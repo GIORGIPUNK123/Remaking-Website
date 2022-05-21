@@ -1,0 +1,32 @@
+.shopbox-normal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 350px;
+  border-radius: 5px;
+}
+.newPrice {
+  color: #ff4858;
+}
+.oldPrice {
+  font-size: 16px;
+  margin-left: 10px;
+  color: #c1c8ce;
+}
+.shop-box:hover {
+  cursor: pointer;
+}
+.shop-box-image {
+  height: 150px;
+}
+.shop-box-name {
+  margin-top: 46px;
+  font-size: 14px;
+}
+.shop-box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}

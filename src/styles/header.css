@@ -1,0 +1,11 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: 180px;
+  margin: 20px 20% 0 20%;
+}
+.header-top-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
