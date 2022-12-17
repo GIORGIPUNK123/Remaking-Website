@@ -24,3 +24,15 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+ul {
+  list-style: none;
+}
+a {
+  color: unset;
+}
+a:hover {
+  color: unset;
+}
+* {
+  box-sizing: border-box;
+}

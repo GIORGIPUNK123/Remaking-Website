@@ -7,5 +7,16 @@ import './styles/shopbox.css';
 import './styles/bestseller.css';
 import './styles/langcurrency.css';
 import './styles/adminpanel.css';
+import './styles/itempage.css';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import theme from './theme';
+import { RecoilRoot } from 'recoil';
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <ChakraProvider theme={theme}>
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
+  </ChakraProvider>
+);

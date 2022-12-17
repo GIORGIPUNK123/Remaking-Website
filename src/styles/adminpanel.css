@@ -2,11 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(56, 56, 56);
   height: 100vh;
 }
 .admin-panel-heading {
-  color: #fff;
   font-size: 50px;
 }
 .admin-panel-top {
@@ -15,17 +13,17 @@
   padding: 0 20%;
 }
 .fetch-buttons {
-  margin-top: 350px;
+  /* margin-top: 350px; */
   display: flex;
   justify-content: space-between;
   width: 80%;
 }
 .custom-input {
   text-align: center;
-  background-color: rgb(104, 100, 100);
+  /* background-color: rgb(104, 100, 100); */
   border-radius: 5px;
   color: #fff;
-  outline-color: rgb(116, 116, 116);
+  /* outline-color: rgb(116, 116, 116); */
 }
 .custom-input::placeholder {
   color: #fff;
@@ -36,5 +34,36 @@
   justify-content: space-evenly;
   margin-bottom: 50px;
   height: 550px;
-  border: 14px solid rgb(40, 40, 40);
+  /* border: 14px solid rgb(40, 40, 40); */
+}
+.edit-item-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  /* background-color: rgb(56, 56, 56); */
+}
+.edit-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 90%;
+  width: 80%;
+  /* background-color: rgb(40, 40, 40); */
+  padding: 60px 150px;
+}
+.admin-panel-table {
+  width: 80%;
+}
+.admin-panel-modal {
+  width: 80%;
+}
+.adminpanel-input {
+  color: #fff;
+  /* background-color: #383838; */
+  /* border-color: #383838; */
+}
+.adminpanel-label {
+  color: #fff;
 }
