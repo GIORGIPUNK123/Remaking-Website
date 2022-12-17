@@ -26,6 +26,7 @@ import {
   Center,
   useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { itemsState } from "../../atoms";
 import { useCookies } from "react-cookie";
@@ -33,7 +34,7 @@ import { Loading } from "../Loading";
 
 export const AdminPanel = (props) => {
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState("loading");
+  const [loggedIn, setLoggedIn] = useState("waiting");
   const { colorMode, toggleColorMode } = useColorMode();
   console.log(colorMode);
   const {
@@ -67,15 +68,17 @@ export const AdminPanel = (props) => {
   console.log("Token ", cookies.accessToken);
 
   useEffect(() => {
-    fetch("http://localhost:3006/adminpanel", {
+    axios({
+      url: "http://localhost:3006/adminpanel",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.accessToken}`,
       },
     })
-      .then((res) => res.json())
-      .then((values) => {
+      .then((res) => {
+        console.log("loggedIn: ", loggedIn);
+        console.log("res.status ", res.status);
         console.log("values ", values);
         console.log("cookies ", cookies);
         setLoggedIn(true);
@@ -89,7 +92,9 @@ export const AdminPanel = (props) => {
         });
       })
       .catch((err) => {
+        console.log("loggedIn: ", loggedIn);
         console.log("Error: ", err);
+        setLoggedIn(false);
         toast({
           title: err.message,
           // description: "test",
@@ -105,7 +110,7 @@ export const AdminPanel = (props) => {
 
   const [activeImage, setActiveImage] = useState();
   console.log(items.length);
-  if (loggedIn) {
+  if (loggedIn == true) {
     return (
       <div className="admin-panel">
         <div className="admin-panel-top">
@@ -187,8 +192,5 @@ export const AdminPanel = (props) => {
     );
   } else if (loggedIn == "waiting") {
     return <Loading />;
-  } else
-    useEffect(() => {
-      navigate("../");
-    }, []);
+  } else navigate("../");
 };
