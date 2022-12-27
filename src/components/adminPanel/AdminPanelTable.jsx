@@ -18,11 +18,12 @@ import {
   AlertTitle,
   Spinner,
   Center,
-} from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { itemsState } from '../../atoms';
+} from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { itemsState } from "../../atoms";
 export const AdminPanelTable = (props) => {
+  const navigate = useNavigate();
   const items = useRecoilValue(itemsState);
   return (
     <TableContainer overflowY="scroll" h="50%">
@@ -65,8 +66,14 @@ export const AdminPanelTable = (props) => {
               </Td>
               <Td textAlign="center"> {item.inStock} </Td>
               <Td textAlign="center"> {item.name} </Td>
-              <Button colorScheme={'blue'} style={{ marginLeft: '25px' }}>
-                <Link to={'./edit/' + item.id}> Edit </Link>
+              <Button
+                onClick={() => {
+                  navigate("./edit/" + item.id);
+                }}
+                colorScheme={"blue"}
+                style={{ marginLeft: "25px" }}
+              >
+                Edit
               </Button>
             </Tr>
           ))}

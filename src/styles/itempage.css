@@ -1,8 +1,7 @@
 .item-page {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 .item-image {
   height: 300px;
@@ -32,11 +31,6 @@
   width: 80%;
   height: 300px;
   border-radius: 15px;
-}
-.item-page-name {
-  margin-top: 75px;
-  margin-bottom: 45px;
-  font-size: 34px;
 }
 .item-page-buttons {
   display: flex;

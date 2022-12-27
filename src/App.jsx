@@ -1,8 +1,8 @@
-import { Header } from "./components/Header";
-import { HomeSection } from "./components/HomeSection";
+import { Header } from "./components/important-components/Header";
+import { HomeSection } from "./components/important-components/HomeSection";
 import { AdminPanel } from "./components/adminPanel/AdminPanel";
 import { AdminPanelEdit } from "./components/adminPanel/AdminPanelEdit";
-import { ItemPage } from "./components/ItemPage";
+import { ItemPage } from "./components/important-components/ItemPage";
 import { Loading } from "./components/Loading";
 import { DeadServer } from "./components/DeadServer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -22,8 +22,9 @@ import "swiper/css/autoplay";
 import { useState, useEffect } from "react";
 
 import { itemsState } from "./atoms";
-import { Login } from "./components/Login";
-import { Cart } from "./components/Cart";
+import { Login } from "./components/important-components/Login";
+import { Cart } from "./components/inside-components/Cart";
+import { ShopSection } from "./components/important-components/ShopSection";
 
 const App = () => {
   const [items, setItems] = useRecoilState(itemsState);
@@ -47,10 +48,12 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Loading />}></Route>
+          <Route path="/shop" element={<Loading />}></Route>
           <Route path="/item/:id" element={<Loading />}></Route>
           <Route path="/adminpanel" element={<Loading />}></Route>
           <Route path="/adminpanel/edit/:id" element={<Loading />}></Route>
           <Route path="/cart" element={<Loading />}></Route>
+          <Route path="/login" element={<Login />}></Route>
         </Routes>
       </Router>
     );
@@ -59,6 +62,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<HomeSection />}></Route>
+          <Route path="/shop" element={<ShopSection />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/item/:id" element={<ItemPage />}></Route>
           <Route

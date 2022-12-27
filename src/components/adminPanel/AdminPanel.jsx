@@ -67,6 +67,11 @@ export const AdminPanel = (props) => {
   console.log("cookies ", cookies);
   console.log("Token ", cookies.accessToken);
 
+  if (cookies.accessToken == undefined) {
+    useEffect(() => {
+      navigate("../login");
+    }, []);
+  }
   useEffect(() => {
     axios({
       url: "http://localhost:3006/adminpanel",
@@ -79,11 +84,11 @@ export const AdminPanel = (props) => {
       .then((res) => {
         console.log("loggedIn: ", loggedIn);
         console.log("res.status ", res.status);
-        console.log("values ", values);
+        console.log("values ", res.data);
         console.log("cookies ", cookies);
         setLoggedIn(true);
         toast({
-          title: values.message,
+          title: res.data.message,
           // description: "test",
           status: "success",
           duration: 5000,

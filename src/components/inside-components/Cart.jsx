@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { cartState } from "../atoms";
+import { cartState } from "../../atoms";
 
 export const Cart = () => {
   const [myCartItems, setMyCartItems] = useRecoilState(cartState);

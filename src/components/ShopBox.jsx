@@ -4,11 +4,6 @@ import { Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { languageState, valueState } from "../atoms";
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 import { useRecoilValue } from "recoil";
 
 const MoneyDisplay = (props) => {
@@ -39,64 +34,57 @@ const MoneyDisplay = (props) => {
   }
 };
 export const ShopBox = (props) => {
-  if (props.boxType == "normal") {
-    return (
-      <>
-        <div className="shopbox shopbox-normal">
-          <span className="shop-box-name">{props.itemName}</span>
-          <Swiper
-            navigation={true}
-            modules={[Navigation]}
-            className="shop-box-images"
-            loop={true}
+  const language = useRecoilValue(languageState);
+  return (
+    <div className="shopbox shopbox-normal">
+      <span className="shop-box-name">{props.itemName}</span>
+      <Swiper
+        navigation={true}
+        modules={[Navigation]}
+        className="shop-box-images"
+        loop={true}
+      >
+        {props.itemImages.map((image, index) => (
+          <SwiperSlide
+            key={index}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
           >
-            {props.itemImages.map((image, index) => {
-              return (
-                <SwiperSlide
-                  key={index}
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <div
-                    className="shop-box-image"
-                    style={{ backgroundImage: `url(${image})` }}
-                  ></div>
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-          <MoneyDisplay
-            itemPrice={props.itemPrice}
-            itemSalePrice={props.itemSalePrice}
-            itemGelPrice={props.itemGelPrice}
-            itemSaleGelPrice={props.itemSaleGelPrice}
-            // LangAndCurrency={LangAndCurrency}
-          />
-          <Button
-            variant="solid"
-            colorScheme="blue"
-            bg="blue.400"
-            className="shop-box-button"
-            color={"white"}
-          >
-            <Link
-              style={{
-                width: "100%",
-                height: "100%",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              to={`item/${props.itemId}`}
-            >
-              View
-            </Link>
-          </Button>
-        </div>
-      </>
-    );
-  }
+            <div
+              className="shop-box-image"
+              style={{ backgroundImage: `url(${image})` }}
+            ></div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      <MoneyDisplay {...props} />
+      <Button
+        variant="solid"
+        colorScheme="blue"
+        bg="blue.400"
+        className="shop-box-button"
+        color={"white"}
+      >
+        <Link
+          style={{
+            width: "100%",
+            height: "100%",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          to={
+            props.shop === true
+              ? `../item/${props.itemId}`
+              : `/item/${props.itemId}`
+          }
+        >
+          {language === "en" ? "View" : "ნახე ვრცლად"}
+        </Link>
+      </Button>
+    </div>
+  );
 };

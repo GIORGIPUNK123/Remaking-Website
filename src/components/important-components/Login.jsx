@@ -1,6 +1,6 @@
 import { Box, Button, Input, Text } from "@chakra-ui/react";
 import { useFormik, yupToFormErrors, FieldArray, Formik } from "formik";
-import { AdminPanelInput } from "./adminPanel/AdminPanelInput";
+import { AdminPanelInput } from "../adminPanel/AdminPanelInput";
 import * as Yup from "yup";
 import { useState } from "react";
 import { useToast } from "@chakra-ui/react";
