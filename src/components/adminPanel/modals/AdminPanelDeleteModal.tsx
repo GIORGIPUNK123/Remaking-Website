@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -13,31 +13,31 @@ import {
   Select,
   Button,
   Text,
-} from '@chakra-ui/react';
-import { itemsState } from '../../../atoms';
-import { useRecoilValue } from 'recoil';
-export const AdminPanelDeleteModal = (props) => {
+} from "@chakra-ui/react";
+import { itemsState } from "../../../atoms";
+import { useRecoilValue } from "recoil";
+export const AdminPanelDeleteModal = (props: any) => {
   const items = useRecoilValue(itemsState);
   const [minItem, setMinItem] = useState(1);
 
   useEffect(() => {
-    if (!items.length < 1) {
+    if (items.length > 0) {
       setMinItem(
-        items.reduce((prev, curr) => (prev.id < curr.id ? prev : curr))
+        items.reduce((prev, curr) => (prev.id < curr.id ? prev : curr)).id
       );
     }
   }, [items]);
 
-  const [deleteId, setDeleteId] = useState('');
+  const [deleteId, setDeleteId] = useState("");
 
-  const deleteAlertDisplay = deleteId === '' ? 'flex' : 'none';
+  const deleteAlertDisplay = deleteId === "" ? "flex" : "none";
   console.log(deleteId);
   return (
     <Modal
       isOpen={props.isOpen}
       onClose={() => {
         props.onClose();
-        setDeleteId('');
+        setDeleteId("");
       }}
       className="admin-panel-modal"
     >
@@ -75,14 +75,14 @@ export const AdminPanelDeleteModal = (props) => {
             colorScheme="red"
             mr={3}
             onClick={() => {
-              if (deleteId != '') {
-                fetch('http://localhost:3006/delete', {
-                  method: 'POST',
+              if (deleteId != "") {
+                fetch("http://localhost:3006/delete", {
+                  method: "POST",
                   body: deleteId,
                 })
                   .then((response) => {
                     console.log(response);
-                    console.log('I am dumb duck');
+                    console.log("I am dumb duck");
                     return response.text();
                   })
                   .then((data) => {
@@ -102,59 +102,5 @@ export const AdminPanelDeleteModal = (props) => {
         </ModalFooter>
       </ModalContent>
     </Modal>
-    // <Modal
-    //   width={'80%'}
-    //   title=''
-    //   visible={props.visible}
-    //   onCancel={props.onCancel}
-    //   footer={null}
-    //   header={null}
-    //   bodyStyle={{
-    //     backgroundColor: '#1f1f1f',
-    //     padding: '80px',
-    //   }}
-    // >
-    //   <Select
-    //     defaultValue={minItem.id}
-    //     style={{
-    //       width: '100%',
-    //       backgroundColor: 'blue',
-    //     }}
-    //     onChange={(value) => {
-    //       console.log(value);
-    //       setDeleteId(value);
-    //     }}
-    //   >
-    //     {items.map((item) => {
-    //       return (
-    //         <Option value={item.id} key={item.id}>
-    //           {item.name} ID: {item.id}
-    //         </Option>
-    //       );
-    //     })}
-    //   </Select>
-    //   <Button
-    //     type='primary'
-    //     onClick={() => {
-    //       fetch('http://localhost:3006/delete', {
-    //         method: 'POST',
-    //         body: deleteId,
-    //       })
-    //         .then((response) => {
-    //           console.log(response);
-    //           console.log('I am dumb duck');
-    //           return response.text();
-    //         })
-    //         .then((data) => {
-    //           console.log(data);
-    //         })
-    //         .catch((err) => {
-    //           console.log(err);
-    //         });
-    //     }}
-    //   >
-    //     Delete
-    //   </Button>
-    // </Modal>
   );
 };

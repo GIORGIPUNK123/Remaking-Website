@@ -8,31 +8,35 @@ import {
   NumberInput,
   NumberInputField,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { itemsState, valueState } from "../../atoms";
 import { Loading } from "../Loading";
 import { ShopBox } from "../ShopBox";
 import { Header } from "./Header";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
-import { useEffect } from "react";
-
-const DisplayShopBoxes = (props) => {
-  return props.items
-    .slice(0, props.sliceValue)
-    .map((item) => (
-      <ShopBox
-        key={item.id}
-        itemId={item.id}
-        itemName={item.name}
-        itemPrice={item.price}
-        itemSalePrice={item.salePrice}
-        itemGelPrice={item.gelPrice}
-        itemSaleGelPrice={item.saleGelPrice}
-        itemImages={item.images}
-        shop
-      />
-    ));
+import { ItemTypes, PriceRangeSliderTypes, CheckBoxTypes } from "../../types";
+const DisplayShopBoxes = (props: {
+  items: ItemTypes[];
+  sliceValue: number;
+}) => {
+  return (
+    <>
+      {props.items.slice(0, props.sliceValue).map((item) => (
+        <ShopBox
+          key={item.id}
+          itemId={item.id}
+          itemName={item.name}
+          itemPrice={item.price}
+          itemSalePrice={item.salePrice}
+          itemGelPrice={item.gelPrice}
+          itemSaleGelPrice={item.saleGelPrice}
+          itemImages={item.images}
+          shop
+        />
+      ))}
+    </>
+  );
 };
 
 const PriceRangeSlider = ({
@@ -41,7 +45,7 @@ const PriceRangeSlider = ({
   setMinSliderValue,
   maxSliderValue,
   setMaxSliderValue,
-}) => {
+}: PriceRangeSliderTypes) => {
   return (
     <Box
       boxShadow="2xl"
@@ -64,7 +68,7 @@ const PriceRangeSlider = ({
           allowMouseWheel
           value={minSliderValue}
           min={0}
-          onChange={(value) => setMinSliderValue(value)}
+          onChange={(value) => setMinSliderValue(parseInt(value))}
         >
           <NumberInputField />
         </NumberInput>
@@ -73,7 +77,7 @@ const PriceRangeSlider = ({
           allowMouseWheel
           value={maxSliderValue}
           max={maxPrice}
-          onChange={(value) => setMaxSliderValue(value)}
+          onChange={(value) => setMaxSliderValue(parseInt(value))}
         >
           <NumberInputField />
         </NumberInput>
@@ -116,7 +120,7 @@ const Checkboxes = ({
   setIsAirpods,
   filterTypes,
   setFilterTypes,
-}) => {
+}: CheckBoxTypes) => {
   return (
     <>
       <Checkbox
@@ -126,7 +130,7 @@ const Checkboxes = ({
         onChange={() => {
           setIsIphone(!isIphone);
           const newFilterTypes = filterTypes.includes("iphone")
-            ? filterTypes.filter((t) => t !== "iphone")
+            ? filterTypes.filter((t: string) => t !== "iphone")
             : [...filterTypes, "iphone"];
           setFilterTypes(newFilterTypes);
         }}
@@ -143,7 +147,7 @@ const Checkboxes = ({
         onChange={() => {
           setIsMac(!isMac);
           const newFilterTypes = filterTypes.includes("mac")
-            ? filterTypes.filter((t) => t !== "mac")
+            ? filterTypes.filter((t: string) => t !== "mac")
             : [...filterTypes, "mac"];
           setFilterTypes(newFilterTypes);
         }}
@@ -159,7 +163,7 @@ const Checkboxes = ({
         onChange={() => {
           setIsAirpods(!isAirpods);
           const newFilterTypes = filterTypes.includes("airpods")
-            ? filterTypes.filter((t) => t !== "airpods")
+            ? filterTypes.filter((t: string) => t !== "airpods")
             : [...filterTypes, "airpods"];
           setFilterTypes(newFilterTypes);
         }}
@@ -173,7 +177,7 @@ const Checkboxes = ({
 
 export const ShopSection = () => {
   const currentValue = useRecoilValue(valueState);
-  const getInputText = (text) => {
+  const getInputText = (text: string) => {
     setInputText(text);
   };
   const [isMac, setIsMac] = useState(false);
@@ -181,14 +185,15 @@ export const ShopSection = () => {
   const [isAirpods, setIsAirpods] = useState(false);
   const [inputText, setInputText] = useState("");
   const items = useRecoilValue(itemsState);
-  const [filterTypes, setFilterTypes] = useState([]);
+  const [filterTypes, setFilterTypes] = useState<string[]>([]);
   const maxPrice =
     currentValue === "usd"
       ? Math.max(...items.map((item) => item.price))
       : Math.max(...items.map((item) => item.gelPrice));
   const [minSliderValue, setMinSliderValue] = useState(0);
   const [maxSliderValue, setMaxSliderValue] = useState(maxPrice);
-  const filteredItems = items.filter((item) => {
+  const filteredItems: ItemTypes[] = items.filter((item) => {
+    console.log("item: ", item);
     const priceField = currentValue === "usd" ? "price" : "gelPrice";
     const containsInputText = item.name.toLowerCase().includes(inputText);
     return (
@@ -199,7 +204,6 @@ export const ShopSection = () => {
     );
   });
   const [sliceValue, setSliceValue] = useState(6);
-
   if (filteredItems !== undefined) {
     return (
       <>
@@ -221,10 +225,8 @@ export const ShopSection = () => {
               minSliderValue={minSliderValue}
               setMinSliderValue={setMinSliderValue}
               maxSliderValue={maxSliderValue}
-              items={filteredItems}
               setMaxSliderValue={setMaxSliderValue}
               maxPrice={maxPrice}
-              width="85%"
             />
             <Box
               boxShadow="2xl"
@@ -271,5 +273,5 @@ export const ShopSection = () => {
         </Box>
       </>
     );
-  } else <Loading />;
+  } else return <Loading />;
 };

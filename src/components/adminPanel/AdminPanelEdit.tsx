@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Modal,
@@ -53,8 +53,9 @@ const boxStyle = {
 
 export const AdminPanelEdit = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies("accessToken");
-  const [loggedIn, setLoggedIn] = useState("waiting");
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     axios({
@@ -97,23 +98,14 @@ export const AdminPanelEdit = () => {
 
   const [isDisabled, setIsDisabled] = useState(false);
   const toast = useToast();
-  let { id } = useParams();
+  const { id: currentId } = useParams();
   const items = useRecoilValue(itemsState);
   console.log(
     "this item ",
-    items.find((x) => x.id == id)
+    items.find((x) => x.id === parseInt(currentId!))
   );
-  const initialValues = {
-    id: items.find((x) => x.id == id).id,
-    type: items.find((x) => x.id == id).type,
-    price: items.find((x) => x.id == id).price,
-    salePrice: items.find((x) => x.id == id).salePrice,
-    gelPrice: items.find((x) => x.id == id).gelPrice,
-    saleGelPrice: items.find((x) => x.id == id).saleGelPrice,
-    images: items.find((x) => x.id == id).images,
-    inStock: items.find((x) => x.id == id).inStock,
-    name: items.find((x) => x.id == id).name,
-  };
+  const currentItem = items.find((x) => x.id === parseInt(currentId!))!;
+  const initialValues = { ...currentItem };
 
   const editItemSchema = Yup.object().shape({
     type: Yup.string()
@@ -156,7 +148,7 @@ export const AdminPanelEdit = () => {
           Go Back
         </Button>
         <h1 style={{ fontSize: "34px", marginBottom: "75px" }}>
-          Editing id: {id}
+          Editing id: {currentId}
         </h1>
         <Formik
           validationSchema={editItemSchema}
@@ -368,9 +360,10 @@ export const AdminPanelEdit = () => {
         </Formik>
       </div>
     );
-  } else if (loggedIn == "waiting") {
+  } else if (isLoading === true) {
     return <Loading />;
-  } else if (loggedIn == false) {
-    return navigate("../login");
+  } else {
+    navigate("../login");
+    return <h1>Hello</h1>;
   }
 };

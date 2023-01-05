@@ -56,6 +56,8 @@
   position: absolute;
   top: 25px;
   right: 20px;
+  display: flex;
+  justify-content: space-evenly;
 }
 .header-top-left {
   position: absolute;

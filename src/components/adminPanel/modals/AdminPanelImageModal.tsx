@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -9,11 +9,11 @@ import {
   ModalCloseButton,
   Button,
   Text,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import { itemsState } from '../../../atoms';
-import { useRecoilValue } from 'recoil';
-export const AdminPanelImageModal = (props) => {
+import { itemsState } from "../../../atoms";
+import { useRecoilValue } from "recoil";
+export const AdminPanelImageModal = (props: any) => {
   return (
     <Modal
       isOpen={props.isOpen}
@@ -29,10 +29,10 @@ export const AdminPanelImageModal = (props) => {
         <ModalBody justifyContent="center" display="flex">
           <img
             style={{
-              maxWidth: '80%',
-              maxHeight: '80%',
-              borderWidth: '4px',
-              borderStyle: 'solid',
+              maxWidth: "80%",
+              maxHeight: "80%",
+              borderWidth: "4px",
+              borderStyle: "solid",
             }}
             src={props.activeImage}
             alt="image"

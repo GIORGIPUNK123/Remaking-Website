@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -13,92 +13,92 @@ import {
   FormLabel,
   FormErrorMessage,
   Input,
-} from '@chakra-ui/react';
-import { useFormik, yupToFormErrors, FieldArray, Formik } from 'formik';
-import * as Yup from 'yup';
-import { AdminPanelInput } from '../AdminPanelInput';
-import { itemsState } from '../../../atoms';
-import { useRecoilValue } from 'recoil';
-export const AdminPanelAddModal = (props) => {
+} from "@chakra-ui/react";
+import { useFormik, yupToFormErrors, FieldArray, Formik } from "formik";
+import * as Yup from "yup";
+import { AdminPanelInput } from "../AdminPanelInput";
+import { itemsState } from "../../../atoms";
+import { useRecoilValue } from "recoil";
+export const AdminPanelAddModal = (props: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
   // const [addRow, setAddRow] = useState([0, '']);
   // const [booleans, setBooleans] = useState([false]);
   // console.log('addRow ', addRow);
   // console.log('booleans ', booleans);
   const items = useRecoilValue(itemsState);
-  console.log('items ', items);
+  console.log("items ", items);
   const initialValues = {
     id: 0,
-    type: '',
+    type: "",
     price: 0,
     salePrice: 0,
     gelPrice: 0,
     saleGelPrice: 0,
-    images: [''],
+    images: [""],
     inStock: 0,
+    name: "",
   };
 
   const addItemSchema = Yup.object().shape({
     id: Yup.number()
-      .required('ID is requiered')
-      .positive('ID has to be positive')
-      .integer('ID has to be integer')
+      .required("ID is requiered")
+      .positive("ID has to be positive")
+      .integer("ID has to be integer")
       .notOneOf(
         items.map((item) => {
           return item.id;
         }),
-        'ID has been already used'
+        "ID has been already used"
       ),
 
     type: Yup.string()
-      .required('Type is requiered')
-      .oneOf(['mac', 'iphone', 'airpods']),
+      .required("Type is requiered")
+      .oneOf(["mac", "iphone", "airpods"]),
     price: Yup.number()
-      .positive('Price has to be positive')
-      .required('Price is required'),
+      .positive("Price has to be positive")
+      .required("Price is required"),
     salePrice: Yup.number().moreThan(-1),
-    gelPrice: Yup.number().positive('Gel price has to be positive'),
+    gelPrice: Yup.number().positive("Gel price has to be positive"),
     images: Yup.array()
-      .min(1, 'At least 1 image is required')
+      .min(1, "At least 1 image is required")
       .max(7)
       .of(
         Yup.string()
-          .required('Image is required')
-          .url('Image has to be a valid link')
+          .required("Image is required")
+          .url("Image has to be a valid link")
       ),
     inStock: Yup.number().moreThan(-1),
     name: Yup.string()
       .required()
-      .min(2, 'Name has to contain more than 2 letters')
-      .max(50, 'Name has to contain less than 50 letters'),
+      .min(2, "Name has to contain more than 2 letters")
+      .max(50, "Name has to contain less than 50 letters"),
   });
 
   return (
-    <Modal
-      isOpen={props.isOpen}
-      onClose={props.onClose}
-      className="admin-panel-modal"
-    >
+    <Modal isOpen={props.isOpen} onClose={props.onClose}>
       <ModalOverlay />
       <ModalContent w="80%" maxW="auto">
         <Formik
           validationSchema={addItemSchema}
           initialValues={initialValues}
           onSubmit={(values) => {
-            fetch('http://localhost:3006/add', {
-              method: 'POST',
+            fetch("http://localhost:3006/add", {
+              method: "POST",
               body: JSON.stringify(values),
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
             })
               .then((values) => console.log(values))
-              .catch((err) => console.log('fetch errors ', err));
+              .catch((err) => console.log("fetch errors ", err));
             alert(JSON.stringify(values, null, 2));
           }}
         >
           {({ values, errors, handleChange, handleBlur, handleSubmit }) => {
-            console.log('errors ', errors);
-            console.log('values ', values);
+            console.log("errors ", errors);
+            console.log("values ", values);
             return (
               <form onSubmit={handleSubmit}>
                 <ModalHeader justifyContent="center" display="flex">
@@ -226,7 +226,7 @@ export const AdminPanelAddModal = (props) => {
                             }
                           })}
 
-                        <Button mt={'2'} type="button" onClick={() => push('')}>
+                        <Button mt={"2"} type="button" onClick={() => push("")}>
                           Add Image
                         </Button>
                       </div>

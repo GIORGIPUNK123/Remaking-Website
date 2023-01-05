@@ -2,13 +2,14 @@ import { Box, Button, Input, Text } from "@chakra-ui/react";
 import { useFormik, yupToFormErrors, FieldArray, Formik } from "formik";
 import { AdminPanelInput } from "../adminPanel/AdminPanelInput";
 import * as Yup from "yup";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useToast } from "@chakra-ui/react";
 
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
+import axios from "axios";
 export const Login = () => {
   const navigate = useNavigate();
   const toast = useToast();
@@ -63,28 +64,31 @@ export const Login = () => {
               validationSchema={loginSchema}
               initialValues={initialValues}
               onSubmit={(values) => {
-                fetch("http://localhost:3006/login", {
+                axios({
+                  url: "http://localhost:3006/login",
                   method: "POST",
-                  body: JSON.stringify(values),
+                  data: JSON.stringify(values),
                   headers: {
                     "Content-Type": "application/json",
                   },
                 })
-                  .then((res) => res.json())
-                  .then((values) => {
-                    setCookie("accessToken", values.accessToken, {
+                  .then((res: any) => {
+                    setCookie("accessToken", res.data.accessToken, {
                       path: "/",
                     });
-                    navigate("../");
-                    console.log("token ", values.accessToken);
+                    console.log("token ", res.accessToken);
                     console.log("cookies ", cookies);
+                    navigate("../");
                   })
                   .catch((err) => {
-                    console.log("Error: ", JSON.stringify(err));
+                    console.log("Error: ", err);
+                    console.log("Error Status: ", err.response.status);
                     toast({
-                      title: "Error.",
-                      // description: "test",
-                      description: err,
+                      title: `Error. `,
+                      description:
+                        err.response.status === 401
+                          ? "Email or Password is incorrect"
+                          : err.response.status,
                       status: "error",
                       duration: 5000,
                       isClosable: true,

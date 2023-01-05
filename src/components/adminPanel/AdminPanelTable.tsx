@@ -22,7 +22,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { itemsState } from "../../atoms";
-export const AdminPanelTable = (props) => {
+import React from "react";
+export const AdminPanelTable = (props: any) => {
   const navigate = useNavigate();
   const items = useRecoilValue(itemsState);
   return (

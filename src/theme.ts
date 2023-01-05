@@ -6,7 +6,7 @@ const config = {
   useSystemColorMode: false,
 };
 const styles = {
-  global: (props) => ({
+  global: (props: any) => ({
     // styles for the `body`
     body: {
       color: props.colorMode === "dark" ? "white" : "gray.900",
@@ -49,7 +49,7 @@ const overrides = {
           boxShadow: "0 0 2px 2px #efdfde",
         },
         // 4. We can override existing variants
-        solid: (props) => ({
+        solid: (props: any) => ({
           bg: props.colorMode === "dark" ? "red.300" : "red.500",
         }),
         // 5. We can add responsive variants

@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { languageState, valueState } from "../atoms";
 import { useRecoilValue } from "recoil";
+import React from "react";
 
-const MoneyDisplay = (props) => {
+const MoneyDisplay: React.FC<MoneyDisplayTypes> = (props) => {
   if (useRecoilValue(valueState) === "gel") {
     if (props.itemSaleGelPrice === 0) {
       return (
@@ -14,11 +15,14 @@ const MoneyDisplay = (props) => {
           <h2 className="shopbox-normal-price">{props.itemGelPrice}₾</h2>
         </div>
       );
-    } else
-      <div className="shopbox-prices-normal">
-        <h2 className="shopbox-sale-price">{props.itemSaleGelPrice}₾</h2>
-        <h2 className="shopbox-normal-price">{props.itemGelPrice}₾</h2>
-      </div>;
+    } else {
+      return (
+        <div className="shopbox-prices-normal">
+          <h2 className="shopbox-sale-price">{props.itemSaleGelPrice}₾</h2>
+          <h2 className="shopbox-normal-price">{props.itemGelPrice}₾</h2>
+        </div>
+      );
+    }
   } else {
     if (props.itemSalePrice === 0) {
       return (
@@ -26,14 +30,19 @@ const MoneyDisplay = (props) => {
           <h2 className="shopbox-normal-price">{props.itemPrice}$</h2>
         </div>
       );
-    } else
-      <div className="shopbox-prices-normal">
-        <h2 className="shopbox-sale-price">{props.itemSalePrice}$</h2>
-        <h2 className="shopbox-normal-price">{props.itemPrice}$</h2>
-      </div>;
+    } else {
+      return (
+        <div className="shopbox-prices-normal">
+          <h2 className="shopbox-sale-price">{props.itemSalePrice}$</h2>
+          <h2 className="shopbox-normal-price">{props.itemPrice}$</h2>
+        </div>
+      );
+    }
   }
 };
-export const ShopBox = (props) => {
+import { ShopBoxTypes, MoneyDisplayTypes } from "../types";
+
+export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
   const language = useRecoilValue(languageState);
   return (
     <div className="shopbox shopbox-normal">
@@ -44,7 +53,7 @@ export const ShopBox = (props) => {
         className="shop-box-images"
         loop={true}
       >
-        {props.itemImages.map((image, index) => (
+        {props.itemImages.map((image: string, index: number) => (
           <SwiperSlide
             key={index}
             style={{
@@ -59,7 +68,12 @@ export const ShopBox = (props) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <MoneyDisplay {...props} />
+      <MoneyDisplay
+        itemGelPrice={props.itemGelPrice}
+        itemPrice={props.itemPrice}
+        itemSalePrice={props.itemSalePrice}
+        itemSaleGelPrice={props.itemSaleGelPrice}
+      />
       <Button
         variant="solid"
         colorScheme="blue"
