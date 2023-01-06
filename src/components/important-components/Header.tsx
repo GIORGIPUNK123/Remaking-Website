@@ -67,7 +67,7 @@ export const Header: React.FC<{
                 props.getInputText!(e.target.value);
               }}
             />
-            {Object.keys(currentUser).length !== 0 ? (
+            {Object.keys(currentUser).length === 0 ? (
               <>
                 <Button
                   colorScheme="blue"
@@ -94,9 +94,13 @@ export const Header: React.FC<{
                 </Button>
               </>
             ) : (
-              <Link to="./profile" style={{ marginLeft: "15px" }}>
-                <img src={profile} alt="profile" />
-              </Link>
+              <>
+                <Text>{currentUser.name}</Text>
+                <Text>{currentUser.surname}</Text>
+                <Link to="./profile" style={{ marginLeft: "15px" }}>
+                  <img src={profile} alt="profile" />
+                </Link>
+              </>
             )}
           </div>
         ) : null}
