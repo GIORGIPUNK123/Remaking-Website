@@ -31,20 +31,17 @@ export const AdminPanel = (props: any) => {
   } = useDisclosure();
   const [items, setItems] = useRecoilState(itemsState);
   const currentUser = useRecoilValue(currentUserState);
-  useEffect(() => {
-    if (Object.keys(currentUser).length === 0) {
-      navigate("../login");
-    }
-  }, []);
-  useEffect(() => {
-    if (currentUser.rank !== "admin") {
-      navigate("../");
-    }
-  }, []);
-  const [activeImage, setActiveImage] = useState();
   if (isLoading === true) {
     return <Loading />;
   }
+  if (Object.keys(currentUser).length === 0) {
+    navigate("../login");
+  }
+  if (currentUser.rank !== "admin") {
+    navigate("../");
+  }
+  const [activeImage, setActiveImage] = useState();
+
   return (
     <>
       <div className="admin-panel">
