@@ -14,13 +14,9 @@ export const Header: React.FC<{
 }> = (props) => {
   const navigate = useNavigate();
   const language = useRecoilValue(languageState);
-  const [loggedIn, setLoggedIn] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
   console.log("Token ", cookies.accessToken);
   const currentUser = useRecoilValue(currentUserState);
-    if (Object.keys(currentUser).length !== 0) {
-      setLoggedIn(true);
-    }
   return (
     <header className="header">
       <div className="header-introduction">
@@ -71,7 +67,7 @@ export const Header: React.FC<{
                 props.getInputText!(e.target.value);
               }}
             />
-            {loggedIn === false ? (
+            {Object.keys(currentUser).length !== 0 ? (
               <>
                 <Button
                   colorScheme="blue"
