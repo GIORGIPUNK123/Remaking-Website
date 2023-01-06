@@ -126,7 +126,7 @@ export const AdminPanelEdit = () => {
         initialValues={initialValues}
         onSubmit={(values) => {
           axios({
-            url: "http://localhost:3006/edit",
+            url: "https://geolab-project-backend.onrender.com/edit",
             method: "POST",
             headers: {
               "Content-Type": "application/json",

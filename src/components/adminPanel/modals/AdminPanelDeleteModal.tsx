@@ -76,7 +76,7 @@ export const AdminPanelDeleteModal = (props: any) => {
             mr={3}
             onClick={() => {
               if (deleteId != "") {
-                fetch("http://localhost:3006/delete", {
+                fetch("https://geolab-project-backend.onrender.com/delete", {
                   method: "POST",
                   body: deleteId,
                 })

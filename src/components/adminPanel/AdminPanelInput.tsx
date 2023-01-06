@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -23,12 +23,12 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   useDisclosure,
-} from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
-import { Loading } from '../Loading';
-import { AdminPanelImageModal } from './modals/AdminPanelImageModal';
-
-export const AdminPanelInput = (props) => {
+} from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
+import { Loading } from "../Loading";
+import { AdminPanelImageModal } from "./modals/AdminPanelImageModal";
+import React from "react";
+export const AdminPanelInput = (props: any) => {
   // console.log(props.errorMessage);
   if (props.number) {
     return (
@@ -74,11 +74,11 @@ export const AdminPanelInput = (props) => {
             onChange={props.handleChange}
             min={props.min}
             onBlur={props.onBlur}
-            type={show ? 'text' : 'password'}
+            type={show ? "text" : "password"}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? 'Hide' : 'Show'}
+              {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
         </InputGroup>
@@ -96,8 +96,8 @@ export const AdminPanelInput = (props) => {
         <div
           key={props.itemKey}
           style={{
-            display: 'flex',
-            alignItems: 'center',
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <Input

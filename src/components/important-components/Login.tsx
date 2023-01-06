@@ -71,7 +71,7 @@ export const Login = () => {
               initialValues={initialValues}
               onSubmit={(values) => {
                 axios({
-                  url: "http://localhost:3006/login",
+                  url: "https://geolab-project-backend.onrender.com/login",
                   method: "POST",
                   data: JSON.stringify(values),
                   headers: {

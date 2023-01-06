@@ -84,7 +84,7 @@ export const AdminPanelAddModal = (props: {
           validationSchema={addItemSchema}
           initialValues={initialValues}
           onSubmit={(values) => {
-            fetch("http://localhost:3006/add", {
+            fetch("https://geolab-project-backend.onrender.com/add", {
               method: "POST",
               body: JSON.stringify(values),
               headers: {

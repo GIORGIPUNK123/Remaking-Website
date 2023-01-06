@@ -37,7 +37,7 @@ const App = () => {
   useEffect(() => {
     if (cookies.accessToken !== undefined) {
       axios({
-        url: "http://localhost:3006/userInfo",
+        url: "https://geolab-project-backend.onrender.com/userInfo",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ const App = () => {
     }
   }, []);
   const getItemsFunction = () => {
-    fetch("http://localhost:3006/items")
+    fetch("https://geolab-project-backend.onrender.com/items")
       .then((response) => response.json())
       .then((data) => {
         setItems(data);

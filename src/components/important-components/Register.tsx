@@ -35,7 +35,7 @@ export const Register = () => {
       .email()
       .min(2, "Email has to contain more than 2 letters")
       .test("test-name", "Email already exists", (value) => {
-        fetch("http://localhost:3006/userexists", {
+        fetch("https://geolab-project-backend.onrender.com/userexists", {
           method: "POST",
           body: JSON.stringify({ email: value }),
           headers: {
@@ -98,7 +98,7 @@ export const Register = () => {
               initialValues={initialValues}
               onSubmit={(values) => {
                 axios({
-                  url: "http://localhost:3006/register",
+                  url: "https://geolab-project-backend.onrender.com/register",
                   method: "POST",
                   data: JSON.stringify({
                     email: values.email,
