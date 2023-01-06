@@ -18,11 +18,9 @@ export const Header: React.FC<{
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
   console.log("Token ", cookies.accessToken);
   const currentUser = useRecoilValue(currentUserState);
-  useEffect(() => {
     if (Object.keys(currentUser).length !== 0) {
       setLoggedIn(true);
     }
-  }, []);
   return (
     <header className="header">
       <div className="header-introduction">
