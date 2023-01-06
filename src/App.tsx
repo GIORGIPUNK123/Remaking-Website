@@ -1,4 +1,5 @@
 import { Header } from "./components/important-components/Header";
+import axios from "axios";
 import { HomeSection } from "./components/important-components/HomeSection";
 import { AdminPanel } from "./components/adminPanel/AdminPanel";
 import { AdminPanelEdit } from "./components/adminPanel/AdminPanelEdit";
@@ -20,8 +21,8 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
 import { useState, useEffect } from "react";
-
-import { itemsState } from "./atoms";
+import { useCookies } from "react-cookie";
+import { itemsState, currentUserState } from "./atoms";
 import { Login } from "./components/important-components/Login";
 import { Register } from "./components/important-components/Register";
 import { Cart } from "./components/inside-components/Cart";
@@ -29,7 +30,28 @@ import { ShopSection } from "./components/important-components/ShopSection";
 import { Profile } from "./components/important-components/Profile";
 
 const App = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
   const [items, setItems] = useRecoilState(itemsState);
+  const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
+  console.log(currentUser);
+  useEffect(() => {
+    if (cookies.accessToken !== undefined) {
+      axios({
+        url: "http://localhost:3006/userInfo",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.accessToken}`,
+        },
+      })
+        .then((res: any) => {
+          setCurrentUser(res.data);
+        })
+        .catch((err: any) => {
+          console.log("Error: ", err);
+        });
+    }
+  }, []);
   const getItemsFunction = () => {
     fetch("http://localhost:3006/items")
       .then((response) => response.json())

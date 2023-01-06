@@ -46,3 +46,13 @@ export interface CheckBoxTypes {
   filterTypes: string[];
   setFilterTypes: (value: string[]) => void;
 }
+export interface UserTypes {
+  id?: number;
+  email?: string;
+  locked?: boolean;
+  name?: string;
+  surname?: string;
+  password?: string;
+  rank?: string;
+  verified?: boolean;
+}

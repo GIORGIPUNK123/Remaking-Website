@@ -207,7 +207,11 @@ export const ShopSection = () => {
   if (filteredItems !== undefined) {
     return (
       <>
-        <Header getInputText={getInputText}></Header>
+        <Header
+          getInputText={getInputText}
+          login="../login"
+          register="../register"
+        />
         <Box bg="whiteAlpha.800" h="75px"></Box>
         <Box display="flex" ml="5%" mr="5%">
           <Box

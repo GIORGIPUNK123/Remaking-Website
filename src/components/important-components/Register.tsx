@@ -8,9 +8,20 @@ import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
+import { useRecoilValue } from "recoil";
+import { currentUserState } from "../../atoms";
 export const Register = () => {
-  const [emailExists, setEmailExists] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
+  console.log("Token ", cookies.accessToken);
   const navigate = useNavigate();
+  const currentUser = useRecoilValue(currentUserState);
+  useEffect(() => {
+    if (Object.keys(currentUser).length !== 0) {
+      navigate("../");
+    }
+  }, []);
+
+  const [emailExists, setEmailExists] = useState(false);
   const toast = useToast();
   const initialValues = {
     email: "",
@@ -55,9 +66,6 @@ export const Register = () => {
       .required()
       .oneOf([Yup.ref("password")], "Passwords do not match"),
   });
-
-  const [cookies, setCookie] = useCookies(["accessToken"]);
-
   return (
     <>
       <div

@@ -35,7 +35,11 @@ export const HomeSection = () => {
   console.log("filteredItems :", filteredItems);
   return (
     <>
-      <Header getInputText={getInputText} />
+      <Header
+        getInputText={getInputText}
+        login="./login"
+        register="./register"
+      />
       <section>
         <Box bg={"whiteAlpha.800"} h="75px"></Box>
         {language === "en" ? (

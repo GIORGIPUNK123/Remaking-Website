@@ -1,5 +1,5 @@
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { ItemTypes, CartItemTypes } from "./types";
+import { ItemTypes, CartItemTypes, UserTypes } from "./types";
 export const itemsState = atom<ItemTypes[]>({
   key: "items", // unique ID (with respect to other atoms/selectors)
   default: [], // default value (aka initial value)
@@ -15,4 +15,8 @@ export const valueState = atom({
 export const cartState = atom<CartItemTypes[]>({
   key: "cart", // unique ID (with respect to other atoms/selectors)
   default: [], // default value (aka initial value)
+});
+export const currentUserState = atom<UserTypes>({
+  key: "currentUser", // unique ID (with respect to other atoms/selectors)
+  default: {}, // default value (aka initial value)
 });

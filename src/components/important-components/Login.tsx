@@ -4,12 +4,12 @@ import { AdminPanelInput } from "../adminPanel/AdminPanelInput";
 import * as Yup from "yup";
 import React, { useState } from "react";
 import { useToast } from "@chakra-ui/react";
-
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import { currentUserState } from "../../atoms";
 export const Login = () => {
   const navigate = useNavigate();
   const toast = useToast();
@@ -32,6 +32,12 @@ export const Login = () => {
   });
 
   const [cookies, setCookie] = useCookies(["accessToken"]);
+  const currentUser = useRecoilValue(currentUserState);
+  useEffect(() => {
+    if (Object.keys(currentUser).length !== 0) {
+      navigate("../");
+    }
+  }, []);
 
   return (
     <>
