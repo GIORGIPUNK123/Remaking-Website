@@ -63,6 +63,58 @@ export const Header: React.FC<{
               </Link>
             )}
           </Box>
+          <Box display="flex" alignItems="center" flexDir="column">
+            {Object.keys(currentUser).length === 0 ? (
+              <>
+                <Button
+                  colorScheme="blue"
+                  w="220px"
+                  h="50px"
+                  fontSize="17px"
+                  onClick={() => {
+                    navigate(props.login!);
+                  }}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  mt="70px"
+                  colorScheme="blue"
+                  w="220px"
+                  h="50px"
+                  fontSize="17px"
+                  onClick={() => {
+                    navigate(props.register!);
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </>
+            ) : (
+              <>
+                <Box
+                  display="flex"
+                  mr="45px"
+                  alignItems="center"
+                  onClick={() => {
+                    navigate(props.profile!);
+                  }}
+                  cursor="pointer"
+                >
+                  <Text fontSize="5xl" ml="55px" pb="5px">
+                    {currentUser.name}
+                  </Text>
+                  <Image
+                    h="100%"
+                    // borderRadius="full"
+                    ml="4"
+                    src={profile}
+                    alt="profile"
+                  />
+                </Box>
+              </>
+            )}
+          </Box>
         </Box>
         <Image
           className="burger-bar"
