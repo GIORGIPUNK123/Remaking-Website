@@ -1,6 +1,6 @@
 // import Swiper core and required modules
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Button } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { languageState, valueState } from "../atoms";
@@ -52,6 +52,10 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
         modules={[Navigation]}
         className="shop-box-images"
         loop={true}
+        style={{
+          "--swiper-navigation-color": "#000",
+          "--swiper-navigation-size": "35px",
+        }}
       >
         {props.itemImages.map((image: string, index: number) => (
           <SwiperSlide
@@ -96,7 +100,11 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
               : `/item/${props.itemId}`
           }
         >
-          {language === "en" ? "View" : "ნახე ვრცლად"}
+          {language === "en" ? (
+            <Text className="shop-box-button-text">View</Text>
+          ) : (
+            <Text className="shop-box-button-text">ნახე ვრცლად</Text>
+          )}
         </Link>
       </Button>
     </div>

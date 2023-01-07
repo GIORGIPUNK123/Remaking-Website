@@ -39,6 +39,7 @@ export const HomeSection = () => {
         getInputText={getInputText}
         login="./login"
         register="./register"
+        profile="./profile"
       />
       <section>
         <Box bg={"whiteAlpha.800"} h="75px"></Box>

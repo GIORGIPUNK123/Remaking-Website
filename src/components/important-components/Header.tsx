@@ -1,29 +1,90 @@
 import React, { useEffect, useState } from "react";
 import { LangAndCurrency } from "../inside-components/LangAndCurrency";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Image, Input, Text } from "@chakra-ui/react";
 import { currentUserState, languageState } from "../../atoms";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import profile from "../../images/profile.svg";
+import burgerBar from "../../images/burger-bar.svg";
 export const Header: React.FC<{
   getInputText?: (text: string) => void;
   login?: string;
   register?: string;
+  profile?: string;
 }> = (props) => {
   const navigate = useNavigate();
   const language = useRecoilValue(languageState);
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
   console.log("Token ", cookies.accessToken);
   const currentUser = useRecoilValue(currentUserState);
+  const [burgerBarOpen, setBurgerBarOpen] = useState(false);
+  if (burgerBarOpen) {
+    return (
+      <>
+        <Box display="flex" flexDirection="column" h="100vh" w="100%">
+          <Box ml="15px" mt="15px">
+            <LangAndCurrency />
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            h="500px"
+            mt="50px"
+            justifyContent="space-evenly"
+          >
+            {language === "en" ? (
+              <Link className="header-li" to="/">
+                HOME
+              </Link>
+            ) : (
+              <Link className="header-li" to="/">
+                სახლი
+              </Link>
+            )}
+            {language === "en" ? (
+              <Link className="header-li" to="/shop">
+                SHOP
+              </Link>
+            ) : (
+              <Link className="header-li" to="/shop">
+                მაღაზია
+              </Link>
+            )}
+            {language === "en" ? (
+              <Link className="header-li" to="/about">
+                ABOUT US
+              </Link>
+            ) : (
+              <Link className="header-li" to="/about">
+                ჩვენს შესახებ
+              </Link>
+            )}
+          </Box>
+        </Box>
+        <Image
+          className="burger-bar"
+          position="absolute"
+          top="25px"
+          right="20px"
+          cursor="pointer"
+          onClick={() => {
+            setBurgerBarOpen(!burgerBarOpen);
+          }}
+          src={burgerBar}
+        />
+      </>
+    );
+  }
   return (
     <header className="header">
       <div className="header-introduction">
         {language === "en" ? (
-          <Text fontSize="4xl">Apple Kingdom</Text>
+          <Text>Apple Kingdom</Text>
         ) : (
-          <Text fontSize="4xl">ეფლის სამეფო</Text>
+          <Text>ეფლის სამეფო</Text>
         )}
       </div>
       <div className="header-bottom-bar">
@@ -60,7 +121,29 @@ export const Header: React.FC<{
           <LangAndCurrency />
         </div>
         {props.getInputText ? (
-          <div className="header-top-right">
+          <>
+            <Input
+              className="search"
+              placeholder="Search"
+              onChange={(e) => {
+                props.getInputText!(e.target.value);
+              }}
+            />
+            <Image
+              className="burger-bar"
+              position="absolute"
+              top="25px"
+              right="20px"
+              cursor="pointer"
+              onClick={() => {
+                setBurgerBarOpen(!burgerBarOpen);
+              }}
+              src={burgerBar}
+            />
+          </>
+        ) : null}
+        {props.getInputText ? (
+          <Box className="header-top-right">
             <Input
               placeholder="Search"
               onChange={(e) => {
@@ -95,14 +178,28 @@ export const Header: React.FC<{
               </>
             ) : (
               <>
-                <Text>{currentUser.name}</Text>
-                <Text>{currentUser.surname}</Text>
-                <Link to="./profile" style={{ marginLeft: "15px" }}>
-                  <img src={profile} alt="profile" />
-                </Link>
+                <Box
+                  display="flex"
+                  mr="45px"
+                  alignItems="center"
+                  onClick={() => {
+                    navigate(props.profile!);
+                  }}
+                  cursor="pointer"
+                >
+                  <Text fontSize="2xl" ml="55px" pb="5px">
+                    {currentUser.name}
+                  </Text>
+                  <Image
+                    // borderRadius="full"
+                    ml="4"
+                    src={profile}
+                    alt="profile"
+                  />
+                </Box>
               </>
             )}
-          </div>
+          </Box>
         ) : null}
       </div>
     </header>

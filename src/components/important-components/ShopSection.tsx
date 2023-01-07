@@ -211,15 +211,22 @@ export const ShopSection = () => {
           getInputText={getInputText}
           login="../login"
           register="../register"
+          profile="../profile"
         />
         <Box bg="whiteAlpha.800" h="75px"></Box>
-        <Box display="flex" ml="5%" mr="5%">
+        <Box
+          display="flex"
+          flexDir={{ base: "column", xl: "row" }}
+          alignItems={{ base: "center", xl: "unset" }}
+          ml="5%"
+          mr="5%"
+        >
           <Box
             boxShadow="dark-lg"
             display="flex"
             bg="whiteAlpha.100"
             mt="50px"
-            w="30%"
+            w={{ base: "80%", xl: "30%" }}
             borderRadius="15px"
             flexDir="column"
             alignItems="center"
@@ -266,8 +273,9 @@ export const ShopSection = () => {
             </Box>
           </Box>
           <Box
-            pl="35px"
-            w="70%"
+            mt={{ base: "40px", xl: "0" }}
+            pl={{ base: "0", xl: "35px" }}
+            w={{ base: "unset", xl: "70%" }}
             display="flex"
             justifyContent="center"
             flexWrap="wrap"
