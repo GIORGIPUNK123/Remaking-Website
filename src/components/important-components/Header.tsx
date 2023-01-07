@@ -23,7 +23,7 @@ export const Header: React.FC<{
   if (burgerBarOpen) {
     return (
       <>
-        <Box display="flex" flexDirection="column" h="100vh" w="100%">
+        <Box position="absolute" z-index=20 display="flex" flexDirection="column" h="100vh" w="100%">
           <Box ml="15px" mt="15px">
             <LangAndCurrency />
           </Box>
