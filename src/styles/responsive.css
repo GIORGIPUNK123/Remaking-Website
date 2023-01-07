@@ -27,6 +27,9 @@
   .best-seller-heading {
     font-size: 35px;
   }
+  .header-li {
+    font-size: 25px;
+  }
 }
 @media (max-width: 650px) {
   .best-seller-heading {

@@ -23,7 +23,15 @@ export const Header: React.FC<{
   if (burgerBarOpen) {
     return (
       <>
-        <Box position="absolute" z-index=20 display="flex" flexDirection="column" h="100vh" w="100%">
+        <Box
+          position="fixed"
+          zIndex="2"
+          display="flex"
+          flexDirection="column"
+          h="100vh"
+          w="100%"
+          bgColor="rgb(18 18 18)"
+        >
           <Box ml="15px" mt="15px">
             <LangAndCurrency />
           </Box>
@@ -31,7 +39,7 @@ export const Header: React.FC<{
             display="flex"
             flexDirection="column"
             alignItems="center"
-            h="500px"
+            h={{ base: "200px", xl: "240px" }}
             mt="50px"
             justifyContent="space-evenly"
           >
@@ -101,7 +109,11 @@ export const Header: React.FC<{
                   }}
                   cursor="pointer"
                 >
-                  <Text fontSize="5xl" ml="55px" pb="5px">
+                  <Text
+                    fontSize={{ base: "4xl", xl: "6xl" }}
+                    ml="55px"
+                    pb="5px"
+                  >
                     {currentUser.name}
                   </Text>
                   <Image
@@ -126,6 +138,7 @@ export const Header: React.FC<{
             setBurgerBarOpen(!burgerBarOpen);
           }}
           src={burgerBar}
+          zIndex="3"
         />
       </>
     );
