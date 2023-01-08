@@ -66,7 +66,10 @@ export const HomeSection = () => {
         )}
 
         <div className="best-seller">
-          <div className="best-seller-box">
+          <Box
+            className="best-seller-box"
+            display={{ base: "none", md: "flex" }}
+          >
             <div className="best-seller-items">
               {filteredItems.slice(0, 6).map((item) => {
                 console.log("item.images :", item.images);
@@ -84,7 +87,27 @@ export const HomeSection = () => {
                 );
               })}
             </div>
-          </div>
+          </Box>
+          <Box
+            className="best-seller-items"
+            display={{ base: "flex", md: "none" }}
+          >
+            {filteredItems.slice(0, 6).map((item) => {
+              console.log("item.images :", item.images);
+              return (
+                <ShopBox
+                  key={item.id}
+                  itemId={item.id}
+                  itemName={item.name}
+                  itemPrice={item.price}
+                  itemSalePrice={item.salePrice}
+                  itemGelPrice={item.gelPrice}
+                  itemSaleGelPrice={item.saleGelPrice}
+                  itemImages={item.images}
+                />
+              );
+            })}
+          </Box>
         </div>
       </section>
     </>

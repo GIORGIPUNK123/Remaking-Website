@@ -262,7 +262,7 @@ export const Header: React.FC<{
         // justifyContent="center"
       >
         <Box ml="50px">
-          <LangAndCurrency size="sm" width="70px" />
+          <LangAndCurrency size="sm" width="72px" />
         </Box>
       </Box>
     </header>

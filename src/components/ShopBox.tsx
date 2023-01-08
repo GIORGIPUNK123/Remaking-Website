@@ -1,6 +1,6 @@
 // import Swiper core and required modules
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Button, Text } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { languageState, valueState } from "../atoms";
@@ -45,7 +45,7 @@ import { ShopBoxTypes, MoneyDisplayTypes } from "../types";
 export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
   const language = useRecoilValue(languageState);
   return (
-    <div className="shopbox shopbox-normal">
+    <Box className="shopbox shopbox-normal">
       <span className="shop-box-name">{props.itemName}</span>
       <Swiper
         navigation={true}
@@ -107,6 +107,6 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
           )}
         </Link>
       </Button>
-    </div>
+    </Box>
   );
 };
