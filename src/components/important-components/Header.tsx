@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { LangAndCurrency } from "../inside-components/LangAndCurrency";
 import { Link, useNavigate } from "react-router-dom";
-import { Box, Button, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Heading, Image, Input, Text } from "@chakra-ui/react";
 import { currentUserState, languageState } from "../../atoms";
 import { useRecoilValue } from "recoil";
 import { useCookies } from "react-cookie";
