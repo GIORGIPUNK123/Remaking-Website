@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { itemsState, languageState } from "../../atoms";
 import { useRecoilValue } from "recoil";
 
@@ -42,11 +42,29 @@ export const HomeSection = () => {
         profile="./profile"
       />
       <section>
-        <Box bg={"whiteAlpha.800"} h="75px"></Box>
+        <Box bg={"whiteAlpha.800"} h="125px" />
         {language === "en" ? (
-          <h1 className="best-seller-heading">New Products</h1>
+          <Text
+            className="best-seller-heading"
+            fontSize={{ base: "32px" }}
+            mt="80px"
+            mb="80px"
+            textAlign="center"
+            fontWeight="600"
+          >
+            New Products
+          </Text>
         ) : (
-          <h1 className="best-seller-heading">ახალი პროდუქტები</h1>
+          <Text
+            className="best-seller-heading"
+            fontSize={{ base: "32px" }}
+            mt="80px"
+            mb="80px"
+            textAlign="center"
+            fontWeight="600"
+          >
+            ახალი პროდუქტები
+          </Text>
         )}
 
         <div className="best-seller">

@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Button, Image, Input, Text } from "@chakra-ui/react";
 import { currentUserState, languageState } from "../../atoms";
 import { useRecoilValue } from "recoil";
-import axios from "axios";
 import { useCookies } from "react-cookie";
 import profile from "../../images/profile.svg";
 import burgerBar from "../../images/burger-bar.svg";
@@ -24,6 +23,9 @@ export const Header: React.FC<{
     return (
       <>
         <Box
+          overflowY="auto"
+          top="0"
+          left="0"
           position="fixed"
           zIndex="2"
           display="flex"
@@ -32,16 +34,31 @@ export const Header: React.FC<{
           w="100%"
           bgColor="rgb(18 18 18)"
         >
-          <Box ml="15px" mt="15px">
-            <LangAndCurrency />
+          <Box
+            h="64px"
+            display="flex"
+            justifyContent="space-between"
+            ml="50px"
+            mr="50px"
+          >
+            <Image
+              filter="invert(100%)"
+              className="burger-bar"
+              cursor="pointer"
+              onClick={() => {
+                setBurgerBarOpen(!burgerBarOpen);
+              }}
+              src={burgerBar}
+              w="30px"
+            />
           </Box>
           <Box
             display="flex"
             flexDirection="column"
             alignItems="center"
-            h={{ base: "200px", xl: "240px" }}
-            mt="50px"
             justifyContent="space-evenly"
+            fontSize="24px"
+            h="250px"
           >
             {language === "en" ? (
               <Link className="header-li" to="/">
@@ -74,29 +91,12 @@ export const Header: React.FC<{
           <Box display="flex" alignItems="center" flexDir="column">
             {Object.keys(currentUser).length === 0 ? (
               <>
-                <Button
-                  colorScheme="blue"
-                  w="220px"
-                  h="50px"
-                  fontSize="17px"
-                  onClick={() => {
-                    navigate(props.login!);
-                  }}
-                >
+                <Link to={props.login!} style={{ fontSize: "24px" }}>
                   Sign In
-                </Button>
-                <Button
-                  mt="70px"
-                  colorScheme="blue"
-                  w="220px"
-                  h="50px"
-                  fontSize="17px"
-                  onClick={() => {
-                    navigate(props.register!);
-                  }}
-                >
+                </Link>
+                <Link to={props.register!} style={{ fontSize: "24px" }}>
                   Sign Up
-                </Button>
+                </Link>
               </>
             ) : (
               <>
@@ -109,164 +109,162 @@ export const Header: React.FC<{
                   }}
                   cursor="pointer"
                 >
-                  <Text
-                    fontSize={{ base: "4xl", xl: "6xl" }}
-                    ml="55px"
-                    pb="5px"
-                  >
+                  <Text fontSize="24px" ml="55px" pb="5px">
                     {currentUser.name}
                   </Text>
-                  <Image
-                    h="100%"
-                    // borderRadius="full"
-                    ml="4"
-                    src={profile}
-                    alt="profile"
-                  />
+                  <Image h="30px" ml="4" src={profile} alt="profile" />
                 </Box>
               </>
             )}
           </Box>
         </Box>
-        <Image
-          className="burger-bar"
-          position="absolute"
-          top="25px"
-          right="20px"
-          cursor="pointer"
-          onClick={() => {
-            setBurgerBarOpen(!burgerBarOpen);
-          }}
-          src={burgerBar}
-          zIndex="3"
-        />
       </>
     );
   }
   return (
     <header className="header">
-      <div className="header-introduction">
+      <Box fontSize="24px">
         {language === "en" ? (
-          <Text>Apple Kingdom</Text>
+          <Text fontWeight="600">Apple Kingdom</Text>
         ) : (
-          <Text>ეფლის სამეფო</Text>
+          <Text fontWeight="600">ეფლის სამეფო</Text>
         )}
-      </div>
-      <div className="header-bottom-bar">
-        <ul className="header-ul">
-          {language === "en" ? (
-            <Link className="header-li" to="/">
-              HOME
-            </Link>
-          ) : (
-            <Link className="header-li" to="/">
-              სახლი
-            </Link>
-          )}
-          {language === "en" ? (
-            <Link className="header-li" to="/shop">
-              SHOP
-            </Link>
-          ) : (
-            <Link className="header-li" to="/shop">
-              მაღაზია
-            </Link>
-          )}
-          {language === "en" ? (
-            <Link className="header-li" to="/about">
-              ABOUT US
-            </Link>
-          ) : (
-            <Link className="header-li" to="/about">
-              ჩვენს შესახებ
-            </Link>
-          )}
-        </ul>
-        <div className="header-top-left">
-          <LangAndCurrency />
-        </div>
+      </Box>
+      <Box
+        display={{ base: "none", xl: "flex" }}
+        justifyContent="space-between"
+        w={{ xl: "350px", "2xl": "500px" }}
+        position={{ "2xl": "absolute" }}
+        left={{ "2xl": "50%" }}
+        transform={{ "2xl": "translate(-50%)" }}
+        fontSize="18px"
+        fontWeight="600"
+      >
+        {language === "en" ? (
+          <Link className="header-li" to="/">
+            HOME
+          </Link>
+        ) : (
+          <Link className="header-li" to="/">
+            სახლი
+          </Link>
+        )}
+        {language === "en" ? (
+          <Link className="header-li" to="/shop">
+            SHOP
+          </Link>
+        ) : (
+          <Link className="header-li" to="/shop">
+            მაღაზია
+          </Link>
+        )}
+        {language === "en" ? (
+          <Link className="header-li" to="/about">
+            ABOUT US
+          </Link>
+        ) : (
+          <Link className="header-li" to="/about">
+            ჩვენს შესახებ
+          </Link>
+        )}
+      </Box>
+      <Box display={{ base: "none", xl: "flex" }} alignItems="center">
+        <Input
+          h="35px"
+          w={{ "2xl": "240px" }}
+          placeholder="Search"
+          onChange={(e) => {
+            props.getInputText!(e.target.value);
+          }}
+        />
         {props.getInputText ? (
-          <>
-            <Input
-              className="search"
-              placeholder="Search"
-              onChange={(e) => {
-                props.getInputText!(e.target.value);
-              }}
-            />
-            <Image
-              className="burger-bar"
-              position="absolute"
-              top="25px"
-              right="20px"
-              cursor="pointer"
-              onClick={() => {
-                setBurgerBarOpen(!burgerBarOpen);
-              }}
-              src={burgerBar}
-            />
-          </>
-        ) : null}
-        {props.getInputText ? (
-          <Box className="header-top-right">
-            <Input
-              placeholder="Search"
-              onChange={(e) => {
-                props.getInputText!(e.target.value);
-              }}
-            />
+          <Box>
             {Object.keys(currentUser).length === 0 ? (
               <>
-                <Button
-                  colorScheme="blue"
-                  ml="20px"
-                  mr="20px"
-                  w="120px"
-                  fontSize="17px"
-                  onClick={() => {
-                    navigate(props.login!);
-                  }}
+                <Box
+                  ml="50px"
+                  display="flex"
+                  w="255px"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
-                  Sign In
-                </Button>
-                <Button
-                  colorScheme="blue"
-                  ml="20px"
-                  w="120px"
-                  fontSize="17px"
-                  onClick={() => {
-                    navigate(props.register!);
-                  }}
-                >
-                  Sign Up
-                </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    fontSize="18px"
+                    onClick={() => {
+                      navigate(props.login!);
+                    }}
+                  >
+                    {language === "en" ? "Sign In" : "შესვლა"}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    fontSize="18px"
+                    onClick={() => {
+                      navigate(props.register!);
+                    }}
+                  >
+                    {language === "en" ? "Sign Up" : "რეგისტრაცია"}
+                  </Button>
+                </Box>
               </>
             ) : (
               <>
-                <Box
-                  display="flex"
-                  mr="45px"
-                  alignItems="center"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  fontSize="18px"
                   onClick={() => {
                     navigate(props.profile!);
                   }}
-                  cursor="pointer"
+                  ml="25px"
                 >
-                  <Text fontSize="2xl" ml="55px" pb="5px">
+                  <Text fontSize="18px" pb="5px">
                     {currentUser.name}
                   </Text>
                   <Image
-                    // borderRadius="full"
+                    borderRadius="full"
+                    h="30px"
                     ml="4"
                     src={profile}
                     alt="profile"
                   />
-                </Box>
+                </Button>
               </>
             )}
           </Box>
         ) : null}
-      </div>
+      </Box>
+      <Image
+        display={{ base: "block", xl: "none" }}
+        w="30px"
+        filter="invert(100%)"
+        className="burger-bar"
+        cursor="pointer"
+        onClick={() => {
+          setBurgerBarOpen(!burgerBarOpen);
+        }}
+        src={burgerBar}
+      />
+
+      <Box
+        pos="absolute"
+        left="0"
+        top="64px"
+        bgColor="#121212"
+        w="300px"
+        h="50px"
+        clipPath="polygon(0% 0%, 100% 0%, 82% 100%, 0% 100%)"
+        display="flex"
+        // alignItems="center"
+        // justifyContent="center"
+      >
+        <Box ml="50px">
+          <LangAndCurrency size="sm" width="70px" />
+        </Box>
+      </Box>
     </header>
   );
 };

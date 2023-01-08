@@ -8,7 +8,7 @@ import "./styles/bestseller.css";
 import "./styles/langcurrency.css";
 import "./styles/adminpanel.css";
 import "./styles/itempage.css";
-import "./styles/responsive.css";
+// import "./styles/responsive.css";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import theme from "./theme";
 import { RecoilRoot } from "recoil";
