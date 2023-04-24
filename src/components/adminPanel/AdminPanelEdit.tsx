@@ -28,7 +28,7 @@ import {
 } from "@chakra-ui/react";
 import { Loading } from "../Loading";
 import { useRecoilValue } from "recoil";
-import { currentUserState, itemsState } from "../../atoms";
+import { currentUserState, macsState } from "../../atoms";
 import { useFormik, yupToFormErrors, FieldArray, Formik } from "formik";
 import * as Yup from "yup";
 import { AdminPanelInput } from "./AdminPanelInput";
@@ -69,7 +69,7 @@ export const AdminPanelEdit = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const toast = useToast();
   const { id: currentId } = useParams();
-  const items = useRecoilValue(itemsState);
+  const items = useRecoilValue(macsState);
   console.log(
     "this item ",
     items.find((x) => x.id === parseInt(currentId!))

@@ -1,19 +1,37 @@
 import { Box, Button, Input, Text } from "@chakra-ui/react";
-import axios from "axios";
 import { useFormik, yupToFormErrors, FieldArray, Formik } from "formik";
-import { AdminPanelInput } from "../adminPanel/AdminPanelInput";
+import { AdminPanelInput } from "../../adminPanel/AdminPanelInput";
 import * as Yup from "yup";
 import React, { useState } from "react";
 import { useToast } from "@chakra-ui/react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { useRecoilValue } from "recoil";
-import { currentUserState } from "../../atoms";
-export const Register = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
-  console.log("Token ", cookies.accessToken);
+import axios from "axios";
+import { currentUserState } from "../../../atoms";
+export const Login = () => {
   const navigate = useNavigate();
+  const toast = useToast();
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loginSchema = Yup.object().shape({
+    email: Yup.string()
+      .required()
+      .email()
+      .min(2, "Email has to contain more than 2 letters")
+      .max(50, "Email has to contain less than 50 letters"),
+    password: Yup.string()
+      .required()
+      .min(6, "Password has to contain more than 6 letters")
+      .max(15, "Password has to contain less than 15 letters"),
+  });
+
+  const [cookies, setCookie] = useCookies(["accessToken"]);
   const currentUser = useRecoilValue(currentUserState);
   useEffect(() => {
     if (Object.keys(currentUser).length !== 0) {
@@ -21,51 +39,6 @@ export const Register = () => {
     }
   }, []);
 
-  const [emailExists, setEmailExists] = useState(false);
-  const toast = useToast();
-  const initialValues = {
-    email: "",
-    password: "",
-    repeatPassword: "",
-  };
-  const [isLoading, setIsLoading] = useState(false);
-  const registerSchema = Yup.object().shape({
-    email: Yup.string()
-      .required()
-      .email()
-      .min(2, "Email has to contain more than 2 letters")
-      .test("test-name", "Email already exists", (value) => {
-        fetch("https://geolab-project-backend.onrender.com/userexists", {
-          method: "POST",
-          body: JSON.stringify({ email: value }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((values) => {
-            if (values.emailExists === true) {
-              setEmailExists(false);
-            } else {
-              setEmailExists(true);
-            }
-            console.log("fetch values: ", values);
-          })
-          .catch((err) => {
-            console.log("Error: ", JSON.stringify(err));
-          });
-        return emailExists;
-      })
-      .max(50, "Email has to contain less than 50 letters"),
-
-    password: Yup.string()
-      .required()
-      .min(6, "Password has to contain more than 6 letters")
-      .max(15, "Password has to contain less than 15 letters"),
-    repeatPassword: Yup.string()
-      .required()
-      .oneOf([Yup.ref("password")], "Passwords do not match"),
-  });
   return (
     <>
       <div
@@ -83,7 +56,7 @@ export const Register = () => {
           flexDirection="column"
           borderRadius="15"
         >
-          <Text fontSize="6xl">Sign Up</Text>
+          <Text fontSize="6xl">Log In</Text>
           <Box
             className="inputs"
             mt="55"
@@ -94,41 +67,45 @@ export const Register = () => {
             justifyContent="space-between"
           >
             <Formik
-              validationSchema={registerSchema}
+              validationSchema={loginSchema}
               initialValues={initialValues}
               onSubmit={(values) => {
                 axios({
-                  url: "https://geolab-project-backend.onrender.com/register",
+                  url: "https://geolab-project-backend.onrender.com/login",
                   method: "POST",
-                  data: JSON.stringify({
-                    email: values.email,
-                    password: values.password,
-                  }),
+                  data: JSON.stringify(values),
                   headers: {
                     "Content-Type": "application/json",
                   },
                 })
-                  .then((res) => {
-                    console.log("fetch res: ", res);
+                  .then((res: any) => {
+                    setCookie("accessToken", res.data.accessToken, {
+                      path: "/",
+                    });
+                    console.log("token ", res.accessToken);
+                    console.log("cookies ", cookies);
+                    navigate("../");
                   })
                   .catch((err) => {
-                    console.log("Error: ", JSON.stringify(err));
+                    console.log("Error: ", err);
+                    console.log("Error Status: ", err.response.status);
                     toast({
-                      title: "Error.",
-                      description: err.message,
+                      title: `Error. `,
+                      description:
+                        err.response.status === 401
+                          ? "Email or Password is incorrect"
+                          : err.response.status,
                       status: "error",
                       duration: 5000,
                       isClosable: true,
                       position: "top",
                     });
                   });
-                useEffect(() => {
-                  const timer = setTimeout(() => {
-                    setIsLoading(false);
-                  }, 1500);
-                  return () => clearTimeout(timer);
-                }, []);
-
+                setIsLoading(true);
+                const timer = setTimeout(() => {
+                  setIsLoading(false);
+                }, 1500);
+                return () => clearTimeout(timer);
                 // alert(JSON.stringify(values, null, 2));
               }}
             >
@@ -146,7 +123,7 @@ export const Register = () => {
                   >
                     <Box
                       w="100%"
-                      h="300px"
+                      h="220px"
                       display="flex"
                       flexDir="column"
                       justifyContent="space-between"
@@ -175,19 +152,6 @@ export const Register = () => {
                         onBlur={handleBlur}
                         password
                       />
-                      <AdminPanelInput
-                        label="Repeat Password"
-                        error={errors.repeatPassword}
-                        errorMessage={errors.repeatPassword}
-                        helperText="Nice Job"
-                        min={0}
-                        id="repeatPassword"
-                        inputValue={values.repeatPassword}
-                        handleChange={handleChange}
-                        onBlur={handleBlur}
-                        autocomplete="off"
-                        password
-                      />
                     </Box>
                     <Button
                       isLoading={isLoading}
@@ -197,9 +161,9 @@ export const Register = () => {
                       w="70%"
                       h="60px"
                       fontSize="2xl"
-                      disabled={Object.keys(errors).length !== 0}
+                      onClick={() => {}}
                     >
-                      Sign Up
+                      Log In
                     </Button>
                   </form>
                 );

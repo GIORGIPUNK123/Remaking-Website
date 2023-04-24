@@ -1,7 +1,11 @@
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { ItemTypes, CartItemTypes, UserTypes } from "./types";
-export const itemsState = atom<ItemTypes[]>({
-  key: "items", // unique ID (with respect to other atoms/selectors)
+import { MacTypes, GeneralMacTypes, CartItemTypes, UserTypes } from "./types";
+export const macsState = atom<MacTypes[]>({
+  key: "macs", // unique ID (with respect to other atoms/selectors)
+  default: [], // default value (aka initial value)
+});
+export const generalMacsState = atom<GeneralMacTypes[]>({
+  key: "generalMacs", // unique ID (with respect to other atoms/selectors)
   default: [], // default value (aka initial value)
 });
 export const languageState = atom({

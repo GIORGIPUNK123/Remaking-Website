@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { useCookies } from "react-cookie";
-import { currentUserState } from "../../atoms";
+import { currentUserState } from "../../../atoms";
 import { useNavigate } from "react-router-dom";
 export const Profile: React.FC = () => {
   const navigate = useNavigate();

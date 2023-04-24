@@ -6,7 +6,7 @@ import { AdminPanelImageModal } from "./modals/AdminPanelImageModal";
 import { AdminPanelTable } from "./AdminPanelTable";
 import { Button, useColorMode, useDisclosure } from "@chakra-ui/react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { currentUserState, itemsState } from "../../atoms";
+import { currentUserState, macsState } from "../../atoms";
 import { Loading } from "../Loading";
 
 export const AdminPanel = (props: any) => {
@@ -29,7 +29,7 @@ export const AdminPanel = (props: any) => {
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
-  const [items, setItems] = useRecoilState(itemsState);
+  const [items, setItems] = useRecoilState(macsState);
   const currentUser = useRecoilValue(currentUserState);
   if (isLoading === true) {
     return <Loading />;

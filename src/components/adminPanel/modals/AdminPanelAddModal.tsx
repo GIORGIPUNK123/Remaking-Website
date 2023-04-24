@@ -17,7 +17,7 @@ import {
 import { useFormik, yupToFormErrors, FieldArray, Formik } from "formik";
 import * as Yup from "yup";
 import { AdminPanelInput } from "../AdminPanelInput";
-import { itemsState } from "../../../atoms";
+import { macsState } from "../../../atoms";
 import { useRecoilValue } from "recoil";
 export const AdminPanelAddModal = (props: {
   isOpen: boolean;
@@ -27,8 +27,8 @@ export const AdminPanelAddModal = (props: {
   // const [booleans, setBooleans] = useState([false]);
   // console.log('addRow ', addRow);
   // console.log('booleans ', booleans);
-  const items = useRecoilValue(itemsState);
-  console.log("items ", items);
+  const macs = useRecoilValue(macsState);
+  console.log("macs ", macsState);
   const initialValues = {
     id: 0,
     type: "",
@@ -47,7 +47,7 @@ export const AdminPanelAddModal = (props: {
       .positive("ID has to be positive")
       .integer("ID has to be integer")
       .notOneOf(
-        items.map((item) => {
+        macs.map((item) => {
           return item.id;
         }),
         "ID has been already used"

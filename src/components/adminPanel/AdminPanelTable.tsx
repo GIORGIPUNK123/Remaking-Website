@@ -21,11 +21,11 @@ import {
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { itemsState } from "../../atoms";
+import { macsState } from "../../atoms";
 import React from "react";
 export const AdminPanelTable = (props: any) => {
   const navigate = useNavigate();
-  const items = useRecoilValue(itemsState);
+  const items = useRecoilValue(macsState);
   return (
     <TableContainer overflowY="scroll" h="50%">
       <Table variant="simple">

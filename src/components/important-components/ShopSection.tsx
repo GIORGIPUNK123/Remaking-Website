@@ -10,29 +10,60 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { itemsState, valueState } from "../../atoms";
+import { generalMacsState, macsState, valueState } from "../../atoms";
 import { Loading } from "../Loading";
 import { ShopBox } from "../ShopBox";
 import { Header } from "./Header";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
-import { ItemTypes, PriceRangeSliderTypes, CheckBoxTypes } from "../../types";
+import {
+  ItemTypes,
+  MacTypes,
+  PriceRangeSliderTypes,
+  CheckBoxTypes,
+  GeneralMacTypes,
+} from "../../types";
 const DisplayShopBoxes = (props: {
   items: ItemTypes[];
   sliceValue: number;
 }) => {
   return (
     <>
-      {props.items.slice(0, props.sliceValue).map((item) => (
+      {props.items.slice(0, props.sliceValue).map((items) => (
         <ShopBox
-          key={item.id}
-          itemId={item.id}
-          itemName={item.name}
-          itemPrice={item.price}
-          itemSalePrice={item.salePrice}
-          itemGelPrice={item.gelPrice}
-          itemSaleGelPrice={item.saleGelPrice}
-          itemImages={item.images}
+          key={items.id}
+          itemId={items.id}
+          itemName={items.name}
+          itemPrice={items.price}
+          itemSalePrice={items.salePrice!}
+          itemGelPrice={items.gelPrice}
+          itemSaleGelPrice={items.saleGelPrice!}
+          itemImages={items.images}
           shop
+        />
+      ))}
+    </>
+  );
+};
+const DisplayGeneralShopBoxes = (props: {
+  items: GeneralMacTypes[];
+  sliceValue: number;
+}) => {
+  return (
+    <>
+      {props.items.slice(0, props.sliceValue).map((items) => (
+        <ShopBox
+          key={items.id}
+          itemId={items.id}
+          itemName={items.name}
+          itemPrice={items.startingPrice}
+          itemGelPrice={items.startingGelPrice}
+          itemImages={items.images}
+          itemType={items.type}
+          itemCategory={items.category}
+          // itemSalePrice={items.salePrice!}
+          // itemSaleGelPrice={items.saleGelPrice!}
+          shop
+          general
         />
       ))}
     </>
@@ -177,34 +208,43 @@ const Checkboxes = ({
 
 export const ShopSection = () => {
   const currentValue = useRecoilValue(valueState);
+  const macs = useRecoilValue(macsState);
+  const generalMacs = useRecoilValue(generalMacsState);
+  const [items, setItems] = useState([]);
+  // useEffect(() => {
+  //   setItems(items.concat(macs));
+  // }, []);
   const getInputText = (text: string) => {
     setInputText(text);
   };
   const [isMac, setIsMac] = useState(false);
+  console.log("ITEEEEMSSSS: ", items);
   const [isIphone, setIsIphone] = useState(false);
   const [isAirpods, setIsAirpods] = useState(false);
   const [inputText, setInputText] = useState("");
-  const items = useRecoilValue(itemsState);
   const [filterTypes, setFilterTypes] = useState<string[]>([]);
   const maxPrice =
     currentValue === "usd"
-      ? Math.max(...items.map((item) => item.price))
-      : Math.max(...items.map((item) => item.gelPrice));
+      ? Math.max(...macs.map((item) => item.price))
+      : Math.max(...macs.map((item) => item.gelPrice));
   const [minSliderValue, setMinSliderValue] = useState(0);
   const [maxSliderValue, setMaxSliderValue] = useState(maxPrice);
-  const filteredItems: ItemTypes[] = items.filter((item) => {
-    console.log("item: ", item);
-    const priceField = currentValue === "usd" ? "price" : "gelPrice";
-    const containsInputText = item.name.toLowerCase().includes(inputText);
-    return (
-      (filterTypes.length === 0 || filterTypes.includes(item.type)) &&
-      containsInputText &&
-      item[priceField] > minSliderValue &&
-      item[priceField] <= maxSliderValue
-    );
-  });
+  // const filteredItems: ItemTypes[] = macs.filter((item) => {
+  //   console.log("item: ", item);
+  //   const priceField = currentValue === "usd" ? "price" : "gelPrice";
+  //   const containsInputText = item.name.toLowerCase().includes(inputText);
+  //   return (
+  //     (filterTypes.length === 0 || filterTypes.includes(item.type)) &&
+  //     containsInputText &&
+  //     item[priceField] > minSliderValue &&
+  //     item[priceField] <= maxSliderValue
+  //   );
+  // });
   const [sliceValue, setSliceValue] = useState(6);
-  if (filteredItems !== undefined) {
+  if (
+    macs !== undefined
+    // filteredItems !== undefined
+  ) {
     return (
       <>
         <Header
@@ -280,7 +320,16 @@ export const ShopSection = () => {
             justifyContent="center"
             flexWrap="wrap"
           >
-            <DisplayShopBoxes items={filteredItems} sliceValue={sliceValue} />
+            {/* <DisplayShopBoxes
+              // items={generalMacs}
+              items={filteredItems}
+              sliceValue={sliceValue}
+            /> */}
+            <DisplayGeneralShopBoxes
+              items={generalMacs}
+              // items={filteredItems}
+              sliceValue={sliceValue}
+            />
           </Box>
         </Box>
       </>

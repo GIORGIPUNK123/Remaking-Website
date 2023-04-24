@@ -14,10 +14,10 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
-import { itemsState } from "../../../atoms";
+import { macsState } from "../../../atoms";
 import { useRecoilValue } from "recoil";
 export const AdminPanelDeleteModal = (props: any) => {
-  const items = useRecoilValue(itemsState);
+  const items = useRecoilValue(macsState);
   const [minItem, setMinItem] = useState(1);
 
   useEffect(() => {

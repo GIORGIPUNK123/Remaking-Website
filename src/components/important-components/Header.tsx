@@ -169,73 +169,75 @@ export const Header: React.FC<{
         )}
       </Box>
       <Box display={{ base: "none", xl: "flex" }} alignItems="center">
-        <Input
-          h="35px"
-          w={{ "2xl": "240px" }}
-          placeholder="Search"
-          onChange={(e) => {
-            props.getInputText!(e.target.value);
-          }}
-        />
         {props.getInputText ? (
-          <Box>
-            {Object.keys(currentUser).length === 0 ? (
-              <>
-                <Box
-                  ml="50px"
-                  display="flex"
-                  w="255px"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    fontSize="18px"
-                    onClick={() => {
-                      navigate(props.login!);
-                    }}
-                  >
-                    {language === "en" ? "Sign In" : "შესვლა"}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    fontSize="18px"
-                    onClick={() => {
-                      navigate(props.register!);
-                    }}
-                  >
-                    {language === "en" ? "Sign Up" : "რეგისტრაცია"}
-                  </Button>
-                </Box>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  fontSize="18px"
-                  onClick={() => {
-                    navigate(props.profile!);
-                  }}
-                  ml="25px"
-                >
-                  <Text fontSize="18px" pb="5px">
-                    {currentUser.name}
-                  </Text>
-                  <Image
-                    borderRadius="full"
-                    h="30px"
-                    ml="4"
-                    src={profile}
-                    alt="profile"
-                  />
-                </Button>
-              </>
-            )}
-          </Box>
+          <>
+            <Box>
+              <Input
+                h="35px"
+                w={{ "2xl": "240px" }}
+                placeholder="Search"
+                onChange={(e) => {
+                  props.getInputText!(e.target.value);
+                }}
+              />
+            </Box>
+          </>
         ) : null}
+        {Object.keys(currentUser).length === 0 ? (
+          <>
+            <Box
+              ml="50px"
+              display="flex"
+              w="255px"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Button
+                variant="ghost"
+                size="sm"
+                fontSize="18px"
+                onClick={() => {
+                  navigate(props.login!);
+                }}
+              >
+                {language === "en" ? "Sign In" : "შესვლა"}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                fontSize="18px"
+                onClick={() => {
+                  navigate(props.register!);
+                }}
+              >
+                {language === "en" ? "Sign Up" : "რეგისტრაცია"}
+              </Button>
+            </Box>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="ghost"
+              size="sm"
+              fontSize="18px"
+              onClick={() => {
+                navigate(props.profile!);
+              }}
+              ml="25px"
+            >
+              <Text fontSize="18px" pb="5px">
+                {currentUser.name}
+              </Text>
+              <Image
+                borderRadius="full"
+                h="30px"
+                ml="4"
+                src={profile}
+                alt="profile"
+              />
+            </Button>
+          </>
+        )}
       </Box>
       <Image
         display={{ base: "block", xl: "none" }}

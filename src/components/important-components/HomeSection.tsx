@@ -8,11 +8,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Box, Heading, Text } from "@chakra-ui/react";
-import { itemsState, languageState } from "../../atoms";
-import { useRecoilValue } from "recoil";
+import { macsState, languageState, generalMacsState } from "../../atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { ItemTypes } from "../../types";
 
 export const HomeSection = () => {
-  const items = useRecoilValue(itemsState);
+  const generalMacs = useRecoilValue(generalMacsState);
+  const [items, setItems] = useState<any>([]);
   const language = useRecoilValue(languageState);
   const [inputText, setInputText] = useState("");
   const getInputText = (text: string) => {
@@ -29,10 +31,16 @@ export const HomeSection = () => {
     salePrice: number;
     type: string;
   }
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(inputText)
-  );
-  console.log("filteredItems :", filteredItems);
+  useEffect(() => {
+    setItems([...generalMacs]);
+  }, [generalMacs]);
+
+  console.log("items: ", items);
+  // console.log("macs: ", macs);
+  // const filteredItems = items.filter((item) =>
+  //   item.name.toLowerCase().includes(inputText)
+  // );
+  // console.log("filteredItems :", filteredItems);
   return (
     <>
       <Header
@@ -71,7 +79,24 @@ export const HomeSection = () => {
             display={{ base: "none", md: "flex" }}
           >
             <div className="best-seller-items">
-              {filteredItems.slice(0, 6).map((item) => {
+              {items.slice(0, 6).map((item: any) => {
+                console.log("item.images :", item.images);
+                return (
+                  <ShopBox
+                    key={item.id}
+                    itemId={item.id}
+                    itemName={item.name}
+                    itemPrice={item.startingPrice}
+                    itemGelPrice={item.startingGelPrice}
+                    itemImages={item.images}
+                    itemType={item.type}
+                    itemCategory={item.category}
+                    general
+                  />
+                );
+              })}
+
+              {/* {filteredItems.slice(0, 6).map((item) => {
                 console.log("item.images :", item.images);
                 return (
                   <ShopBox
@@ -85,14 +110,14 @@ export const HomeSection = () => {
                     itemImages={item.images}
                   />
                 );
-              })}
+              })} */}
             </div>
           </Box>
           <Box
             className="best-seller-items"
             display={{ base: "flex", md: "none" }}
           >
-            {filteredItems.slice(0, 6).map((item) => {
+            {/* {filteredItems.slice(0, 6).map((item) => {
               console.log("item.images :", item.images);
               return (
                 <ShopBox
@@ -106,7 +131,7 @@ export const HomeSection = () => {
                   itemImages={item.images}
                 />
               );
-            })}
+            })} */}
           </Box>
         </div>
       </section>
