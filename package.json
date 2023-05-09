@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.4",
-    "@chakra-ui/react": "^2.2.4",
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/react": "^2.6.1",
     "@emotion/styled": "^11.10.5",
     "axios": "^1.2.1",
     "formik": "^2.2.9",
@@ -23,7 +23,7 @@
     "recoil": "^0.7.5",
     "styled-components": "^5.3.5",
     "swiper": "^8.2.6",
-    "typescript": "^4.9.4",
+    "typescript": "^5.0.4",
     "yup": "^0.32.11"
   },
   "devDependencies": {

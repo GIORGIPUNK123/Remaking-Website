@@ -3,7 +3,7 @@ export const DeadServer = () => {
   return (
     <>
       <div>
-        <h1>SERVER IS DEAD GO FUCK OFF</h1>
+        <h1>SERVER IS DEAD</h1>
       </div>
     </>
   );

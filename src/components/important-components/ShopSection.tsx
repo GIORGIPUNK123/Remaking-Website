@@ -1,207 +1,22 @@
-import {
-  Box,
-  Text,
-  RangeSlider,
-  RangeSliderTrack,
-  RangeSliderFilledTrack,
-  RangeSliderThumb,
-  NumberInput,
-  NumberInputField,
-} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { generalMacsState, macsState, valueState } from "../../atoms";
 import { Loading } from "../Loading";
 import { ShopBox } from "../ShopBox";
 import { Header } from "./Header";
-import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
-import {
-  ItemTypes,
-  MacTypes,
-  PriceRangeSliderTypes,
-  CheckBoxTypes,
-  GeneralMacTypes,
-} from "../../types";
-const DisplayShopBoxes = (props: {
-  items: ItemTypes[];
-  sliceValue: number;
-}) => {
-  return (
-    <>
-      {props.items.slice(0, props.sliceValue).map((items) => (
-        <ShopBox
-          key={items.id}
-          itemId={items.id}
-          itemName={items.name}
-          itemPrice={items.price}
-          itemSalePrice={items.salePrice!}
-          itemGelPrice={items.gelPrice}
-          itemSaleGelPrice={items.saleGelPrice!}
-          itemImages={items.images}
-          shop
-        />
-      ))}
-    </>
-  );
-};
+import { GeneralMacTypes } from "../../types";
+import { CheckBoxes } from "../inside-components/CheckBoxes";
+import { PriceRangeSlider } from "../inside-components/PriceRangeSlider";
 const DisplayGeneralShopBoxes = (props: {
   items: GeneralMacTypes[];
   sliceValue: number;
 }) => {
   return (
     <>
-      {props.items.slice(0, props.sliceValue).map((items) => (
-        <ShopBox
-          key={items.id}
-          itemId={items.id}
-          itemName={items.name}
-          itemPrice={items.startingPrice}
-          itemGelPrice={items.startingGelPrice}
-          itemImages={items.images}
-          itemType={items.type}
-          itemCategory={items.category}
-          // itemSalePrice={items.salePrice!}
-          // itemSaleGelPrice={items.saleGelPrice!}
-          shop
-          general
-        />
+      {props.items.map((item, index) => (
+        <ShopBox key={index} {...item} shop general />
       ))}
-    </>
-  );
-};
-
-const PriceRangeSlider = ({
-  maxPrice,
-  minSliderValue,
-  setMinSliderValue,
-  maxSliderValue,
-  setMaxSliderValue,
-}: PriceRangeSliderTypes) => {
-  return (
-    <Box
-      boxShadow="2xl"
-      mt="30px"
-      pt="25px"
-      pb="25px"
-      pl="25px"
-      pr="25px"
-      display="flex"
-      flexDir="column"
-      w="90%"
-      borderRadius="15px"
-      alignSelf="center"
-      textAlign="center"
-      bg="whiteAlpha.100"
-    >
-      <Box display="flex" justifyContent="space-evenly">
-        <NumberInput
-          w="110px"
-          allowMouseWheel
-          value={minSliderValue}
-          min={0}
-          onChange={(value) => setMinSliderValue(parseInt(value))}
-        >
-          <NumberInputField />
-        </NumberInput>
-        <NumberInput
-          w="110px"
-          allowMouseWheel
-          value={maxSliderValue}
-          max={maxPrice}
-          onChange={(value) => setMaxSliderValue(parseInt(value))}
-        >
-          <NumberInputField />
-        </NumberInput>
-      </Box>
-      <Box
-        mt="25px"
-        bg="whiteAlpha.50"
-        borderRadius="15px"
-        h="50px"
-        display="flex"
-        pl="35px"
-        pr="35px"
-      >
-        <RangeSlider
-          aria-label={["min", "max"]}
-          defaultValue={[0, maxPrice]}
-          max={maxPrice}
-          onChange={(values) => {
-            setMinSliderValue(values[0]);
-            setMaxSliderValue(values[1]);
-          }}
-        >
-          <RangeSliderTrack bg="red.100">
-            <RangeSliderFilledTrack bg="tomato" />
-          </RangeSliderTrack>
-          <RangeSliderThumb boxSize={6} index={0} />
-          <RangeSliderThumb boxSize={6} index={1} />
-        </RangeSlider>
-      </Box>
-    </Box>
-  );
-};
-
-const Checkboxes = ({
-  isMac,
-  setIsMac,
-  isIphone,
-  setIsIphone,
-  isAirpods,
-  setIsAirpods,
-  filterTypes,
-  setFilterTypes,
-}: CheckBoxTypes) => {
-  return (
-    <>
-      <Checkbox
-        isChecked={isIphone}
-        value="isIphone"
-        colorScheme={"blue"}
-        onChange={() => {
-          setIsIphone(!isIphone);
-          const newFilterTypes = filterTypes.includes("iphone")
-            ? filterTypes.filter((t: string) => t !== "iphone")
-            : [...filterTypes, "iphone"];
-          setFilterTypes(newFilterTypes);
-        }}
-        size="lg"
-        mb="5px"
-      >
-        Iphone
-      </Checkbox>
-      <Checkbox
-        mt="5px"
-        isChecked={isMac}
-        value="mac"
-        colorScheme={"blue"}
-        onChange={() => {
-          setIsMac(!isMac);
-          const newFilterTypes = filterTypes.includes("mac")
-            ? filterTypes.filter((t: string) => t !== "mac")
-            : [...filterTypes, "mac"];
-          setFilterTypes(newFilterTypes);
-        }}
-        size="lg"
-      >
-        Mac
-      </Checkbox>
-      <Checkbox
-        mt="5px"
-        isChecked={isAirpods}
-        value="airpods"
-        colorScheme={"blue"}
-        onChange={() => {
-          setIsAirpods(!isAirpods);
-          const newFilterTypes = filterTypes.includes("airpods")
-            ? filterTypes.filter((t: string) => t !== "airpods")
-            : [...filterTypes, "airpods"];
-          setFilterTypes(newFilterTypes);
-        }}
-        size="lg"
-      >
-        Airpods
-      </Checkbox>
     </>
   );
 };
@@ -253,7 +68,8 @@ export const ShopSection = () => {
           register="../register"
           profile="../profile"
         />
-        <Box bg="whiteAlpha.800" h="75px"></Box>
+
+        <Box bg="whiteAlpha.800" h="75px" />
         <Box
           display="flex"
           flexDir={{ base: "column", xl: "row" }}
@@ -299,9 +115,7 @@ export const ShopSection = () => {
                 justifyContent="space-evenly"
                 align-items="center"
               >
-                <Checkboxes
-                  filterTypes={filterTypes}
-                  setFilterTypes={setFilterTypes}
+                <CheckBoxes
                   isMac={isMac}
                   setIsMac={setIsMac}
                   isIphone={isIphone}
@@ -321,10 +135,10 @@ export const ShopSection = () => {
             flexWrap="wrap"
           >
             {/* <DisplayShopBoxes
-              // items={generalMacs}
-              items={filteredItems}
-              sliceValue={sliceValue}
-            /> */}
+        // items={generalMacs}
+        items={filteredItems}
+        sliceValue={sliceValue}
+      /> */}
             <DisplayGeneralShopBoxes
               items={generalMacs}
               // items={filteredItems}

@@ -1,4 +1,4 @@
-export interface MacTypes {
+export interface MacType {
   id: number;
   price: number;
   salePrice?: number;
@@ -42,23 +42,23 @@ export interface CartItemTypes {
   amount: number;
 }
 export interface ShopBoxTypes {
-  itemImages: string[];
-  itemId: number;
-  itemPrice: number;
-  itemSalePrice?: number;
-  itemGelPrice: number;
-  itemSaleGelPrice?: number;
+  images: string[];
+  id: number;
+  startingPrice: number;
+  salePrice?: number;
+  startingGelPrice: number;
+  saleGelPrice?: number;
   shop?: boolean;
   general?: boolean;
-  itemName: string;
-  itemType?: string;
-  itemCategory?: string;
+  name: string;
+  type?: string;
+  category: string;
 }
 export interface MoneyDisplayTypes {
-  itemPrice: number;
-  itemSalePrice?: number;
-  itemGelPrice: number;
-  itemSaleGelPrice?: number;
+  price: number;
+  salePrice?: number;
+  gelPrice: number;
+  saleGelPrice?: number;
 }
 export interface PriceRangeSliderTypes {
   maxPrice: number;
@@ -74,8 +74,6 @@ export interface CheckBoxTypes {
   setIsIphone: (value: boolean) => void;
   isAirpods: boolean;
   setIsAirpods: (value: boolean) => void;
-  filterTypes: string[];
-  setFilterTypes: (value: string[]) => void;
 }
 export interface UserTypes {
   id?: number;

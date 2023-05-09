@@ -8,7 +8,7 @@ import { Button, useColorMode, useDisclosure } from "@chakra-ui/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { currentUserState, macsState } from "../../atoms";
 import { Loading } from "../Loading";
-
+import { getMacs } from "../../functions/fetchFuncions";
 export const AdminPanel = (props: any) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);

@@ -1,5 +1,4 @@
-import { Header } from "./components/important-components/Header";
-import axios from "axios";
+import React from "react";
 import { HomeSection } from "./components/important-components/HomeSection";
 import { AdminPanel } from "./components/adminPanel/AdminPanel";
 import { AdminPanelEdit } from "./components/adminPanel/AdminPanelEdit";
@@ -8,18 +7,6 @@ import { Loading } from "./components/Loading";
 import { DeadServer } from "./components/DeadServer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import React from "react";
-// import Swiper core and required modules
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/autoplay";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { currentUserState, generalMacsState, macsState } from "./atoms";
@@ -28,6 +15,11 @@ import { Register } from "./components/important-components/user-related/Registe
 import { Cart } from "./components/inside-components/Cart";
 import { ShopSection } from "./components/important-components/ShopSection";
 import { Profile } from "./components/important-components/user-related/Profile";
+import {
+  getCurrentUser,
+  getGeneralMacs,
+  getMacs,
+} from "./functions/fetchFuncions";
 
 const App = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
@@ -37,54 +29,21 @@ const App = () => {
   // console.log(currentUser);
   useEffect(() => {
     if (cookies.accessToken !== undefined) {
-      axios({
-        url: "https://geolab-project-backend.onrender.com/userInfo",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.accessToken}`,
-        },
-      })
-        .then((res: any) => {
-          setCurrentUser(res.data);
-        })
-        .catch((err: any) => {
-          console.log("Error: ", err);
-        });
+      getCurrentUser(cookies.accessToken!).then((data) => {
+        setCurrentUser(data);
+      });
     }
+    getMacs().then((data) => {
+      setMacs(data);
+    });
+    getGeneralMacs().then((data) => {
+      setGeneralMacs(data);
+    });
   }, []);
-  const getMacsFunction = () => {
-    fetch(
-      // "https://geolab-project-backend.onrender.com/macs"
-      "http://localhost:3006/macs"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setMacs(data);
-        // console.log("fetched");
-      })
-      .catch((err) => console.log(err));
-  };
-  const getGeneralMacsFunction = () => {
-    fetch(
-      // "https://geolab-project-backend.onrender.com/generalmacs"
-      "http://localhost:3006/generalmacs"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setGeneralMacs(data);
-        // console.log("fetched");
-      })
-      .catch((err) => console.log(err));
-  };
-  useEffect(() => {
-    getMacsFunction();
-    getGeneralMacsFunction();
-  }, []);
-  // console.log("MACS ==> ", macs);
-  // console.log("GENERAL MACS ==> ", generalMacs);
-  const ifMacsAreRendered = !!macs.length;
-  if (!ifMacsAreRendered) {
+
+  // ROUTES
+
+  if (!!!macs.length) {
     return (
       <Router>
         <Routes>
@@ -109,10 +68,7 @@ const App = () => {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/build/:type/:product" element={<BuildPage />}></Route>
-          <Route
-            path="/adminpanel"
-            element={<AdminPanel getMacsFunction={getMacsFunction} />}
-          ></Route>
+          <Route path="/adminpanel" element={<AdminPanel />}></Route>
           <Route
             path="/adminpanel/edit/:id"
             element={<AdminPanelEdit />}

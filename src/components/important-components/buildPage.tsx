@@ -4,19 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 import { Header } from "./Header";
 import cartImage from "../../images/add-to-cart.svg";
-import {
-  Box,
-  useColorMode,
-  Button,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  useNumberInput,
-  Input,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, useNumberInput, Input, Text } from "@chakra-ui/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   cartState,
@@ -27,183 +15,20 @@ import {
 } from "../../atoms";
 import { Loading } from "../Loading";
 import axios from "axios";
-const SwiperSlideForImages = (props: any) => {
-  return (
-    <Box className="my-swiper-wrapper" boxShadow="dark-lg">
-      <Swiper
-        modules={[Navigation, Autoplay]}
-        slidesPerView={1}
-        spaceBetween={30}
-        loop={true}
-        autoplay
-        navigation
-      >
-        {props.images.map((image: string, index: number) => (
-          <SwiperSlide
-            key={index}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <div
-              className="item-image"
-              style={{ backgroundImage: `url(${image})` }}
-            ></div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </Box>
-  );
-};
-const getmacoptions = async (myId: number) => {
-  return await axios
-    .get(`http://localhost:3006/getmacoptions/${myId}`)
-    .then((response) => {
-      // handle success
-      console.log("AXIOS RESPONSE DATA: ", response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      // handle error
-      console.log("AXIOS ERROR: ", error);
-    });
-};
-const colorsDisplay = (
-  colors: string[],
-  activeColor: string | undefined,
-  setState: any
-) => {
-  console.log("activeColor: ", activeColor);
-  return colors.map((color, index) => {
-    switch (color) {
-      case "silver":
-        return (
-          <Box
-            outline={activeColor === "silver" ? "solid" : "none"}
-            key={index}
-            cursor="pointer"
-            w="100px"
-            h="55px"
-            bgColor="#C0C0C0"
-            borderRadius="7px"
-            boxShadow="xl"
-            _hover={{
-              boxShadow: "dark-lg",
-              transitionDuration: ".3s",
-            }}
-            onClick={() => {
-              setState("silver");
-            }}
-          />
-        );
-      case "gold":
-        return (
-          <Box
-            w="100px"
-            h="55px"
-            outline={activeColor === "gold" ? "solid" : "none"}
-            key={index}
-            cursor="pointer"
-            bgColor="#FFD700"
-            borderRadius="7px"
-            boxShadow="xl"
-            _hover={{
-              boxShadow: "dark-lg",
-              transitionDuration: ".3s",
-            }}
-            onClick={() => {
-              setState("gold");
-            }}
-          />
-        );
-      case "space_grey":
-        return (
-          <Box
-            w="100px"
-            h="55px"
-            outline={activeColor === "space_grey" ? "solid" : "none"}
-            key={index}
-            cursor="pointer"
-            bgColor="#808080"
-            borderRadius="7px"
-            boxShadow="xl"
-            _hover={{
-              boxShadow: "dark-lg",
-              transitionDuration: ".3s",
-            }}
-            onClick={() => {
-              setState("space_grey");
-            }}
-          />
-        );
-      default:
-        return null;
-    }
-  });
-};
-const ssdsDisplay = (
-  ssds: number[],
-  activeSsd: number | undefined,
-  setState: any,
-  language: string
-) => {
-  return ssds.map((ssd, index) => (
-    <Box
-      margin="0px 15px 0px 15px"
-      key={index}
-      bgColor="whiteAlpha.200"
-      outline={ssd === activeSsd ? "solid" : "none"}
-      w="220px"
-      h="75px"
-      mt="12"
-      borderRadius="15px"
-      boxShadow="2xl"
-      cursor="pointer"
-      _hover={{
-        boxShadow: "dark-lg",
-        bgColor: "whiteAlpha.300",
-        transitionDuration: ".3s",
-      }}
-      textAlign="center"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      onClick={() => {
-        setState(ssd);
-      }}
-    >
-      <Text fontSize="2xl">
-        {ssd} {language === "ge" ? "გბ" : "Gb"}
-      </Text>
-    </Box>
-  ));
-};
-
-const getMacByOptions = async (
-  productType: string,
-  ssdValue: number,
-  color: string
-) => {
-  return axios
-    .get(
-      `http://localhost:3006/getmacbyoptions/mac/${productType}/${ssdValue}/${color}`
-    )
-    .then((data) => {
-      console.log(data.data);
-      return data.data;
-    })
-    .catch((err) => console.log(err));
-};
-
+import { getMacByOptions, getMacOptions } from "../../functions/fetchFuncions";
+import { SwiperSlideForImages } from "../helper-components/SwiperSlideForImages";
+import { SsdsDisplay } from "../helper-components/SsdsDisplay";
+import { ColorsDisplay } from "../helper-components/ColorsDisplay";
 export const BuildPage = () => {
   const { type: productType, product: productParams } = useParams();
   const generalMacs = useRecoilValue(generalMacsState);
   const language = useRecoilValue(languageState);
   const currency = useRecoilValue(valueState);
+
   const currentProduct = generalMacs.find(
     (product) => product.type === productParams
   );
+
   const [options, setOptions] = useState<{
     colors: string[];
     ssds: number[];
@@ -218,7 +43,7 @@ export const BuildPage = () => {
   }>();
   useEffect(() => {
     if (currentProduct) {
-      getmacoptions(currentProduct.id).then((data) => {
+      getMacOptions(currentProduct.id).then((data) => {
         setOptions(data);
         setActiveColor(data.colors[0]);
         setActiveSsd(data.ssds[0]);
@@ -304,16 +129,13 @@ export const BuildPage = () => {
             w="80%"
             bgColor="whiteAlpha.100"
             borderRadius="15px"
-            mt="50px"
-            mb="50px"
-            pt="60px"
-            pb="60px"
-            pl="80px"
-            pr="80px"
+            my="50px"
+            py="60px"
+            px="80px"
             boxShadow="dark-lg"
           >
             <Text fontSize="24px" color="whiteAlpha.800">
-              Hello, fuck you
+              Hello
             </Text>
           </Box>
         </Box>
@@ -343,7 +165,7 @@ export const BuildPage = () => {
                   flexWrap="wrap"
                   mt="10"
                 >
-                  {colorsDisplay(options.colors, activeColor, setActiveColor)}
+                  {ColorsDisplay(options.colors, activeColor, setActiveColor)}
                 </Box>
               </>
             ) : null}
@@ -359,7 +181,7 @@ export const BuildPage = () => {
                   justifyContent="space-evenly"
                   flexWrap="wrap"
                 >
-                  {ssdsDisplay(options.ssds, activeSsd, setActiveSsd, language)}
+                  {SsdsDisplay(options.ssds, activeSsd, setActiveSsd, language)}
                 </Box>
               </>
             ) : null}

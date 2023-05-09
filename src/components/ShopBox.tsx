@@ -8,34 +8,34 @@ import { useRecoilValue } from "recoil";
 import React from "react";
 
 const MoneyDisplay: React.FC<MoneyDisplayTypes> = (props) => {
-  console.log("itemSaleGelPrice: ", props.itemSaleGelPrice);
+  console.log("saleGelPrice: ", props.saleGelPrice);
   if (useRecoilValue(valueState) === "gel") {
-    if (props.itemSaleGelPrice === 0 || props.itemSaleGelPrice === undefined) {
+    if (props.saleGelPrice === 0 || props.saleGelPrice === undefined) {
       return (
         <div className="shopbox-prices-normal">
-          <h2 className="shopbox-normal-price">{props.itemGelPrice}₾</h2>
+          <h2 className="shopbox-normal-price">{props.gelPrice}₾</h2>
         </div>
       );
     } else {
       return (
         <div className="shopbox-prices-normal">
-          <h2 className="shopbox-sale-price">{props.itemSaleGelPrice}₾</h2>
-          <h2 className="shopbox-normal-price">{props.itemGelPrice}₾</h2>
+          <h2 className="shopbox-sale-price">{props.saleGelPrice}₾</h2>
+          <h2 className="shopbox-normal-price">{props.gelPrice}₾</h2>
         </div>
       );
     }
   } else {
-    if (props.itemSalePrice === 0 || props.itemSalePrice === undefined) {
+    if (props.salePrice === 0 || props.salePrice === undefined) {
       return (
         <div className="shopbox-prices-normal">
-          <h2 className="shopbox-normal-price">{props.itemPrice}$</h2>
+          <h2 className="shopbox-normal-price">{props.price}$</h2>
         </div>
       );
     } else {
       return (
         <div className="shopbox-prices-normal">
-          <h2 className="shopbox-sale-price">{props.itemSalePrice}$</h2>
-          <h2 className="shopbox-normal-price">{props.itemPrice}$</h2>
+          <h2 className="shopbox-sale-price">{props.salePrice}$</h2>
+          <h2 className="shopbox-normal-price">{props.price}$</h2>
         </div>
       );
     }
@@ -45,23 +45,23 @@ import { ShopBoxTypes, MoneyDisplayTypes } from "../types";
 import { convertTypeAcquisitionFromJson } from "typescript";
 
 export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
-  console.log("props.general: ", props.general);
+  console.log("props: ", props);
   const language = useRecoilValue(languageState);
   if (!props.general) {
     return (
       <Box className="shopbox shopbox-normal">
-        <span className="shop-box-name">{props.itemName}</span>
+        <span className="shop-box-name">{props.name}</span>
         <Swiper
           navigation={true}
           modules={[Navigation]}
           className="shop-box-images"
           loop={true}
           style={{
-            "--swiper-navigation-color": "#000"!,
+            "--swiper-navigation-color": "#000",
             "--swiper-navigation-size": "35px",
           }}
         >
-          {props.itemImages.map((image: string, index: number) => (
+          {props.images.map((image: string, index: number) => (
             <SwiperSlide
               key={index}
               style={{
@@ -77,10 +77,10 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
           ))}
         </Swiper>
         <MoneyDisplay
-          itemGelPrice={props.itemGelPrice}
-          itemPrice={props.itemPrice}
-          itemSalePrice={props.itemSalePrice}
-          itemSaleGelPrice={props.itemSaleGelPrice}
+          gelPrice={props.startingGelPrice}
+          price={props.startingPrice}
+          salePrice={props.salePrice}
+          saleGelPrice={props.saleGelPrice}
         />
         <Button
           variant="solid"
@@ -101,8 +101,8 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
             to={
               props.shop === true
                 ? // {props}
-                  `../item/${props.itemId}`
-                : `/item/${props.itemId}`
+                  `../item/${props.id}`
+                : `/item/${props.id}`
             }
           >
             {language === "en" ? (
@@ -117,7 +117,7 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
   } else {
     return (
       <Box className="shopbox shopbox-normal">
-        <span className="shop-box-name">{props.itemName}</span>
+        <span className="shop-box-name">{props.name}</span>
         <Swiper
           navigation={true}
           modules={[Navigation]}
@@ -128,7 +128,7 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
             "--swiper-navigation-size": "35px",
           }}
         >
-          {props.itemImages.map((image: string, index: number) => (
+          {props.images.map((image: string, index: number) => (
             <SwiperSlide
               key={index}
               style={{
@@ -144,8 +144,8 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
           ))}
         </Swiper>
         <MoneyDisplay
-          itemGelPrice={props.itemGelPrice}
-          itemPrice={props.itemPrice}
+          gelPrice={props.startingGelPrice}
+          price={props.startingPrice}
         />
         <Button
           variant="solid"
@@ -165,8 +165,8 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
             }}
             to={
               props.shop === true
-                ? `../build/${props.itemCategory}/${props.itemType}`
-                : `/build/${props.itemCategory}/${props.itemType}`
+                ? `../build/${props.category}/${props.type}`
+                : `/build/${props.category}/${props.type}`
             }
           >
             {language === "en" ? (

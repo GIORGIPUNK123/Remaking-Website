@@ -123,7 +123,7 @@ export const Header: React.FC<{
   }
   return (
     <header className="header">
-      <Box fontSize="24px">
+      <Box fontSize="24px" zIndex={1}>
         {language === "en" ? (
           <Text fontWeight="600">Apple Kingdom</Text>
         ) : (
@@ -168,7 +168,11 @@ export const Header: React.FC<{
           </Link>
         )}
       </Box>
-      <Box display={{ base: "none", xl: "flex" }} alignItems="center">
+      <Box
+        bg="inherit"
+        display={{ base: "none", xl: "flex" }}
+        alignItems="center"
+      >
         {props.getInputText ? (
           <>
             <Box>
@@ -250,16 +254,15 @@ export const Header: React.FC<{
         }}
         src={burgerBar}
       />
-
       <Box
         pos="absolute"
         left="0"
         top="64px"
-        bgColor="#121212"
         w="300px"
         h="50px"
         clipPath="polygon(0% 0%, 100% 0%, 82% 100%, 0% 100%)"
         display="flex"
+        bg="gray.900"
         // alignItems="center"
         // justifyContent="center"
       >
