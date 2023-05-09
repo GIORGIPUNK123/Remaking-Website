@@ -19,6 +19,7 @@ import { getMacByOptions, getMacOptions } from "../../functions/fetchFuncions";
 import { SwiperSlideForImages } from "../helper-components/SwiperSlideForImages";
 import { SsdsDisplay } from "../helper-components/SsdsDisplay";
 import { ColorsDisplay } from "../helper-components/ColorsDisplay";
+import { BuildBuyingPart } from "../helper-components/BuildBuyingPart";
 export const BuildPage = () => {
   const { type: productType, product: productParams } = useParams();
   const generalMacs = useRecoilValue(generalMacsState);
@@ -60,49 +61,6 @@ export const BuildPage = () => {
         .catch((err) => console.log("err: ", err));
     }
   }, [activeColor, activeSsd]);
-
-  console.log("generalMacs: ", generalMacs);
-  console.log("productParams: ", productParams);
-  console.log("currentProduct: ", currentProduct);
-  console.log("options: ", options);
-  console.log("activeColor: ", activeColor);
-  console.log("activeSsd: ", activeSsd);
-  const [itemAmount, setItemAmount] = useState(1);
-  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-    useNumberInput({
-      defaultValue: 1,
-      min: 1,
-      max: realProduct ? realProduct.inStock : 1,
-      value: itemAmount,
-      onChange: (e) => {
-        setItemAmount(parseInt(e));
-      },
-    });
-
-  const inc = getIncrementButtonProps();
-  const dec = getDecrementButtonProps();
-  const input = getInputProps();
-  const [buttonIsDisabled, setButtonIsDisabled] = useState(false);
-  const handleAddToCartClick = () => {
-    const isInCart = (
-      productId: number,
-      arr: { itemId: number; amount: number }[]
-    ) => arr.some((el) => el.itemId === productId);
-    // setCartItems([...cartItems, { itemId: currentId, amount: itemAmount }]);
-    console.log("i should push");
-
-    setButtonIsDisabled(true);
-    const timer = setTimeout(() => {
-      setButtonIsDisabled(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  };
-
-  // console.log("PRODUCT ===> ", product, " PRODUCT TYPE ===> ", productType);
-
-  // const [colors, setColors] = useState(options?.colors[0]);
-
-  // console.log("OPTIONS: ", options);
 
   return !options || !activeColor ? (
     <Loading />
@@ -186,76 +144,7 @@ export const BuildPage = () => {
               </>
             ) : null}
           </Box>
-          <Box
-            mt="20"
-            mb="20"
-            w="80%"
-            display="flex"
-            justifyContent="space-evenly"
-            alignItems="center"
-            flexDir="column"
-          >
-            <Box
-              w="100%"
-              display="flex"
-              alignItems="center"
-              justifyContent={{ base: "center", "2xl": "space-between" }}
-              flexDir={{ base: "column", "2xl": "row" }}
-            >
-              <Box
-                className="amount-buttons"
-                maxW={{ base: "100%", "2xl": "35%" }}
-              >
-                <Button h="55px" {...dec}>
-                  -
-                </Button>
-                <Input
-                  h="55px"
-                  // maxW={"60px"}
-                  mx={"2px"}
-                  {...input}
-                  textAlign="center"
-                />
-                <Button h="55px" {...inc}>
-                  +
-                </Button>
-              </Box>
-              <Box display="flex" justifyContent="center" flexWrap="wrap">
-                <Button
-                  colorScheme={"green"}
-                  size="lg"
-                  h="55px"
-                  w="230px"
-                  m="5px 7px"
-                  disabled={!realProduct}
-                >
-                  {language === "en"
-                    ? `Buy now ${realProduct ? realProduct.gelPrice + "₾" : ""}`
-                    : `იყიდე ახლავე ${
-                        realProduct ? realProduct.gelPrice + "₾" : ""
-                      }`}
-                </Button>
-                <Button
-                  colorScheme={"blue"}
-                  size="lg"
-                  h="55px"
-                  // w="240px"
-                  m="5px 7px"
-                  disabled={!realProduct}
-                  onClick={() => {
-                    handleAddToCartClick();
-                  }}
-                >
-                  <img
-                    src={cartImage}
-                    alt="cartImage"
-                    width="35px"
-                    style={{ marginRight: "5px" }}
-                  />
-                </Button>
-              </Box>
-            </Box>
-          </Box>
+          <BuildBuyingPart realProduct={realProduct} />
         </Box>
       </section>
     </>
