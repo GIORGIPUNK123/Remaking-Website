@@ -43,6 +43,7 @@ const MoneyDisplay: React.FC<MoneyDisplayTypes> = (props) => {
 };
 import { ShopBoxTypes, MoneyDisplayTypes } from "../types";
 import { convertTypeAcquisitionFromJson } from "typescript";
+import { SwiperSlideForImages } from "./helper-components/SwiperSlideForImages";
 
 export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
   console.log("props: ", props);

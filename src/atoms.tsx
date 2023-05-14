@@ -1,5 +1,17 @@
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { MacType, GeneralMacTypes, CartItemTypes, UserTypes } from "./types";
+import {
+  MacType,
+  GeneralMacTypes,
+  CartItemTypes,
+  UserTypes,
+  ItemTypes,
+} from "./types";
+
+export const generalItemsState = atom<ItemTypes[]>({
+  key: "items", // unique ID (with respect to other atoms/selectors)
+  default: [], // default value (aka initial value)
+});
+
 export const macsState = atom<MacType[]>({
   key: "macs", // unique ID (with respect to other atoms/selectors)
   default: [], // default value (aka initial value)

@@ -7,6 +7,8 @@ import { useRecoilValue } from "recoil";
 import { useCookies } from "react-cookie";
 import profile from "../../images/profile.svg";
 import burgerBar from "../../images/burger-bar.svg";
+import { addItem } from "../../store/features/itemsSlice";
+import { useDispatch } from "react-redux";
 export const Header: React.FC<{
   getInputText?: (text: string) => void;
   login?: string;
@@ -19,6 +21,8 @@ export const Header: React.FC<{
   console.log("Token ", cookies.accessToken);
   const currentUser = useRecoilValue(currentUserState);
   const [burgerBarOpen, setBurgerBarOpen] = useState(false);
+  const dispatch = useDispatch();
+  console.log("currentUser: ", currentUser);
   if (burgerBarOpen) {
     return (
       <>
@@ -130,6 +134,13 @@ export const Header: React.FC<{
           <Text fontWeight="600">ეფლის სამეფო</Text>
         )}
       </Box>
+      <Button
+        onClick={() => {
+          dispatch(addItem({ id: 5, token: "test" }));
+        }}
+      >
+        TEST ADD ITEM
+      </Button>
       <Box
         display={{ base: "none", xl: "flex" }}
         justifyContent="space-between"
@@ -187,7 +198,31 @@ export const Header: React.FC<{
             </Box>
           </>
         ) : null}
-        {Object.keys(currentUser).length === 0 ? (
+
+        {currentUser !== undefined ? (
+          <>
+            <Button
+              variant="ghost"
+              size="sm"
+              fontSize="18px"
+              onClick={() => {
+                navigate(props.profile!);
+              }}
+              ml="25px"
+            >
+              <Text fontSize="18px" pb="5px">
+                {currentUser.name}
+              </Text>
+              <Image
+                borderRadius="full"
+                h="30px"
+                ml="4"
+                src={profile}
+                alt="profile"
+              />
+            </Button>
+          </>
+        ) : (
           <>
             <Box
               ml="50px"
@@ -217,29 +252,6 @@ export const Header: React.FC<{
                 {language === "en" ? "Sign Up" : "რეგისტრაცია"}
               </Button>
             </Box>
-          </>
-        ) : (
-          <>
-            <Button
-              variant="ghost"
-              size="sm"
-              fontSize="18px"
-              onClick={() => {
-                navigate(props.profile!);
-              }}
-              ml="25px"
-            >
-              <Text fontSize="18px" pb="5px">
-                {currentUser.name}
-              </Text>
-              <Image
-                borderRadius="full"
-                h="30px"
-                ml="4"
-                src={profile}
-                alt="profile"
-              />
-            </Button>
           </>
         )}
       </Box>

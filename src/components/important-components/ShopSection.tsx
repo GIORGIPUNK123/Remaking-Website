@@ -1,15 +1,20 @@
 import { Box } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { generalMacsState, macsState, valueState } from "../../atoms";
+import {
+  generalItemsState,
+  generalMacsState,
+  macsState,
+  valueState,
+} from "../../atoms";
 import { Loading } from "../Loading";
 import { ShopBox } from "../ShopBox";
 import { Header } from "./Header";
-import { GeneralMacTypes } from "../../types";
+import { GeneralMacTypes, ItemTypes } from "../../types";
 import { CheckBoxes } from "../inside-components/CheckBoxes";
 import { PriceRangeSlider } from "../inside-components/PriceRangeSlider";
 const DisplayGeneralShopBoxes = (props: {
-  items: GeneralMacTypes[];
+  items: any[];
   sliceValue: number;
 }) => {
   return (
@@ -24,6 +29,7 @@ const DisplayGeneralShopBoxes = (props: {
 export const ShopSection = () => {
   const currentValue = useRecoilValue(valueState);
   const macs = useRecoilValue(macsState);
+  const generalItems = useRecoilValue(generalItemsState);
   const generalMacs = useRecoilValue(generalMacsState);
   const [items, setItems] = useState([]);
   // useEffect(() => {
@@ -44,6 +50,12 @@ export const ShopSection = () => {
       : Math.max(...macs.map((item) => item.gelPrice));
   const [minSliderValue, setMinSliderValue] = useState(0);
   const [maxSliderValue, setMaxSliderValue] = useState(maxPrice);
+  const [filteredItems, setFilteredItems] = useState<any>([]);
+  if (!isMac && !isIphone && !isAirpods) {
+    useEffect(() => {
+      setFilteredItems(generalItems);
+    }, []);
+  }
   // const filteredItems: ItemTypes[] = macs.filter((item) => {
   //   console.log("item: ", item);
   //   const priceField = currentValue === "usd" ? "price" : "gelPrice";
@@ -140,8 +152,8 @@ export const ShopSection = () => {
         sliceValue={sliceValue}
       /> */}
             <DisplayGeneralShopBoxes
-              items={generalMacs}
-              // items={filteredItems}
+              // items={generalItems}
+              items={filteredItems}
               sliceValue={sliceValue}
             />
           </Box>

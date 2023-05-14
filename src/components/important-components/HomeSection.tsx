@@ -6,7 +6,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Box, Heading, Text } from "@chakra-ui/react";
-import { macsState, languageState, generalMacsState } from "../../atoms";
+import {
+  macsState,
+  languageState,
+  generalMacsState,
+  generalItemsState,
+} from "../../atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ItemTypes } from "../../types";
 
@@ -24,17 +29,13 @@ interface FilteredItemsProps {
 
 export const HomeSection = () => {
   const generalMacs = useRecoilValue(generalMacsState);
-  const [items, setItems] = useState<any>([]);
+  const [generalItems, setGeneralItems] = useRecoilState(generalItemsState);
   const language = useRecoilValue(languageState);
   const [inputText, setInputText] = useState("");
   const getInputText = (text: string) => {
     setInputText(text);
   };
-  useEffect(() => {
-    setItems([...generalMacs]);
-  }, [generalMacs]);
-
-  console.log("items: ", items);
+  console.log("generalItems: ", generalItems);
   return (
     <>
       <Header
@@ -60,7 +61,7 @@ export const HomeSection = () => {
             display={{ base: "none", md: "flex" }}
           >
             <div className="best-seller-items">
-              {items.slice(0, 6).map((item: any, index: number) => {
+              {generalItems.slice(0, 6).map((item: any, index: number) => {
                 console.log("item.images :", item.images);
                 return <ShopBox key={index} {...item} general />;
               })}

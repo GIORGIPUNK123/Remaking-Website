@@ -5,7 +5,7 @@ export const filterBoxes = (
   maxValue: number,
   currentValue: "usd" | "gel",
   inputText: string,
-  checkBoxes: CheckBoxTypes[]
+  checkBoxes: any[]
 ) => {
   const filteredItems = itemsArr.filter((item) => {
     const containsInputText = item.name.toLowerCase().includes(inputText);

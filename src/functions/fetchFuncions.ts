@@ -18,6 +18,20 @@ export const getGeneralMacs = async () => {
     })
     .catch((err) => console.error(err));
 };
+
+export const getGeneralItems = async () => {
+  return axios
+    .get(
+      // "https://geolab-project-backend.onrender.com/generalmacs"
+      "http://localhost:3006/generalItems"
+    )
+    .then((data) => {
+      console.log("Fetched GeneralItems");
+      return data.data;
+    })
+    .catch((err) => console.error(err));
+};
+
 export const getMacByOptions = async (
   productType: string,
   ssdValue: number,

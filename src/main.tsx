@@ -11,12 +11,15 @@ import "./styles/itempage.css";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import theme from "./theme";
 import { RecoilRoot } from "recoil";
-
+import { store } from "./store/store";
+import { Provider } from "react-redux";
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ChakraProvider theme={theme}>
-    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-    <RecoilRoot>
-      <App />
-    </RecoilRoot>
-  </ChakraProvider>
+  <Provider store={store}>
+    <ChakraProvider theme={theme}>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <RecoilRoot>
+        <App />
+      </RecoilRoot>
+    </ChakraProvider>
+  </Provider>
 );
