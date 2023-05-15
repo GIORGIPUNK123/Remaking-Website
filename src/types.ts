@@ -85,3 +85,12 @@ export interface UserTypes {
   rank?: string;
   verified?: boolean;
 }
+export interface GeneralItemType {
+  id: number;
+  name: string;
+  startingPrice: number;
+  startingGelPrice: number;
+  type: string;
+  images: string[];
+  category: string;
+}

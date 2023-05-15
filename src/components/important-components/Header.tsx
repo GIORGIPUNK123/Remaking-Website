@@ -7,7 +7,7 @@ import { useRecoilValue } from "recoil";
 import { useCookies } from "react-cookie";
 import profile from "../../images/profile.svg";
 import burgerBar from "../../images/burger-bar.svg";
-import { addItem } from "../../store/features/itemsSlice";
+import { editItem } from "../../store/slices/generalItemsSlice";
 import { useDispatch } from "react-redux";
 export const Header: React.FC<{
   getInputText?: (text: string) => void;
@@ -134,13 +134,6 @@ export const Header: React.FC<{
           <Text fontWeight="600">ეფლის სამეფო</Text>
         )}
       </Box>
-      <Button
-        onClick={() => {
-          dispatch(addItem({ id: 5, token: "test" }));
-        }}
-      >
-        TEST ADD ITEM
-      </Button>
       <Box
         display={{ base: "none", xl: "flex" }}
         justifyContent="space-between"

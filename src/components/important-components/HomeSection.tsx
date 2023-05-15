@@ -5,15 +5,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { Box, Heading, Text } from "@chakra-ui/react";
-import {
-  macsState,
-  languageState,
-  generalMacsState,
-  generalItemsState,
-} from "../../atoms";
+import { Box, Button, Heading, Text } from "@chakra-ui/react";
+import { macsState, languageState, generalMacsState } from "../../atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { ItemTypes } from "../../types";
+import { GeneralItemType, ItemTypes } from "../../types";
+import { useDispatch, useSelector } from "react-redux";
 
 interface FilteredItemsProps {
   gelPrice: number;
@@ -28,14 +24,21 @@ interface FilteredItemsProps {
 }
 
 export const HomeSection = () => {
+  const dispatch = useDispatch();
   const generalMacs = useRecoilValue(generalMacsState);
-  const [generalItems, setGeneralItems] = useRecoilState(generalItemsState);
+  const generalItemsObj = useSelector(
+    (state: {
+      generalItems: { generalItems: GeneralItemType[] };
+      error: boolean;
+      loading: boolean;
+    }) => state.generalItems
+  );
   const language = useRecoilValue(languageState);
   const [inputText, setInputText] = useState("");
   const getInputText = (text: string) => {
     setInputText(text);
   };
-  console.log("generalItems: ", generalItems);
+  console.log("generalItems: ", generalItemsObj);
   return (
     <>
       <Header
@@ -55,16 +58,25 @@ export const HomeSection = () => {
         >
           {language === "en" ? "New Products" : "ახალი პროდუქტები"}
         </Heading>
+        {/* <Button
+          onClick={() => {
+            dispatch(replaceItems());
+          }}
+        >
+          TEST ADD ITEM
+        </Button> */}
         <div className="best-seller">
           <Box
             className="best-seller-box"
             display={{ base: "none", md: "flex" }}
           >
             <div className="best-seller-items">
-              {generalItems.slice(0, 6).map((item: any, index: number) => {
-                console.log("item.images :", item.images);
-                return <ShopBox key={index} {...item} general />;
-              })}
+              {generalItemsObj.generalItems
+                .slice(0, 6)
+                .map((item: any, index: number) => {
+                  console.log("item.images :", item.images);
+                  return <ShopBox key={index} {...item} general />;
+                })}
             </div>
           </Box>
         </div>

@@ -1,18 +1,14 @@
 import { Box } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  generalItemsState,
-  generalMacsState,
-  macsState,
-  valueState,
-} from "../../atoms";
+import { generalMacsState, macsState, valueState } from "../../atoms";
 import { Loading } from "../Loading";
 import { ShopBox } from "../ShopBox";
 import { Header } from "./Header";
-import { GeneralMacTypes, ItemTypes } from "../../types";
+import { GeneralItemType, GeneralMacTypes, ItemTypes } from "../../types";
 import { CheckBoxes } from "../inside-components/CheckBoxes";
 import { PriceRangeSlider } from "../inside-components/PriceRangeSlider";
+import { useSelector } from "react-redux";
 const DisplayGeneralShopBoxes = (props: {
   items: any[];
   sliceValue: number;
@@ -29,7 +25,13 @@ const DisplayGeneralShopBoxes = (props: {
 export const ShopSection = () => {
   const currentValue = useRecoilValue(valueState);
   const macs = useRecoilValue(macsState);
-  const generalItems = useRecoilValue(generalItemsState);
+  const generalItemsObj = useSelector(
+    (state: {
+      generalItems: { generalItems: GeneralItemType[] };
+      error: boolean;
+      loading: boolean;
+    }) => state.generalItems
+  );
   const generalMacs = useRecoilValue(generalMacsState);
   const [items, setItems] = useState([]);
   // useEffect(() => {
@@ -53,7 +55,7 @@ export const ShopSection = () => {
   const [filteredItems, setFilteredItems] = useState<any>([]);
   if (!isMac && !isIphone && !isAirpods) {
     useEffect(() => {
-      setFilteredItems(generalItems);
+      setFilteredItems(generalItemsObj.generalItems);
     }, []);
   }
   // const filteredItems: ItemTypes[] = macs.filter((item) => {

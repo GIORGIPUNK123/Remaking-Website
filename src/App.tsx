@@ -9,12 +9,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import {
-  currentUserState,
-  generalItemsState,
-  generalMacsState,
-  macsState,
-} from "./atoms";
+import { currentUserState, generalMacsState, macsState } from "./atoms";
 import { Login } from "./components/important-components/user-related/Login";
 import { Register } from "./components/important-components/user-related/Register";
 import { Cart } from "./components/inside-components/Cart";
@@ -26,11 +21,14 @@ import {
   getGeneralMacs,
   getMacs,
 } from "./functions/fetchFuncions";
+import { useDispatch } from "react-redux";
+import { getItems } from "./store/slices/generalItemsSlice";
+import { AppDispatch } from "./store/store";
 const App = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
   const [macs, setMacs] = useRecoilState(macsState);
   const [generalMacs, setGeneralMacs] = useRecoilState(generalMacsState);
-  const [generalItems, setGeneralItems] = useRecoilState(generalItemsState);
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
   // console.log(currentUser);
   useEffect(() => {
@@ -45,11 +43,8 @@ const App = () => {
     getGeneralMacs().then((data) => {
       setGeneralMacs(data);
     });
-    getGeneralItems().then((data) => {
-      setGeneralItems(data);
-    });
+    dispatch(getItems());
   }, []);
-
   // ROUTES
 
   if (!!!macs.length) {
