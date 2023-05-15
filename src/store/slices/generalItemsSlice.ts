@@ -1,15 +1,17 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { GeneralItemType } from "../../types";
-import { useDispatch } from "react-redux";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { GeneralItemType } from '../../types';
 
-export const getItems = createAsyncThunk("getItems/get", async () => {
-  const { data } = await axios.get("http://localhost:3006/generalItems");
-  console.log("data: ", data);
-  return data;
-});
+export const getGeneralItems = createAsyncThunk(
+  'getGeneralItems/get',
+  async () => {
+    const { data } = await axios.get('http://localhost:3006/generalItems');
+    console.log('getGeneralItems: ', data);
+    return data;
+  }
+);
 export const generalItemsSlice = createSlice({
-  name: "generalItems",
+  name: 'generalItems',
   initialState: {
     generalItems: [] as GeneralItemType[],
     loading: false,
@@ -17,10 +19,10 @@ export const generalItemsSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getItems.pending, (state, action) => {
+    builder.addCase(getGeneralItems.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(getItems.fulfilled, (state, action) => {
+    builder.addCase(getGeneralItems.fulfilled, (state, action) => {
       console.log(action.payload);
       state.loading = false;
       state.generalItems = action.payload;

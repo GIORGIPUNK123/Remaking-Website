@@ -5,16 +5,17 @@ import {
   useNumberInput,
   useStatStyles,
   Text,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
-import cartImage from "../../images/add-to-cart.svg";
-import { useRecoilValue } from "recoil";
-import { languageState } from "../../atoms";
-import { handleAddToCartClick } from "../../functions/BuildPageFunctions";
+} from '@chakra-ui/react';
+import React, { useState } from 'react';
+import cartImage from '../../images/add-to-cart.svg';
+import { handleAddToCartClick } from '../../functions/BuildPageFunctions';
+import { useSelector } from 'react-redux';
 export const BuildBuyingPart = (props: {
   realProduct?: { price: number; gelPrice: number; inStock: number };
 }) => {
-  const language = useRecoilValue(languageState);
+  const languageObj = useSelector(
+    (state: { language: { lang: 'en' | 'ge' } }) => state.language
+  );
   const [itemAmount, setItemAmount] = useState(1);
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
@@ -31,62 +32,62 @@ export const BuildBuyingPart = (props: {
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
   const input = getInputProps();
-  console.log("!!!props.realProduct: ", !!!props.realProduct);
+  console.log('!!!props.realProduct: ', !!!props.realProduct);
   return (
     <Box
-      mt="20"
-      mb="20"
-      w="80%"
-      display="flex"
-      justifyContent="space-evenly"
-      alignItems="center"
-      flexDir="column"
+      mt='20'
+      mb='20'
+      w='80%'
+      display='flex'
+      justifyContent='space-evenly'
+      alignItems='center'
+      flexDir='column'
     >
       <Box
-        w="100%"
-        display="flex"
-        alignItems="center"
-        justifyContent={{ base: "center", "2xl": "space-between" }}
-        flexDir={{ base: "column", "2xl": "row" }}
+        w='100%'
+        display='flex'
+        alignItems='center'
+        justifyContent={{ base: 'center', '2xl': 'space-between' }}
+        flexDir={{ base: 'column', '2xl': 'row' }}
       >
-        <Box className="amount-buttons" maxW={{ base: "100%", "2xl": "35%" }}>
-          <Button h="55px" {...dec}>
+        <Box className='amount-buttons' maxW={{ base: '100%', '2xl': '35%' }}>
+          <Button h='55px' {...dec}>
             -
           </Button>
           <Input
-            h="55px"
+            h='55px'
             // maxW={"60px"}
-            mx={"2px"}
+            mx={'2px'}
             {...input}
-            textAlign="center"
+            textAlign='center'
           />
-          <Button h="55px" {...inc}>
+          <Button h='55px' {...inc}>
             +
           </Button>
         </Box>
-        <Box display="flex" justifyContent="center" flexWrap="wrap">
+        <Box display='flex' justifyContent='center' flexWrap='wrap'>
           <Button
-            colorScheme={"green"}
-            size="lg"
-            h="55px"
-            w="230px"
-            m="5px 7px"
+            colorScheme={'green'}
+            size='lg'
+            h='55px'
+            w='230px'
+            m='5px 7px'
             isDisabled={!props.realProduct}
           >
-            {language === "en"
+            {languageObj.lang === 'en'
               ? `Buy now ${
-                  props.realProduct ? props.realProduct.gelPrice + "₾" : ""
+                  props.realProduct ? props.realProduct.gelPrice + '₾' : ''
                 }`
               : `იყიდე ახლავე ${
-                  props.realProduct ? props.realProduct.gelPrice + "₾" : ""
+                  props.realProduct ? props.realProduct.gelPrice + '₾' : ''
                 }`}
           </Button>
           <Button
-            colorScheme={"blue"}
-            size="lg"
-            h="55px"
+            colorScheme={'blue'}
+            size='lg'
+            h='55px'
             // w="240px"
-            m="5px 7px"
+            m='5px 7px'
             isDisabled={!props.realProduct}
             onClick={() => {
               handleAddToCartClick();
@@ -94,9 +95,9 @@ export const BuildBuyingPart = (props: {
           >
             <img
               src={cartImage}
-              alt="cartImage"
-              width="35px"
-              style={{ marginRight: "5px" }}
+              alt='cartImage'
+              width='35px'
+              style={{ marginRight: '5px' }}
             />
           </Button>
         </Box>

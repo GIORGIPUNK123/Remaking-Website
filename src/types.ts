@@ -21,7 +21,7 @@ export interface GeneralMacTypes {
   images: string[];
   category: string;
 }
-export interface ItemTypes {
+export interface ItemType {
   id: number;
   price: number;
   salePrice?: number;
@@ -75,7 +75,7 @@ export interface CheckBoxTypes {
   isAirpods: boolean;
   setIsAirpods: (value: boolean) => void;
 }
-export interface UserTypes {
+export interface UserType {
   id?: number;
   email?: string;
   locked?: boolean;

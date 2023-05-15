@@ -1,13 +1,18 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { generalItemsSlice } from "./slices/generalItemsSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import { generalItemsSlice } from './slices/generalItemsSlice';
+import { itemsSlice } from './slices/itemsSlice';
+import { currentUserSlice } from './slices/currentUserSlice';
+import { languageSlice } from './slices/languageSlice';
+import { currencySlice } from './slices/currencySlice';
 // ...
 
 export const store = configureStore({
   reducer: {
+    items: itemsSlice.reducer,
     generalItems: generalItemsSlice.reducer,
-    // posts: postsReducer,
-    // comments: commentsReducer,
-    // users: usersReducer,
+    currentUser: currentUserSlice.reducer,
+    language: languageSlice.reducer,
+    currency: currencySlice.reducer,
   },
 });
 

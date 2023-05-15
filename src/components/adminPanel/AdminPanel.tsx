@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AdminPanelAddModal } from "./modals/AdminPanelAddModal";
-import { AdminPanelDeleteModal } from "./modals/AdminPanelDeleteModal";
-import { AdminPanelImageModal } from "./modals/AdminPanelImageModal";
-import { AdminPanelTable } from "./AdminPanelTable";
-import { Button, useColorMode, useDisclosure } from "@chakra-ui/react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { currentUserState, macsState } from "../../atoms";
-import { Loading } from "../Loading";
-import { getMacs } from "../../functions/fetchFuncions";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AdminPanelAddModal } from './modals/AdminPanelAddModal';
+import { AdminPanelDeleteModal } from './modals/AdminPanelDeleteModal';
+import { AdminPanelImageModal } from './modals/AdminPanelImageModal';
+import { AdminPanelTable } from './AdminPanelTable';
+import { Button, useColorMode, useDisclosure } from '@chakra-ui/react';
+import { Loading } from '../Loading';
+import { getMacs } from '../../functions/fetchFuncions';
+import { useDispatch, useSelector } from 'react-redux';
+import { GeneralItemType, UserType } from '../../types';
+import { getItems } from '../../store/slices/itemsSlice';
+import { getGeneralItems } from '../../store/slices/generalItemsSlice';
+import { AppDispatch } from '../../store/store';
 export const AdminPanel = (props: any) => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
@@ -29,48 +33,63 @@ export const AdminPanel = (props: any) => {
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
-  const [items, setItems] = useRecoilState(macsState);
-  const currentUser = useRecoilValue(currentUserState);
+  const currentUserObj = useSelector(
+    (state: {
+      currentUser: { currentUser: UserType; error: boolean; loading: boolean };
+    }) => state.currentUser
+  );
+
+  const languageObj = useSelector(
+    (state: { language: { lang: 'en' | 'ge' } }) => state.language
+  );
+  const generalItemsObj = useSelector(
+    (state: {
+      generalItems: { generalItems: GeneralItemType[] };
+      error: boolean;
+      loading: boolean;
+    }) => state.generalItems
+  );
+
   if (isLoading === true) {
     return <Loading />;
   }
-  if (Object.keys(currentUser).length === 0) {
-    navigate("../login");
+  if (Object.keys(currentUserObj.currentUser).length === 0) {
+    navigate('../login');
   }
-  if (currentUser.rank !== "admin") {
-    navigate("../");
+  if (currentUserObj.currentUser.rank !== 'admin') {
+    navigate('../');
   }
   const [activeImage, setActiveImage] = useState();
 
   return (
     <>
-      <div className="admin-panel">
-        <div className="admin-panel-top">
-          <h1 className="admin-panel-heading">Admin Panel</h1>
+      <div className='admin-panel'>
+        <div className='admin-panel-top'>
+          <h1 className='admin-panel-heading'>Admin Panel</h1>
         </div>
         <Button
-          colorScheme="blue"
-          variant="solid"
+          colorScheme='blue'
+          variant='solid'
           style={{
-            height: "50px",
-            position: "absolute",
-            top: "70px",
-            right: "10%",
-            width: "150px",
-            fontSize: "2vh",
+            height: '50px',
+            position: 'absolute',
+            top: '70px',
+            right: '10%',
+            width: '150px',
+            fontSize: '2vh',
           }}
-          className="admin-panel-refresh"
+          className='admin-panel-refresh'
           onClick={() => {
-            props.getItemsFunction(setItems);
+            dispatch(getItems());
           }}
         >
           Refresh
         </Button>
         <Button
           onClick={toggleColorMode}
-          style={{ position: "absolute", top: "70px", left: "10%" }}
+          style={{ position: 'absolute', top: '70px', left: '10%' }}
         >
-          Toggle {colorMode === "light" ? "Dark" : "Light"}
+          Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
         </Button>
         <AdminPanelTable setActiveImage={setActiveImage} onOpen={onOpenImage} />
         <AdminPanelDeleteModal onClose={onCloseDelete} isOpen={isOpenDelete} />
@@ -82,21 +101,21 @@ export const AdminPanel = (props: any) => {
         <AdminPanelAddModal onClose={onCloseAdd} isOpen={isOpenAdd} />
         <div
           style={{
-            display: "flex",
-            height: "100%",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "center",
+            display: 'flex',
+            height: '100%',
+            alignItems: 'center',
+            width: '100%',
+            justifyContent: 'center',
           }}
         >
-          <div className="fetch-buttons">
+          <div className='fetch-buttons'>
             <Button
-              variant="solid"
-              colorScheme="red"
+              variant='solid'
+              colorScheme='red'
               style={{
-                height: "80px",
-                width: "250px",
-                fontSize: "2vh",
+                height: '80px',
+                width: '250px',
+                fontSize: '2vh',
               }}
               onClick={() => {
                 onOpenDelete();
@@ -105,12 +124,12 @@ export const AdminPanel = (props: any) => {
               Delete
             </Button>
             <Button
-              variant="solid"
-              colorScheme="green"
+              variant='solid'
+              colorScheme='green'
               style={{
-                height: "80px",
-                width: "250px",
-                fontSize: "2vh",
+                height: '80px',
+                width: '250px',
+                fontSize: '2vh',
               }}
               onClick={() => {
                 onOpenAdd();

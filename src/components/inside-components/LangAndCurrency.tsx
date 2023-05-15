@@ -1,35 +1,40 @@
-import React from "react";
-import { Select, useSafeLayoutEffect } from "@chakra-ui/react";
-import { languageState, valueState } from "../../atoms";
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import React from 'react';
+import { Select, useSafeLayoutEffect } from '@chakra-ui/react';
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeLang } from '../../store/slices/languageSlice';
+import { changeCurrency } from '../../store/slices/currencySlice';
 export const LangAndCurrency = (props: { size: string; width: string }) => {
-  const [language, setLanguage] = useRecoilState(languageState);
-  const [value, setValue] = useRecoilState(valueState);
-  console.log('Language" ', language);
-  console.log('Value" ', value);
+  const languageObj = useSelector(
+    (state: { language: { lang: 'en' | 'en' } }) => state.language
+  );
+  const currencyObj = useSelector(
+    (state: { currency: { currency: 'usd' | 'gel' } }) => state.currency
+  );
+  const dispatch = useDispatch();
   return (
-    <div className="langAndCurrency">
+    <div className='langAndCurrency'>
       <Select
         size={props.size}
         w={props.width}
-        value={language}
+        value={languageObj.lang}
         onChange={(e) => {
-          setLanguage(e.target.value);
+          dispatch(changeLang(e.target.value));
         }}
       >
-        <option value="ge">GE</option>
-        <option value="en">EN</option>
+        <option value='ge'>GE</option>
+        <option value='en'>EN</option>
       </Select>
       <Select
         size={props.size}
         w={props.width}
-        value={value}
+        value={currencyObj.currency}
         onChange={(e) => {
-          setValue(e.target.value);
+          dispatch(changeCurrency(e.target.value));
         }}
       >
-        <option value="gel">GEL</option>
-        <option value="usd">USD</option>
+        <option value='gel'>GEL</option>
+        <option value='usd'>USD</option>
       </Select>
     </div>
   );
