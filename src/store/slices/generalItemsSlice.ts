@@ -6,7 +6,6 @@ export const getGeneralItems = createAsyncThunk(
   'getGeneralItems/get',
   async () => {
     const { data } = await axios.get('http://localhost:3006/generalItems');
-    console.log('getGeneralItems: ', data);
     return data;
   }
 );
@@ -23,7 +22,6 @@ export const generalItemsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(getGeneralItems.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.loading = false;
       state.generalItems = action.payload;
     });

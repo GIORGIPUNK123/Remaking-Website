@@ -18,7 +18,6 @@ export const Header: React.FC<{
 }> = (props) => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
-  console.log('Token ', cookies.accessToken);
   const currentUserObj = useSelector(
     (state: {
       currentUser: { currentUser: UserType; error: boolean; loading: boolean };
@@ -29,7 +28,6 @@ export const Header: React.FC<{
   );
   const [burgerBarOpen, setBurgerBarOpen] = useState(false);
   const dispatch = useDispatch();
-  console.log('currentUserOBJ: ', currentUserObj);
   if (currentUserObj.loading) {
     return <Loading />;
   }

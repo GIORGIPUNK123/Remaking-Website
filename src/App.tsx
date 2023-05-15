@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getGeneralItems } from './store/slices/generalItemsSlice';
 import { AppDispatch } from './store/store';
 import { getCurrentUser } from './store/slices/currentUserSlice';
+import { getItems } from './store/slices/itemsSlice';
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
@@ -29,12 +30,12 @@ const App = () => {
       loading: boolean;
     }) => state.generalItems
   );
-  console.log('generalItems: ', generalItemsObj.generalItems);
   useEffect(() => {
     if (cookies.accessToken !== undefined) {
       dispatch(getCurrentUser(cookies.accessToken));
     }
     dispatch(getGeneralItems());
+    dispatch(getItems());
   }, []);
   // ROUTES
 

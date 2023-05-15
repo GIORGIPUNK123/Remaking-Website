@@ -35,9 +35,7 @@ export const ShopSection = () => {
   );
   const itemsObj = useSelector(
     (state: {
-      items: { items: ItemType[] };
-      error: boolean;
-      loading: boolean;
+      items: { items: ItemType[]; error: boolean; loading: boolean };
     }) => state.items
   );
   const getInputText = (text: string) => {
@@ -49,20 +47,23 @@ export const ShopSection = () => {
   const [isAirpods, setIsAirpods] = useState(false);
   const [inputText, setInputText] = useState('');
   const [filterTypes, setFilterTypes] = useState<string[]>([]);
-  const maxPrice =
-    currencyObj.currency === 'usd'
-      ? Math.max(...itemsObj.items.map((item) => item.price))
-      : Math.max(...itemsObj.items.map((item) => item.gelPrice));
+
+  console.log('itemsObj.items: ', itemsObj.items);
+  const [maxPrice, setMaxPrice] = useState(0);
+
   const [minSliderValue, setMinSliderValue] = useState(0);
-  const [maxSliderValue, setMaxSliderValue] = useState(maxPrice);
-  // const [filteredItems, setFilteredItems] = useState<any>([]);
-  // if (!isMac && !isIphone && !isAirpods) {
-  //   useEffect(() => {
-  //     setFilteredItems(generalItemsObj.generalItems);
-  //   }, []);
-  // }
+  const [maxSliderValue, setMaxSliderValue] = useState(() => maxPrice);
+
+  useEffect(() => {
+    setMaxPrice(() =>
+      Math.max(
+        ...itemsObj.items.map((item) => {
+          return currencyObj.currency === 'usd' ? item.price : item.gelPrice;
+        })
+      )
+    );
+  }, [itemsObj, currencyObj]);
   const filteredItems = generalItemsObj.generalItems.filter((item) => {
-    console.log('item: ', item);
     const priceField =
       currencyObj.currency === 'usd' ? 'startingPrice' : 'startingGelPrice';
     const containsInputText = item.name.toLowerCase().includes(inputText);
@@ -75,7 +76,7 @@ export const ShopSection = () => {
   });
   const [sliceValue, setSliceValue] = useState(6);
   if (
-    itemsObj.items !== undefined
+    !itemsObj.loading
     // filteredItems !== undefined
   ) {
     return (
