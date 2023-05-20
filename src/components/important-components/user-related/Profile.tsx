@@ -1,9 +1,7 @@
 import { Box, useToast, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue, useRecoilState } from 'recoil';
 import { useCookies } from 'react-cookie';
-import { currentUserState } from '../../../atoms';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { UserType } from '../../../types';

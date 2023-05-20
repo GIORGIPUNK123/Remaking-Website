@@ -37,10 +37,6 @@ export interface ItemType {
   type: string;
   category: string;
 }
-export interface CartItemTypes {
-  itemId: number;
-  amount: number;
-}
 export interface ShopBoxTypes {
   images: string[];
   id: number;
@@ -93,4 +89,9 @@ export interface GeneralItemType {
   type: string;
   images: string[];
   category: string;
+}
+export interface CartItemsType {
+  generalType: string;
+  specificType: string;
+  amount: number;
 }

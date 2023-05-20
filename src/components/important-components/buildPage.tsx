@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper';
+import { useParams } from 'react-router-dom';
 import { Header } from './Header';
 import cartImage from '../../images/add-to-cart.svg';
 import { Box, Button, useNumberInput, Input, Text } from '@chakra-ui/react';
@@ -12,13 +10,20 @@ import { SsdsDisplay } from '../helper-components/SsdsDisplay';
 import { ColorsDisplay } from '../helper-components/ColorsDisplay';
 import { BuildBuyingPart } from '../helper-components/BuildBuyingPart';
 import { useDispatch, useSelector } from 'react-redux';
+import { GeneralItemType } from '../../types';
 export const BuildPage = () => {
   const { type: productType, product: productParams } = useParams();
 
-  const currentProduct = generalMacs.find(
+  const generalItemsObj = useSelector(
+    (state: {
+      generalItems: { generalItems: GeneralItemType[] };
+      error: boolean;
+      loading: boolean;
+    }) => state.generalItems
+  );
+  const currentProduct = generalItemsObj.generalItems.find(
     (product) => product.type === productParams
   );
-  //TODO: use Redux States not Atoms
   const [options, setOptions] = useState<{
     colors: string[];
     ssds: number[];

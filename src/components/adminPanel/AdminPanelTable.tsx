@@ -18,17 +18,21 @@ import {
   AlertTitle,
   Spinner,
   Center,
-} from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { macsState } from "../../atoms";
-import React from "react";
+} from '@chakra-ui/react';
+import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { ItemType } from '../../types';
 export const AdminPanelTable = (props: any) => {
   const navigate = useNavigate();
-  const items = useRecoilValue(macsState);
+  const itemsObj = useSelector(
+    (state: {
+      items: { items: ItemType[]; error: boolean; loading: boolean };
+    }) => state.items
+  );
   return (
-    <TableContainer overflowY="scroll" h="50%">
-      <Table variant="simple">
+    <TableContainer overflowY='scroll' h='50%'>
+      <Table variant='simple'>
         <Thead>
           <Tr>
             <Th>ID</Th>
@@ -43,18 +47,18 @@ export const AdminPanelTable = (props: any) => {
           </Tr>
         </Thead>
         <Tbody>
-          {items.map((item) => (
+          {itemsObj.items.map((item) => (
             <Tr key={item.id}>
-              <Td textAlign="center"> {item.id} </Td>
-              <Td textAlign="center"> {item.type} </Td>
-              <Td textAlign="center"> {item.price} </Td>
-              <Td textAlign="center"> {item.salePrice} </Td>
-              <Td textAlign="center"> {item.gelPrice} </Td>
-              <Td textAlign="center">{item.saleGelPrice}</Td>
-              <Td display="flex" justifyContent="space-evenly" w="250px">
+              <Td textAlign='center'> {item.id} </Td>
+              <Td textAlign='center'> {item.type} </Td>
+              <Td textAlign='center'> {item.price} </Td>
+              <Td textAlign='center'> {item.salePrice} </Td>
+              <Td textAlign='center'> {item.gelPrice} </Td>
+              <Td textAlign='center'>{item.saleGelPrice}</Td>
+              <Td display='flex' justifyContent='space-evenly' w='250px'>
                 {item.images.map((image, index) => (
                   <Button
-                    variant="solid"
+                    variant='solid'
                     key={index}
                     onClick={() => {
                       props.setActiveImage(image);
@@ -65,14 +69,14 @@ export const AdminPanelTable = (props: any) => {
                   </Button>
                 ))}
               </Td>
-              <Td textAlign="center"> {item.inStock} </Td>
-              <Td textAlign="center"> {item.name} </Td>
+              <Td textAlign='center'> {item.inStock} </Td>
+              <Td textAlign='center'> {item.name} </Td>
               <Button
                 onClick={() => {
-                  navigate("./edit/" + item.id);
+                  navigate('./edit/' + item.id);
                 }}
-                colorScheme={"blue"}
-                style={{ marginLeft: "25px" }}
+                colorScheme={'blue'}
+                style={{ marginLeft: '25px' }}
               >
                 Edit
               </Button>

@@ -6,7 +6,6 @@ import { BuildPage } from './components/important-components/buildPage';
 import { Loading } from './components/Loading';
 import { DeadServer } from './components/DeadServer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { Login } from './components/important-components/user-related/Login';

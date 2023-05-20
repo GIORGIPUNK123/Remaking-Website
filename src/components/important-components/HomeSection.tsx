@@ -5,11 +5,9 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { Box, Button, Heading, Text } from '@chakra-ui/react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { Box, Heading, Text } from '@chakra-ui/react';
 import { GeneralItemType, ItemType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
-
 export const HomeSection = () => {
   const languageObj = useSelector(
     (state: { language: { lang: 'en' | 'ge' } }) => state.language

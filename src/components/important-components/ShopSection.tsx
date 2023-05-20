@@ -20,8 +20,6 @@ const DisplayGeneralShopBoxes = (props: {
   );
 };
 
-//TODO: REMOVE EVERY RECOIL STATE
-
 export const ShopSection = () => {
   const generalItemsObj = useSelector(
     (state: {
@@ -48,11 +46,12 @@ export const ShopSection = () => {
   const [inputText, setInputText] = useState('');
   const [filterTypes, setFilterTypes] = useState<string[]>([]);
 
-  console.log('itemsObj.items: ', itemsObj.items);
   const [maxPrice, setMaxPrice] = useState(0);
 
+  console.log('maxPrice: ', maxPrice);
   const [minSliderValue, setMinSliderValue] = useState(0);
   const [maxSliderValue, setMaxSliderValue] = useState(() => maxPrice);
+  console.log('maxSliderValue: ', maxSliderValue);
 
   useEffect(() => {
     setMaxPrice(() =>
@@ -62,7 +61,8 @@ export const ShopSection = () => {
         })
       )
     );
-  }, [itemsObj, currencyObj]);
+    setMaxSliderValue(maxPrice);
+  }, [itemsObj.items, currencyObj, maxPrice]);
   const filteredItems = generalItemsObj.generalItems.filter((item) => {
     const priceField =
       currencyObj.currency === 'usd' ? 'startingPrice' : 'startingGelPrice';

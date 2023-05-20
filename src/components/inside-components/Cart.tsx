@@ -1,14 +1,26 @@
-import React, { useState } from "react";
-import { useRecoilState } from "recoil";
-import { cartState } from "../../atoms";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { CartItemsType } from '../../types';
 
 export const Cart = () => {
-  const [myCartItems, setMyCartItems] = useRecoilState(cartState);
-  console.log(myCartItems);
+  const cartItemsObj = useSelector(
+    (state: {
+      cartItems: {
+        cartItems: CartItemsType[];
+        error: boolean;
+        loading: boolean;
+      };
+    }) => state.cartItems
+  );
+
   return (
     <>
-      {myCartItems.map((cartItem) => (
-        <h1>{cartItem.itemId}</h1>
+      {cartItemsObj.cartItems.map((cartItem) => (
+        <>
+          <h1>{cartItem.generalType}</h1>
+          <h1>{cartItem.specificType}</h1>
+          <h1>{cartItem.amount}</h1>
+        </>
       ))}
     </>
   );

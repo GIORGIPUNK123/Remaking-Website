@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { LangAndCurrency } from '../inside-components/LangAndCurrency';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box, Button, Heading, Image, Input, Text } from '@chakra-ui/react';
-import { useRecoilValue } from 'recoil';
+import { Box, Button, Image, Input, Text } from '@chakra-ui/react';
 import { useCookies } from 'react-cookie';
 import profile from '../../images/profile.svg';
 import burgerBar from '../../images/burger-bar.svg';

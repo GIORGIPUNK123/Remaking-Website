@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -13,47 +13,52 @@ import {
   Select,
   Button,
   Text,
-} from "@chakra-ui/react";
-import { macsState } from "../../../atoms";
-import { useRecoilValue } from "recoil";
+} from '@chakra-ui/react';
+import { ItemType } from '../../../types';
+import { useSelector } from 'react-redux';
 export const AdminPanelDeleteModal = (props: any) => {
-  const items = useRecoilValue(macsState);
+  const itemsObj = useSelector(
+    (state: {
+      items: { items: ItemType[]; error: boolean; loading: boolean };
+    }) => state.items
+  );
   const [minItem, setMinItem] = useState(1);
 
   useEffect(() => {
-    if (items.length > 0) {
+    if (!itemsObj.loading) {
       setMinItem(
-        items.reduce((prev, curr) => (prev.id < curr.id ? prev : curr)).id
+        itemsObj.items.reduce((prev, curr) => (prev.id < curr.id ? prev : curr))
+          .id
       );
     }
-  }, [items]);
+  }, [itemsObj]);
 
-  const [deleteId, setDeleteId] = useState("");
+  const [deleteId, setDeleteId] = useState('');
 
-  const deleteAlertDisplay = deleteId === "" ? "flex" : "none";
+  const deleteAlertDisplay = deleteId === '' ? 'flex' : 'none';
   console.log(deleteId);
   return (
     <Modal
       isOpen={props.isOpen}
       onClose={() => {
         props.onClose();
-        setDeleteId("");
+        setDeleteId('');
       }}
-      className="admin-panel-modal"
+      className='admin-panel-modal'
     >
       <ModalOverlay />
-      <ModalContent w="80%" maxW="auto">
-        <ModalHeader justifyContent="center" display="flex">
-          <Text fontSize="4xl">Delete An Item</Text>
+      <ModalContent w='80%' maxW='auto'>
+        <ModalHeader justifyContent='center' display='flex'>
+          <Text fontSize='4xl'>Delete An Item</Text>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody justifyContent="center" display="flex">
+        <ModalBody justifyContent='center' display='flex'>
           <Select
-            variant="filled"
-            placeholder="Select Id"
+            variant='filled'
+            placeholder='Select Id'
             onChange={(e) => setDeleteId(e.target.value)}
           >
-            {items.map((item) => (
+            {itemsObj.items.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.id}_{item.name}
               </option>
@@ -62,27 +67,27 @@ export const AdminPanelDeleteModal = (props: any) => {
         </ModalBody>
         <ModalFooter>
           <Alert
-            status="error"
-            w="50%"
-            mr="50%"
-            borderRadius="2xl"
+            status='error'
+            w='50%'
+            mr='50%'
+            borderRadius='2xl'
             display={deleteAlertDisplay}
           >
             <AlertIcon />
             <AlertTitle>Select Item To Delete Please</AlertTitle>
           </Alert>
           <Button
-            colorScheme="red"
+            colorScheme='red'
             mr={3}
             onClick={() => {
-              if (deleteId != "") {
-                fetch("https://geolab-project-backend.onrender.com/delete", {
-                  method: "POST",
+              if (deleteId != '') {
+                fetch('https://geolab-project-backend.onrender.com/delete', {
+                  method: 'POST',
                   body: deleteId,
                 })
                   .then((response) => {
                     console.log(response);
-                    console.log("I am dumb duck");
+                    console.log('I am dumb duck');
                     return response.text();
                   })
                   .then((data) => {

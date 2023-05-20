@@ -27,7 +27,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { Loading } from '../Loading';
-import { useRecoilValue } from 'recoil';
 import { useFormik, yupToFormErrors, FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
 import { AdminPanelInput } from './AdminPanelInput';
