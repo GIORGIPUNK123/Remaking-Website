@@ -10,9 +10,8 @@ import React, { useState } from 'react';
 import cartImage from '../../images/add-to-cart.svg';
 import { handleAddToCartClick } from '../../functions/BuildPageFunctions';
 import { useSelector } from 'react-redux';
-export const BuildBuyingPart = (props: {
-  realProduct?: { price: number; gelPrice: number; inStock: number };
-}) => {
+import { ItemType } from '../../types';
+export const BuildBuyingPart = (props: { currProduct?: ItemType }) => {
   const languageObj = useSelector(
     (state: { language: { lang: 'en' | 'ge' } }) => state.language
   );
@@ -21,7 +20,7 @@ export const BuildBuyingPart = (props: {
     useNumberInput({
       defaultValue: 1,
       min: 1,
-      max: props.realProduct ? props.realProduct.inStock : 1,
+      max: props.currProduct ? props.currProduct.inStock : 1,
       value: itemAmount,
       onChange: (e) => {
         setItemAmount(parseInt(e));
@@ -32,7 +31,7 @@ export const BuildBuyingPart = (props: {
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
   const input = getInputProps();
-  console.log('!!!props.realProduct: ', !!!props.realProduct);
+  console.log('props.currProduct: ', props.currProduct);
   return (
     <Box
       mt='20'
@@ -72,14 +71,14 @@ export const BuildBuyingPart = (props: {
             h='55px'
             w='230px'
             m='5px 7px'
-            isDisabled={!props.realProduct}
+            isDisabled={!props.currProduct}
           >
             {languageObj.lang === 'en'
               ? `Buy now ${
-                  props.realProduct ? props.realProduct.gelPrice + '₾' : ''
+                  props.currProduct ? props.currProduct.gelPrice + '₾' : ''
                 }`
               : `იყიდე ახლავე ${
-                  props.realProduct ? props.realProduct.gelPrice + '₾' : ''
+                  props.currProduct ? props.currProduct.gelPrice + '₾' : ''
                 }`}
           </Button>
           <Button
@@ -88,9 +87,11 @@ export const BuildBuyingPart = (props: {
             h='55px'
             // w="240px"
             m='5px 7px'
-            isDisabled={!props.realProduct}
+            isDisabled={!props.currProduct}
             onClick={() => {
-              handleAddToCartClick();
+              props.currProduct
+                ? handleAddToCartClick(props.currProduct, itemAmount)
+                : null;
             }}
           >
             <img

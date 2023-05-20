@@ -91,7 +91,6 @@ export interface GeneralItemType {
   category: string;
 }
 export interface CartItemsType {
-  generalType: string;
-  specificType: string;
+  productId: number;
   amount: number;
 }

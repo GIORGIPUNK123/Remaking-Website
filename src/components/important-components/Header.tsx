@@ -7,6 +7,7 @@ import profile from '../../images/profile.svg';
 import burgerBar from '../../images/burger-bar.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentUserSlice } from '../../store/slices/currentUserSlice';
+import cartImage from '../../images/shopping-cart.svg';
 import { UserType } from '../../types';
 import { Loading } from '../Loading';
 export const Header: React.FC<{
@@ -14,6 +15,7 @@ export const Header: React.FC<{
   login?: string;
   register?: string;
   profile?: string;
+  cart?: string;
 }> = (props) => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
@@ -141,6 +143,7 @@ export const Header: React.FC<{
           {languageObj.lang === 'en' ? 'ABOUT US' : 'ჩვენს შესახებ'}
         </Link>
       </Box>
+
       <Box
         bg='inherit'
         display={{ base: 'none', xl: 'flex' }}
@@ -160,7 +163,17 @@ export const Header: React.FC<{
             </Box>
           </>
         ) : null}
-
+        <Link to={props.cart!}>
+          <img
+            style={{
+              marginLeft: '12px',
+              height: '40px',
+              filter: 'invert(80%)',
+              cursor: 'pointer',
+            }}
+            src={cartImage}
+          />
+        </Link>
         {currentUserObj.currentUser !== undefined ? (
           <>
             <Button

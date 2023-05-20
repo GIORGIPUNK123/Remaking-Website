@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Header } from './Header';
-import cartImage from '../../images/add-to-cart.svg';
-import { Box, Button, useNumberInput, Input, Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { Loading } from '../Loading';
 import { getMacByOptions, getMacOptions } from '../../functions/fetchFuncions';
 import { SwiperSlideForImages } from '../helper-components/SwiperSlideForImages';
 import { SsdsDisplay } from '../helper-components/SsdsDisplay';
 import { ColorsDisplay } from '../helper-components/ColorsDisplay';
 import { BuildBuyingPart } from '../helper-components/BuildBuyingPart';
-import { useDispatch, useSelector } from 'react-redux';
-import { GeneralItemType } from '../../types';
+import { useSelector } from 'react-redux';
+import { GeneralItemType, ItemType } from '../../types';
 export const BuildPage = () => {
-  const { type: productType, product: productParams } = useParams();
+  const { category: productCategory, type: productType } = useParams();
 
   const generalItemsObj = useSelector(
     (state: {
@@ -21,8 +20,8 @@ export const BuildPage = () => {
       loading: boolean;
     }) => state.generalItems
   );
-  const currentProduct = generalItemsObj.generalItems.find(
-    (product) => product.type === productParams
+  const currentGeneralProduct = generalItemsObj.generalItems.find(
+    (product) => product.type === productType
   );
   const [options, setOptions] = useState<{
     colors: string[];
@@ -36,27 +35,22 @@ export const BuildPage = () => {
   const currencyObj = useSelector(
     (state: { currency: { currency: 'usd' | 'gel' } }) => state.currency
   );
-  const dispatch = useDispatch();
-  const [realProduct, setRealProduct] = useState<{
-    price: number;
-    gelPrice: number;
-    inStock: number;
-  }>();
+  const [realProduct, setRealProduct] = useState<ItemType>();
   useEffect(() => {
-    if (currentProduct) {
-      getMacOptions(currentProduct.id).then((data) => {
+    if (currentGeneralProduct) {
+      getMacOptions(currentGeneralProduct.id).then((data) => {
         setOptions(data);
         setActiveColor(data.colors[0]);
         setActiveSsd(data.ssds[0]);
       });
     }
-  }, [currentProduct]);
+  }, [currentGeneralProduct]);
 
   useEffect(() => {
     setRealProduct(undefined);
-    console.log('from fetch: ', currentProduct, activeSsd, activeColor);
-    if (currentProduct && activeSsd && activeColor) {
-      getMacByOptions(currentProduct.type, activeSsd, activeColor)
+    console.log('from fetch: ', currentGeneralProduct, activeSsd, activeColor);
+    if (currentGeneralProduct && activeSsd && activeColor) {
+      getMacByOptions(currentGeneralProduct.type, activeSsd, activeColor)
         .then((data) => setRealProduct(data))
         .catch((err) => console.log('err: ', err));
     }
@@ -80,9 +74,9 @@ export const BuildPage = () => {
           borderRadius='25px'
         >
           <Text className='item-page-name' fontSize='34px' mt='75px' mb='45px'>
-            {currentProduct?.name}
+            {currentGeneralProduct?.name}
           </Text>
-          <SwiperSlideForImages images={currentProduct?.images} />
+          <SwiperSlideForImages images={currentGeneralProduct?.images} />
           <Box
             w='80%'
             bgColor='whiteAlpha.100'
@@ -153,7 +147,7 @@ export const BuildPage = () => {
               </>
             ) : null}
           </Box>
-          <BuildBuyingPart realProduct={realProduct} />
+          <BuildBuyingPart currProduct={realProduct} />
         </Box>
       </section>
     </>

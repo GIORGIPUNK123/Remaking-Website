@@ -2,7 +2,7 @@ import React from 'react';
 import { HomeSection } from './components/important-components/HomeSection';
 import { AdminPanel } from './components/adminPanel/AdminPanel';
 import { AdminPanelEdit } from './components/adminPanel/AdminPanelEdit';
-import { BuildPage } from './components/important-components/buildPage';
+import { BuildPage } from './components/important-components/BuildPage';
 import { Loading } from './components/Loading';
 import { DeadServer } from './components/DeadServer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -62,7 +62,7 @@ const App = () => {
           <Route path='/shop' element={<ShopSection />}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
-          <Route path='/build/:type/:product' element={<BuildPage />}></Route>
+          <Route path='/build/:category/:type' element={<BuildPage />}></Route>
           <Route path='/adminpanel' element={<AdminPanel />}></Route>
           <Route
             path='/adminpanel/edit/:id'

@@ -1,14 +1,14 @@
-export const handleAddToCartClick = () => {
-  const isInCart = (
-    productId: number,
-    arr: { itemId: number; amount: number }[]
-  ) => arr.some((el) => el.itemId === productId);
-  // setCartItems([...cartItems, { itemId: currentId, amount: itemAmount }]);
-  console.log("i should push");
+import { useSelector } from 'react-redux';
+import { ItemType } from '../types';
+import { changeAmountFromCart } from '../store/slices/cartSlice';
 
-  //   setButtonIsDisabled(true);
-  //   const timer = setTimeout(() => {
-  //     setButtonIsDisabled(false);
-  //   }, 1500);
-  //   return () => clearTimeout(timer);
+export const handleAddToCartClick = (currProduct: ItemType, amount: number) => {
+  const itemsObj = useSelector(
+    (state: {
+      items: { items: ItemType[]; error: boolean; loading: boolean };
+    }) => state.items
+  );
+  const isInCart = (productId: number) =>
+    itemsObj.items.some((el) => el.id === productId);
+  isInCart(currProduct.id) ? changeAmountFromCart(amount) : this;
 };

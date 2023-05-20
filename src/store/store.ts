@@ -4,6 +4,7 @@ import { itemsSlice } from './slices/itemsSlice';
 import { currentUserSlice } from './slices/currentUserSlice';
 import { languageSlice } from './slices/languageSlice';
 import { currencySlice } from './slices/currencySlice';
+import { cartSlice } from './slices/cartSlice';
 // ...
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     currentUser: currentUserSlice.reducer,
     language: languageSlice.reducer,
     currency: currencySlice.reducer,
+    cart: cartSlice.reducer,
   },
 });
 

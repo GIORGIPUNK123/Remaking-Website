@@ -32,6 +32,7 @@ export const HomeSection = () => {
         login='./login'
         register='./register'
         profile='./profile'
+        cart='./cart'
       />
       <section>
         <Box bg={'whiteAlpha.800'} h='125px' />
