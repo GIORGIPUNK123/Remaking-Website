@@ -14,7 +14,7 @@ export const store = configureStore({
     currentUser: currentUserSlice.reducer,
     language: languageSlice.reducer,
     currency: currencySlice.reducer,
-    cart: cartSlice.reducer,
+    cartItems: cartSlice.reducer,
   },
 });
 

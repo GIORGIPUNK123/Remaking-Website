@@ -86,6 +86,7 @@ export const ShopSection = () => {
           login='../login'
           register='../register'
           profile='../profile'
+          cart='../cart'
         />
 
         <Box bg='whiteAlpha.800' h='75px' />

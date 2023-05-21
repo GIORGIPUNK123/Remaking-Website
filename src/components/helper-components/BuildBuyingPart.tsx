@@ -8,9 +8,9 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import cartImage from '../../images/add-to-cart.svg';
-import { handleAddToCartClick } from '../../functions/BuildPageFunctions';
-import { useSelector } from 'react-redux';
-import { ItemType } from '../../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { CartItemsType, ItemType } from '../../types';
+import { addToCart, changeAmountFromCart } from '../../store/slices/cartSlice';
 export const BuildBuyingPart = (props: { currProduct?: ItemType }) => {
   const languageObj = useSelector(
     (state: { language: { lang: 'en' | 'ge' } }) => state.language
@@ -28,9 +28,31 @@ export const BuildBuyingPart = (props: { currProduct?: ItemType }) => {
     });
   const [buttonIsDisabled, setButtonIsDisabled] = useState(false);
 
+  const cartItemsObj = useSelector(
+    (state: {
+      cartItems: {
+        cartItems: CartItemsType[];
+        error: boolean;
+        loading: boolean;
+      };
+    }) => state.cartItems
+  );
+  const dispatch = useDispatch();
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
   const input = getInputProps();
+  const handleAddToCartClick = (
+    currProduct: ItemType,
+    amount: number,
+    cartItems: CartItemsType[]
+  ) => {
+    const isInCart = (productId: number) =>
+      cartItems.some((el) => el.id === productId);
+    console.log('isInCart: ', isInCart(currProduct.id));
+    isInCart(currProduct.id)
+      ? dispatch(changeAmountFromCart({ id: currProduct.id, amount }))
+      : dispatch(addToCart({ id: currProduct.id, amount }));
+  };
   console.log('props.currProduct: ', props.currProduct);
   return (
     <Box
@@ -89,9 +111,11 @@ export const BuildBuyingPart = (props: { currProduct?: ItemType }) => {
             m='5px 7px'
             isDisabled={!props.currProduct}
             onClick={() => {
-              props.currProduct
-                ? handleAddToCartClick(props.currProduct, itemAmount)
-                : null;
+              handleAddToCartClick(
+                props.currProduct!,
+                itemAmount,
+                cartItemsObj.cartItems
+              );
             }}
           >
             <img

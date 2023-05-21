@@ -90,7 +90,7 @@ export interface GeneralItemType {
   images: string[];
   category: string;
 }
-export interface CartItemsType {
-  productId: number;
+export interface CartItemType {
+  id: number;
   amount: number;
 }

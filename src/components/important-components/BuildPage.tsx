@@ -60,7 +60,12 @@ export const BuildPage = () => {
     <Loading />
   ) : (
     <>
-      <Header login='../login' register='../register' profile='../profile' />
+      <Header
+        login='../login'
+        register='../register'
+        profile='../profile'
+        cart='../cart'
+      />
       <section className='item-page'>
         <Box
           ml='2.5%'
