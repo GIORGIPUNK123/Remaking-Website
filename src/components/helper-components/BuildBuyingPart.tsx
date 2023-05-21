@@ -9,7 +9,7 @@ import {
 import React, { useState } from 'react';
 import cartImage from '../../images/add-to-cart.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { CartItemsType, ItemType } from '../../types';
+import { CartItemType, ItemType } from '../../types';
 import { addToCart, changeAmountFromCart } from '../../store/slices/cartSlice';
 export const BuildBuyingPart = (props: { currProduct?: ItemType }) => {
   const languageObj = useSelector(
@@ -31,7 +31,7 @@ export const BuildBuyingPart = (props: { currProduct?: ItemType }) => {
   const cartItemsObj = useSelector(
     (state: {
       cartItems: {
-        cartItems: CartItemsType[];
+        cartItems: CartItemType[];
         error: boolean;
         loading: boolean;
       };
@@ -44,7 +44,7 @@ export const BuildBuyingPart = (props: { currProduct?: ItemType }) => {
   const handleAddToCartClick = (
     currProduct: ItemType,
     amount: number,
-    cartItems: CartItemsType[]
+    cartItems: CartItemType[]
   ) => {
     const isInCart = (productId: number) =>
       cartItems.some((el) => el.id === productId);

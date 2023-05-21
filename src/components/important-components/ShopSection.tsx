@@ -7,6 +7,7 @@ import { GeneralItemType, GeneralMacTypes, ItemType } from '../../types';
 import { CheckBoxes } from '../inside-components/CheckBoxes';
 import { PriceRangeSlider } from '../inside-components/PriceRangeSlider';
 import { useSelector } from 'react-redux';
+import { filterBoxes } from '../../functions/filterBoxes';
 const DisplayGeneralShopBoxes = (props: {
   items: any[];
   sliceValue: number;
@@ -48,10 +49,8 @@ export const ShopSection = () => {
 
   const [maxPrice, setMaxPrice] = useState(0);
 
-  console.log('maxPrice: ', maxPrice);
   const [minSliderValue, setMinSliderValue] = useState(0);
   const [maxSliderValue, setMaxSliderValue] = useState(() => maxPrice);
-  console.log('maxSliderValue: ', maxSliderValue);
 
   useEffect(() => {
     setMaxPrice(() =>
@@ -63,17 +62,13 @@ export const ShopSection = () => {
     );
     setMaxSliderValue(maxPrice);
   }, [itemsObj.items, currencyObj, maxPrice]);
-  const filteredItems = generalItemsObj.generalItems.filter((item) => {
-    const priceField =
-      currencyObj.currency === 'usd' ? 'startingPrice' : 'startingGelPrice';
-    const containsInputText = item.name.toLowerCase().includes(inputText);
-    return (
-      (filterTypes.length === 0 || filterTypes.includes(item.type)) &&
-      containsInputText &&
-      item[priceField] > minSliderValue &&
-      item[priceField] <= maxSliderValue
-    );
-  });
+  const filteredItems = filterBoxes(
+    generalItemsObj.generalItems,
+    inputText,
+    currencyObj.currency,
+    minSliderValue,
+    maxSliderValue
+  );
   const [sliceValue, setSliceValue] = useState(6);
   if (
     !itemsObj.loading
@@ -86,7 +81,7 @@ export const ShopSection = () => {
           login='../login'
           register='../register'
           profile='../profile'
-          cart='../cart'
+          checkout='../checkout'
         />
 
         <Box bg='whiteAlpha.800' h='75px' />

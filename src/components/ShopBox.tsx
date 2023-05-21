@@ -45,7 +45,6 @@ export const ShopBox: React.FC<ShopBoxTypes> = (props) => {
   const languageObj = useSelector(
     (state: { language: { lang: 'en' | 'ge' } }) => state.language
   );
-  console.log('props: ', props);
   if (!props.general) {
     return (
       <Box className='shopbox shopbox-normal'>

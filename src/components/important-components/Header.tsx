@@ -8,14 +8,14 @@ import burgerBar from '../../images/burger-bar.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentUserSlice } from '../../store/slices/currentUserSlice';
 import cartImage from '../../images/shopping-cart.svg';
-import { UserType } from '../../types';
+import { CartItemType, UserType } from '../../types';
 import { Loading } from '../Loading';
 export const Header: React.FC<{
   getInputText?: (text: string) => void;
   login?: string;
   register?: string;
   profile?: string;
-  cart?: string;
+  checkout?: string;
 }> = (props) => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
@@ -32,6 +32,15 @@ export const Header: React.FC<{
   if (currentUserObj.loading) {
     return <Loading />;
   }
+  const cartItemsObj = useSelector(
+    (state: {
+      cartItems: {
+        cartItems: CartItemType[];
+        error: boolean;
+        loading: boolean;
+      };
+    }) => state.cartItems
+  );
   if (burgerBarOpen) {
     return (
       <>
@@ -132,6 +141,7 @@ export const Header: React.FC<{
         transform={{ '2xl': 'translate(-50%)' }}
         fontSize='18px'
         fontWeight='600'
+        className='navbar-links'
       >
         <Link className='header-li' to='/'>
           {languageObj.lang === 'en' ? 'HOME' : 'სახლი'}
@@ -163,17 +173,27 @@ export const Header: React.FC<{
             </Box>
           </>
         ) : null}
-        <Link to={props.cart!}>
+        <Button
+          display='flex'
+          ml='10'
+          variant='ghost'
+          onClick={() => {
+            navigate(props.checkout!);
+          }}
+        >
           <img
             style={{
               marginLeft: '12px',
-              height: '40px',
-              filter: 'invert(80%)',
+              height: '30px',
+              filter: 'invert(100%)',
               cursor: 'pointer',
             }}
             src={cartImage}
           />
-        </Link>
+          <Text fontSize='xl' ml='3'>
+            {cartItemsObj.cartItems.length}
+          </Text>
+        </Button>
         {currentUserObj.currentUser !== undefined ? (
           <>
             <Button

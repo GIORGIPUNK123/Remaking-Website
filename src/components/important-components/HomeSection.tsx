@@ -8,6 +8,7 @@ import 'swiper/css/scrollbar';
 import { Box, Heading, Text } from '@chakra-ui/react';
 import { GeneralItemType, ItemType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
+import { filterBoxes } from '../../functions/filterBoxes';
 export const HomeSection = () => {
   const languageObj = useSelector(
     (state: { language: { lang: 'en' | 'ge' } }) => state.language
@@ -24,7 +25,7 @@ export const HomeSection = () => {
   const getInputText = (text: string) => {
     setInputText(text);
   };
-  console.log('generalItems: ', generalItemsObj);
+  const filteredItems = filterBoxes(generalItemsObj.generalItems, inputText);
   return (
     <>
       <Header
@@ -32,7 +33,7 @@ export const HomeSection = () => {
         login='./login'
         register='./register'
         profile='./profile'
-        cart='./cart'
+        checkout='./checkout'
       />
       <section>
         <Box bg={'whiteAlpha.800'} h='125px' />
@@ -51,12 +52,9 @@ export const HomeSection = () => {
             display={{ base: 'none', md: 'flex' }}
           >
             <div className='best-seller-items'>
-              {generalItemsObj.generalItems
-                .slice(0, 6)
-                .map((item: any, index: number) => {
-                  console.log('item.images :', item.images);
-                  return <ShopBox key={index} {...item} general />;
-                })}
+              {filteredItems.slice(0, 6).map((item: any, index: number) => {
+                return <ShopBox key={index} {...item} general />;
+              })}
             </div>
           </Box>
         </div>

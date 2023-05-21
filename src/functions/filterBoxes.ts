@@ -1,22 +1,28 @@
-import { ShopBoxTypes, CheckBoxTypes } from "../types";
+import { GeneralItemType } from '../types';
 export const filterBoxes = (
-  itemsArr: ShopBoxTypes[],
-  minValue: number,
-  maxValue: number,
-  currentValue: "usd" | "gel",
+  generalItemsArr: GeneralItemType[],
   inputText: string,
-  checkBoxes: any[]
+  currentCurrency?: 'usd' | 'gel',
+  minValue?: number,
+  maxValue?: number,
+  checkBoxes?: any[]
+  // filterTypes
 ) => {
-  const filteredItems = itemsArr.filter((item) => {
-    const containsInputText = item.name.toLowerCase().includes(inputText);
+  return generalItemsArr.filter((item) => {
     const priceField =
-      currentValue === "usd" ? "startingPrice" : "startingGelPrice";
-    return (
-      (checkBoxes.length === 0 ||
-        checkBoxes.some((checkBox) => checkBox[item.category])) &&
-      containsInputText &&
-      item[priceField] >= minValue &&
-      item[priceField] <= maxValue
-    );
+      currentCurrency === 'usd' ? 'startingPrice' : 'startingGelPrice';
+    const containsInputText = item.name
+      .toLowerCase()
+      .includes(inputText.toLowerCase());
+
+    // (filterTypes.length === 0 || filterTypes.includes(item.type)) &&
+    if (minValue || maxValue) {
+      return (
+        containsInputText &&
+        item[priceField] > minValue! &&
+        item[priceField] <= maxValue!
+      );
+    }
+    return containsInputText;
   });
 };

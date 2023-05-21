@@ -78,3 +78,8 @@
 .search {
   display: none;
 }
+@media (max-width: 1700px) {
+  .navbar-links {
+    width: 350px!important;
+  }
+}
