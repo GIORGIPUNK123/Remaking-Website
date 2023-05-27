@@ -5,7 +5,7 @@ export const refreshTokenThunk = createAsyncThunk(
   'refresh/get',
   async (refreshToken: string) => {
     return axios({
-      url: 'https://geolab-project.herokuapp.com/refresh',
+      url: 'https://geolab-project-backend.onrender.com/refresh',
       method: 'POST',
       data: { refreshToken },
       headers: {
@@ -27,7 +27,7 @@ export const getTokenByLogin = createAsyncThunk(
   'login/get',
   async ({ email, password }: { email: string; password: string }) => {
     return axios({
-      url: 'https://geolab-project.herokuapp.com/login',
+      url: 'https://geolab-project-backend.onrender.com/login',
       method: 'POST',
       data: { email, password },
       headers: {

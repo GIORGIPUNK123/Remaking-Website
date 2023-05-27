@@ -9,8 +9,8 @@ export const getMacs = async (amount?: number) => {
 export const getGeneralItems = async () => {
   return axios
     .get(
-      // "https://geolab-project-backend.onrender.com/generalmacs"
-      'http://localhost:3006/generalItems'
+      'https://geolab-project-backend.onrender.com/generalmacs'
+      // 'http://localhost:3006/generalItems'
     )
     .then((data) => {
       console.log('Fetched GeneralItems');
@@ -25,7 +25,7 @@ export const getMacByOptions = async (
 ) =>
   axios
     .get(
-      `http://localhost:3006/getmacbyoptions/mac/${productType}/${ssdValue}/${color}`
+      `https://geolab-project-backend.onrender.com/getmacbyoptions/mac/${productType}/${ssdValue}/${color}`
     )
     .then((macs) => macs.data)
     .then((data: ItemType) => {
@@ -51,7 +51,7 @@ export const getCurrentUser = async (accessToken: string) => {
 };
 export const getMacOptions = async (id: number) =>
   axios
-    .get(`http://localhost:3006/getmacoptions/${id}`)
+    .get(`https://geolab-project-backend.onrender.com/getmacoptions/${id}`)
     .then((response) => {
       // handle success
       console.log('getMacOptions: ', response.data);

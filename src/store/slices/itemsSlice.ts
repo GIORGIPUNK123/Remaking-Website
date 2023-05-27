@@ -4,7 +4,7 @@ import { GeneralItemType, ItemType } from '../../types';
 
 export const getItems = createAsyncThunk('getItems/get', async () => {
   const { data } = await axios.get(
-    'https://geolab-project.herokuapp.com/items'
+    'https://geolab-project-backend.onrender.com/items'
   );
   return data;
 });

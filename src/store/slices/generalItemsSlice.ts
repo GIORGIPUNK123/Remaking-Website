@@ -6,7 +6,7 @@ export const getGeneralItems = createAsyncThunk(
   'getGeneralItems/get',
   async () => {
     const { data } = await axios.get(
-      'https://geolab-project.herokuapp.com/generalItems'
+      'https://geolab-project-backend.onrender.com/generalItems'
     );
     return data;
   }

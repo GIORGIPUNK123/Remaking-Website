@@ -8,7 +8,7 @@ export const getCurrentUser = createAsyncThunk(
   async (accessToken: string) => {
     console.log('accessToken from getCurrUser: ', accessToken);
     return axios({
-      url: 'https://geolab-project.herokuapp.com/userinfo',
+      url: 'https://geolab-project-backend.onrender.com/userinfo',
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
