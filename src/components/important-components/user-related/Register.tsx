@@ -28,12 +28,22 @@ export const Register = () => {
   const [emailExists, setEmailExists] = useState(false);
   const toast = useToast();
   const initialValues = {
+    name: '',
+    surname: '',
     email: '',
     password: '',
     repeatPassword: '',
   };
   const [isLoading, setIsLoading] = useState(false);
   const registerSchema = Yup.object().shape({
+    name: Yup.string()
+      .required()
+      .min(3, 'Name has to contain more than 3 letters')
+      .max(15, 'Password has to contain less than 15 letters'),
+    surname: Yup.string()
+      .required()
+      .min(6, 'Surname has to contain more than 3 letters')
+      .max(15, 'Password has to contain less than 15 letters'),
     email: Yup.string()
       .required()
       .email()
@@ -66,6 +76,7 @@ export const Register = () => {
       .required()
       .min(6, 'Password has to contain more than 6 letters')
       .max(15, 'Password has to contain less than 15 letters'),
+
     repeatPassword: Yup.string()
       .required()
       .oneOf([Yup.ref('password')], 'Passwords do not match'),
@@ -80,7 +91,7 @@ export const Register = () => {
           className='main-login-div'
           mt='105'
           bgColor='blackAlpha.100'
-          h='600px'
+          h='800px'
           w='50%'
           display='flex'
           alignItems='center'
@@ -150,11 +161,33 @@ export const Register = () => {
                   >
                     <Box
                       w='100%'
-                      h='300px'
+                      h='500px'
                       display='flex'
                       flexDir='column'
                       justifyContent='space-between'
                     >
+                      <AdminPanelInput
+                        label='name'
+                        error={errors.name}
+                        errorMessage={errors.name}
+                        helperText='Nice Job'
+                        min={0}
+                        id='name'
+                        inputValue={values.name}
+                        handleChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <AdminPanelInput
+                        label='surname'
+                        error={errors.surname}
+                        errorMessage={errors.surname}
+                        helperText='Nice Job'
+                        min={0}
+                        id='surname'
+                        inputValue={values.surname}
+                        handleChange={handleChange}
+                        onBlur={handleBlur}
+                      />
                       <AdminPanelInput
                         label='Email'
                         error={errors.email}
