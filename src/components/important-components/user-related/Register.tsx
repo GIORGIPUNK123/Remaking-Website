@@ -39,7 +39,7 @@ export const Register = () => {
       .email()
       .min(2, 'Email has to contain more than 2 letters')
       .test('test-name', 'Email already exists', (value) => {
-        fetch('https://geolab-project-backend.onrender.com/userexists', {
+        fetch('https://geolab-project-backend.onrender.com/checkuser', {
           method: 'POST',
           body: JSON.stringify({ email: value }),
           headers: {
