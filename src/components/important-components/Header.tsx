@@ -15,10 +15,9 @@ export const Header: React.FC<{
   login?: string;
   register?: string;
   profile?: string;
-  checkout?: string;
+  cartPage?: string;
 }> = (props) => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
   const currentUserObj = useSelector(
     (state: {
       currentUser: { currentUser: UserType; error: boolean; loading: boolean };
@@ -104,7 +103,7 @@ export const Header: React.FC<{
               </>
             ) : (
               <>
-                <Box
+                {/* <Box
                   display='flex'
                   mr='45px'
                   alignItems='center'
@@ -117,7 +116,7 @@ export const Header: React.FC<{
                     {currentUserObj.currentUser.name}
                   </Text>
                   <Image h='30px' ml='4' src={profile} alt='profile' />
-                </Box>
+                </Box> */}
               </>
             )}
           </Box>
@@ -136,9 +135,6 @@ export const Header: React.FC<{
         display={{ base: 'none', xl: 'flex' }}
         justifyContent='space-between'
         w={{ xl: '350px', '2xl': '500px' }}
-        position={{ '2xl': 'absolute' }}
-        left={{ '2xl': '50%' }}
-        transform={{ '2xl': 'translate(-50%)' }}
         fontSize='18px'
         fontWeight='600'
         className='navbar-links'
@@ -178,7 +174,7 @@ export const Header: React.FC<{
           ml='10'
           variant='ghost'
           onClick={() => {
-            navigate(props.checkout!);
+            navigate(props.cartPage!);
           }}
         >
           <img
@@ -194,7 +190,7 @@ export const Header: React.FC<{
             {cartItemsObj.cartItems.length}
           </Text>
         </Button>
-        {currentUserObj.currentUser !== undefined ? (
+        {Object.keys(currentUserObj.currentUser).length !== 0 ? (
           <>
             <Button
               variant='ghost'
@@ -222,7 +218,7 @@ export const Header: React.FC<{
             <Box
               ml='50px'
               display='flex'
-              w='255px'
+              w='190px'
               justifyContent='space-between'
               alignItems='center'
             >

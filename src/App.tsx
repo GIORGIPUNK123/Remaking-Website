@@ -17,7 +17,7 @@ import { GeneralItemType } from './types';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGeneralItems } from './store/slices/generalItemsSlice';
 import { AppDispatch } from './store/store';
-import { getCurrentUser } from './store/slices/currentUserSlice';
+// import { getCurrentUser } from './store/slices/currentUserSlice';
 import { getItems } from './store/slices/itemsSlice';
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,9 +30,7 @@ const App = () => {
     }) => state.generalItems
   );
   useEffect(() => {
-    if (cookies.accessToken !== undefined) {
-      dispatch(getCurrentUser(cookies.accessToken));
-    }
+    // dispatch(getCurrentUser(cookies.accessToken));
     dispatch(getGeneralItems());
     dispatch(getItems());
   }, []);

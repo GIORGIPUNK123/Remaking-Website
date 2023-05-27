@@ -10,6 +10,7 @@ export const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       state.cartItems.push(action.payload);
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
     removeFromCart: (state, action) => {
       const itemIndex = state.cartItems.findIndex((item) => {

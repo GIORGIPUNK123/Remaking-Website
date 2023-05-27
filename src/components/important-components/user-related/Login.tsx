@@ -8,10 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UserType } from '../../../types';
+import { getTokenByLogin } from '../../../store/slices/currentTokenSlice';
+import { AppDispatch } from '../../../store/store';
+import { getCurrentUser } from '../../../store/slices/currentUserSlice';
 export const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const toast = useToast();
   const initialValues = {
     email: '',
@@ -30,19 +34,24 @@ export const Login = () => {
       .min(6, 'Password has to contain more than 6 letters')
       .max(15, 'Password has to contain less than 15 letters'),
   });
-
   const [cookies, setCookie] = useCookies(['accessToken']);
   const currentUserObj = useSelector(
     (state: {
       currentUser: { currentUser: UserType; error: boolean; loading: boolean };
     }) => state.currentUser
   );
+  // console.log('CurrentUserObj: ', currentUserObj);
   useEffect(() => {
     if (Object.keys(currentUserObj.currentUser).length !== 0) {
       navigate('../');
     }
   }, []);
-
+  const currentTokenObj = useSelector(
+    (state: {
+      currentToken: { token: string; error: boolean; loading: boolean };
+    }) => state.currentToken
+  );
+  // console.log('currentTokenObj: ', currentTokenObj);
   return (
     <>
       <div
@@ -73,49 +82,64 @@ export const Login = () => {
             <Formik
               validationSchema={loginSchema}
               initialValues={initialValues}
-              onSubmit={(values) => {
-                axios({
-                  url: 'https://localhost:3006/login',
-                  method: 'POST',
-                  data: JSON.stringify(values),
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                })
-                  .then((res: any) => {
-                    setCookie('accessToken', res.data.accessToken, {
-                      path: '/',
-                    });
-                    console.log('token ', res.accessToken);
-                    console.log('cookies ', cookies);
+              onSubmit={async ({ email, password }) => {
+                try {
+                  setIsLoading(true);
+                  const tokenRes = await dispatch(
+                    getTokenByLogin({ email, password })
+                  );
+                  const accessToken = tokenRes.payload;
+                  console.log('TOKEN FROM LOGIN:', accessToken);
+                  setIsLoading(false);
+                  try {
+                    await dispatch(getCurrentUser(accessToken));
                     navigate('../');
-                  })
-                  .catch((err) => {
-                    console.log('Error: ', err);
-                    console.log('Error Status: ', err.response.status);
+                    // Handle successful user retrieval here
+                    // For example, you can navigate to another page using a routing library
+                  } catch (currentUserErr: any) {
+                    let errorMessage =
+                      'An error occurred while fetching the current user.';
+                    if (currentUserErr.response) {
+                      if (currentUserErr.response.status === 403) {
+                        errorMessage = 'Invalid Token';
+                      } else {
+                        errorMessage = `Error ${currentUserErr.response.status}`;
+                      }
+                    }
                     toast({
-                      title: `Error. `,
-                      description:
-                        err.response.status === 401
-                          ? 'Email or Password is incorrect'
-                          : err.response.status,
+                      title: 'Error',
+                      description: errorMessage,
                       status: 'error',
                       duration: 5000,
                       isClosable: true,
                       position: 'top',
                     });
+                  }
+                } catch (err: any) {
+                  let errorMessage = 'An error occurred during login.';
+                  if (err.response) {
+                    if (err.response.status === 401) {
+                      errorMessage = 'Email or Password is incorrect';
+                    } else {
+                      errorMessage = `Error ${err.response.status}`;
+                    }
+                  }
+                  console.log('Error:', err);
+                  toast({
+                    title: 'Error',
+                    description: errorMessage,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top',
                   });
-                setIsLoading(true);
-                const timer = setTimeout(() => {
                   setIsLoading(false);
-                }, 1500);
-                return () => clearTimeout(timer);
-                // alert(JSON.stringify(values, null, 2));
+                }
               }}
             >
               {({ values, errors, handleChange, handleBlur, handleSubmit }) => {
-                console.log('errors ', errors);
-                console.log('values ', values);
+                // console.log('errors ', errors);
+                // console.log('values ', values);
                 return (
                   <form
                     onSubmit={handleSubmit}

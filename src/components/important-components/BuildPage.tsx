@@ -64,7 +64,7 @@ export const BuildPage = () => {
         login='../login'
         register='../register'
         profile='../profile'
-        cart='../cart'
+        cartPage='../cartpage'
       />
       <section className='item-page'>
         <Box

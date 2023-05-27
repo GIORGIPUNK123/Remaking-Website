@@ -3,7 +3,9 @@ import axios from 'axios';
 import { GeneralItemType, ItemType } from '../../types';
 
 export const getItems = createAsyncThunk('getItems/get', async () => {
-  const { data } = await axios.get('http://localhost:3006/items');
+  const { data } = await axios.get(
+    'https://geolab-project.herokuapp.com/items'
+  );
   return data;
 });
 export const itemsSlice = createSlice({

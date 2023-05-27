@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { Loading } from '../Loading';
 import { ShopBox } from '../ShopBox';
@@ -47,19 +47,16 @@ export const ShopSection = () => {
   const [inputText, setInputText] = useState('');
   const [filterTypes, setFilterTypes] = useState<string[]>([]);
 
-  const [maxPrice, setMaxPrice] = useState(0);
+  const maxPrice = Math.max(
+    ...itemsObj.items.map((item) => {
+      return currencyObj.currency === 'usd' ? item.price : item.gelPrice;
+    })
+  );
 
   const [minSliderValue, setMinSliderValue] = useState(0);
   const [maxSliderValue, setMaxSliderValue] = useState(() => maxPrice);
 
   useEffect(() => {
-    setMaxPrice(() =>
-      Math.max(
-        ...itemsObj.items.map((item) => {
-          return currencyObj.currency === 'usd' ? item.price : item.gelPrice;
-        })
-      )
-    );
     setMaxSliderValue(maxPrice);
   }, [itemsObj.items, currencyObj, maxPrice]);
   const filteredItems = filterBoxes(
@@ -81,7 +78,7 @@ export const ShopSection = () => {
           login='../login'
           register='../register'
           profile='../profile'
-          checkout='../checkout'
+          cartPage='../cartpage'
         />
 
         <Box bg='whiteAlpha.800' h='75px' />

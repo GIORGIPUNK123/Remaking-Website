@@ -1,12 +1,14 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { GeneralItemType } from '../../types';
+import { UserType } from '../../types';
+import { useDispatch } from 'react-redux';
 
 export const getCurrentUser = createAsyncThunk(
   'getCurrentUser/get',
   async (accessToken: string) => {
+    console.log('accessToken from getCurrUser: ', accessToken);
     return axios({
-      url: 'http://localhost:3006/userinfo',
+      url: 'https://geolab-project.herokuapp.com/userinfo',
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -17,14 +19,17 @@ export const getCurrentUser = createAsyncThunk(
         return res.data;
       })
       .catch((err) => {
-        console.log('Error from getCurrentUser: ', err);
+        if (err.response.status === 401) {
+        }
+        console.error('Error from getCurrentUser: ', err.message);
       });
   }
 );
+
 export const currentUserSlice = createSlice({
   name: 'currentUser',
   initialState: {
-    currentUser: {},
+    currentUser: {} as UserType,
     loading: false,
     error: false,
   },
@@ -33,12 +38,14 @@ export const currentUserSlice = createSlice({
     builder.addCase(getCurrentUser.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
-      state.loading = false;
-      state.currentUser = action.payload;
-    });
+    builder.addCase(
+      getCurrentUser.fulfilled,
+      (state, action: PayloadAction<UserType>) => {
+        state.loading = false;
+        state.currentUser = action.payload;
+      }
+    );
     builder.addCase(getCurrentUser.rejected, (state, action) => {
-      console.log('action.payload: ', action.payload);
       state.loading = false;
       state.error = true;
     });

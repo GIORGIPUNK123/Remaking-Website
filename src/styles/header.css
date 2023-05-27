@@ -41,7 +41,7 @@
 .header-li {
   text-align: center;
   transition-duration: 0.05s;
-  transition-property: "border";
+  transition-property: 'border';
 }
 .header-li:hover {
   border-bottom: solid 4px #fff;
@@ -80,6 +80,13 @@
 }
 @media (max-width: 1700px) {
   .navbar-links {
-    width: 350px!important;
+    width: 350px !important;
+  }
+}
+@media (min-width: 2000px) {
+  .navbar-links {
+    position: absolute !important;
+    left: 50%;
+    transform: translate(-50%);
   }
 }
