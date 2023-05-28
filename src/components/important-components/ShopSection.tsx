@@ -48,11 +48,12 @@ export const ShopSection = () => {
   const [filterTypes, setFilterTypes] = useState<string[]>([]);
 
   const checkBoxesArr = [
-    isMac ? 'mac' : '',
-    isIphone ? 'iphone' : '',
-    isAirpods ? 'airpods' : '',
-  ];
+    isMac ? 'mac' : undefined,
+    isIphone ? 'iphone' : undefined,
+    isAirpods ? 'airpods' : undefined,
+  ].filter(Boolean) as string[];
 
+  console.log('checkBoxesArr: ', checkBoxesArr);
   const maxPrice = Math.max(
     ...itemsObj.items.map((item) => {
       return currencyObj.currency === 'usd' ? item.price : item.gelPrice;
@@ -153,11 +154,6 @@ export const ShopSection = () => {
             justifyContent='center'
             flexWrap='wrap'
           >
-            {/* <DisplayShopBoxes
-        // items={generalMacs}
-        items={filteredItems}
-        sliceValue={sliceValue}
-      /> */}
             <DisplayGeneralShopBoxes
               // items={generalItems}
               items={filteredItems}
