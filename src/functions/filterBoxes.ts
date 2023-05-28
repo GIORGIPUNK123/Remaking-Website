@@ -23,7 +23,14 @@ export const filterBoxes = (
         })
       : true;
 
-    if (minValue || maxValue) {
+    if (minValue || (maxValue && checkBoxesArr?.length !== 0)) {
+      return (
+        categoryContainsCheckbox &&
+        containsInputText &&
+        item[priceField] > minValue! &&
+        item[priceField] <= maxValue!
+      );
+    } else {
       return (
         categoryContainsCheckbox &&
         containsInputText &&
