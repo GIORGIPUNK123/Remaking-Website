@@ -45,13 +45,12 @@ export const ShopSection = () => {
   const [isIphone, setIsIphone] = useState(false);
   const [isAirpods, setIsAirpods] = useState(false);
   const [inputText, setInputText] = useState('');
-  const [filterTypes, setFilterTypes] = useState<string[]>([]);
 
   const checkBoxesArr = [
-    isMac ? 'mac' : '',
-    isIphone ? 'iphone' : '',
-    isAirpods ? 'airpods' : '',
-  ];
+    isMac ? 'mac' : undefined,
+    isIphone ? 'iphone' : undefined,
+    isAirpods ? 'airpods' : undefined,
+  ].filter(Boolean) as string[];
 
   const maxPrice = Math.max(
     ...itemsObj.items.map((item) => {
