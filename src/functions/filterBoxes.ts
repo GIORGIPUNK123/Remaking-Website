@@ -23,20 +23,22 @@ export const filterBoxes = (
         })
       : true;
 
-    if (minValue || (maxValue && checkBoxesArr?.length !== 0)) {
+    if (minValue || maxValue) {
+      if (checkBoxesArr?.length !== 0) {
+        return (
+          categoryContainsCheckbox &&
+          containsInputText &&
+          item[priceField] > minValue! &&
+          item[priceField] <= maxValue!
+        );
+      }
       return (
-        categoryContainsCheckbox &&
         containsInputText &&
         item[priceField] > minValue! &&
         item[priceField] <= maxValue!
       );
     } else {
-      return (
-        containsInputText &&
-        item[priceField] > minValue! &&
-        item[priceField] <= maxValue!
-      );
+      return containsInputText;
     }
-    // return containsInputText && categoryContainsCheckbox;
   });
 };
