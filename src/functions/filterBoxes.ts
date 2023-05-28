@@ -32,7 +32,6 @@ export const filterBoxes = (
       );
     } else {
       return (
-        categoryContainsCheckbox &&
         containsInputText &&
         item[priceField] > minValue! &&
         item[priceField] <= maxValue!
