@@ -10,13 +10,16 @@ import './styles/itempage.css';
 // import "./styles/responsive.css";
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import theme from './theme';
-import { store } from './store/store';
+import { persistor, store } from './store/store';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </ChakraProvider>
   </Provider>
 );

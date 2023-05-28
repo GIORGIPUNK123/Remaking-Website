@@ -47,6 +47,12 @@ export const ShopSection = () => {
   const [inputText, setInputText] = useState('');
   const [filterTypes, setFilterTypes] = useState<string[]>([]);
 
+  const checkBoxesArr = [
+    isMac ? 'mac' : '',
+    isIphone ? 'iphone' : '',
+    isAirpods ? 'airpods' : '',
+  ];
+
   const maxPrice = Math.max(
     ...itemsObj.items.map((item) => {
       return currencyObj.currency === 'usd' ? item.price : item.gelPrice;
@@ -64,7 +70,8 @@ export const ShopSection = () => {
     inputText,
     currencyObj.currency,
     minSliderValue,
-    maxSliderValue
+    maxSliderValue,
+    checkBoxesArr
   );
   const [sliceValue, setSliceValue] = useState(6);
   if (

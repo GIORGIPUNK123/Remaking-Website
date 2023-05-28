@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export const languageSlice = createSlice({
+const languageSlice = createSlice({
   name: 'language',
   initialState: {
     lang: <'en' | 'ge'>'en',
@@ -16,4 +16,5 @@ export const languageSlice = createSlice({
     },
   },
 });
+export const languageReducer = languageSlice.reducer;
 export const { changeLang } = languageSlice.actions;

@@ -1,14 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { GeneralItemType, ItemType } from '../../types';
+import { axiosInstance } from '../../instance';
 
 export const getItems = createAsyncThunk('getItems/get', async () => {
-  const { data } = await axios.get(
-    'https://geolab-project-backend.onrender.com/items'
-  );
+  const { data } = await axiosInstance.get('/items');
   return data;
 });
-export const itemsSlice = createSlice({
+const itemsSlice = createSlice({
   name: 'items',
   initialState: {
     items: [] as ItemType[],
@@ -30,3 +29,4 @@ export const itemsSlice = createSlice({
     });
   },
 });
+export const itemsReducer = itemsSlice.reducer;

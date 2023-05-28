@@ -15,5 +15,6 @@
 
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "jsx": "react"
-  }
+  },
+  "include": ["./node_modules/redux-persist/types"]
 }

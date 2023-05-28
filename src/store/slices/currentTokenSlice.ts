@@ -40,7 +40,7 @@ export const getTokenByLogin = createAsyncThunk(
       .catch((err) => {
         console.log('Error: ', err);
         console.log('Error Status: ', err.response.status);
-        throw err; // Rethrow the error to be handled by the rejected action
+        throw err;
       });
   }
 );

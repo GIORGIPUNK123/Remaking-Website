@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { Login } from './components/important-components/user-related/Login';
 import { Register } from './components/important-components/user-related/Register';
-import { Cart } from './components/inside-components/Cart';
+import { CartPage } from './components/important-components/CartPage';
 import { ShopSection } from './components/important-components/ShopSection';
 import { Profile } from './components/important-components/user-related/Profile';
 import { GeneralItemType } from './types';
@@ -35,7 +35,6 @@ const App = () => {
     dispatch(getItems());
   }, []);
   // ROUTES
-
   if (!!!generalItemsObj.generalItems.length) {
     return (
       <Router>
@@ -45,10 +44,10 @@ const App = () => {
           <Route path='/build/:type/:product' element={<Loading />}></Route>
           <Route path='/adminpanel' element={<Loading />}></Route>
           <Route path='/adminpanel/edit/:id' element={<Loading />}></Route>
-          <Route path='/cart' element={<Loading />}></Route>
           <Route path='/login' element={<Loading />}></Route>
           <Route path='/register' element={<Loading />}></Route>
           <Route path='/profile' element={<Loading />}></Route>
+          <Route path='/cartpage' element={<Loading />}></Route>
         </Routes>
       </Router>
     );
@@ -67,7 +66,7 @@ const App = () => {
             element={<AdminPanelEdit />}
           ></Route>
 
-          <Route path='/cart' element={<Cart />}></Route>
+          <Route path='/cartpage' element={<CartPage />}></Route>
           <Route path='/profile' element={<Profile />}></Route>
         </Routes>
       </Router>

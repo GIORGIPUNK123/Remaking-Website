@@ -1,12 +1,12 @@
 import { GeneralItemType } from '../types';
+
 export const filterBoxes = (
   generalItemsArr: GeneralItemType[],
   inputText: string,
   currentCurrency?: 'usd' | 'gel',
   minValue?: number,
   maxValue?: number,
-  checkBoxes?: any[]
-  // filterTypes
+  checkBoxesArr?: string[]
 ) => {
   return generalItemsArr.filter((item) => {
     const priceField =
@@ -15,7 +15,10 @@ export const filterBoxes = (
       .toLowerCase()
       .includes(inputText.toLowerCase());
 
-    // (filterTypes.length === 0 || filterTypes.includes(item.type)) &&
+    const categoryContainsCheckbox = checkBoxesArr
+      ? checkBoxesArr.some((checkbox) => item.category.includes(checkbox))
+      : true;
+
     if (minValue || maxValue) {
       return (
         containsInputText &&
@@ -23,6 +26,7 @@ export const filterBoxes = (
         item[priceField] <= maxValue!
       );
     }
-    return containsInputText;
+
+    return containsInputText && categoryContainsCheckbox;
   });
 };

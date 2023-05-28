@@ -1,20 +1,18 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { UserType } from '../../types';
-import { useDispatch } from 'react-redux';
+import { axiosInstance } from '../../instance';
 
 export const getCurrentUser = createAsyncThunk(
   'getCurrentUser/get',
   async (accessToken: string) => {
     console.log('accessToken from getCurrUser: ', accessToken);
-    return axios({
-      url: 'https://geolab-project-backend.onrender.com/userinfo',
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
+    return axiosInstance
+      .get('/userinfo', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((res) => {
         return res.data;
       })
@@ -26,7 +24,7 @@ export const getCurrentUser = createAsyncThunk(
   }
 );
 
-export const currentUserSlice = createSlice({
+const currentUserSlice = createSlice({
   name: 'currentUser',
   initialState: {
     currentUser: {} as UserType,
@@ -51,3 +49,4 @@ export const currentUserSlice = createSlice({
     });
   },
 });
+export const currentUserReducer = currentUserSlice.reducer;
