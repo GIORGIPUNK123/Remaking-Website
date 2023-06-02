@@ -1,14 +1,15 @@
-import { Box, useToast, Text } from '@chakra-ui/react';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { UserType } from '../../../types';
+import { Box, useToast, Text, Button } from "@chakra-ui/react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { UserType } from "../../../types";
+import { logout } from "../../../store/slices/currentUserSlice";
 export const Profile: React.FC = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(['accessToken']);
-
+  const [cookies, setCookie] = useCookies(["accessToken"]);
+  const dispatch = useDispatch();
   const toast = useToast();
   const currentUserObj = useSelector(
     (state: {
@@ -17,7 +18,7 @@ export const Profile: React.FC = () => {
   );
   useEffect(() => {
     if (Object.keys(currentUserObj.currentUser).length === 0) {
-      navigate('../');
+      navigate("../");
     }
   }, []);
   return (
@@ -25,6 +26,15 @@ export const Profile: React.FC = () => {
       <Text>{`ID: ${currentUserObj.currentUser.id}`}</Text>
       <Text>{`NAME: ${currentUserObj.currentUser.name}`}</Text>
       <Text>{`SURNAME: ${currentUserObj.currentUser.surname}`}</Text>
+      <Button
+        onClick={() => {
+          dispatch(logout());
+          navigate("../");
+        }}
+        colorScheme="blue"
+      >
+        Log Out
+      </Button>
     </Box>
   );
 };

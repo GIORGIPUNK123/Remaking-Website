@@ -1,31 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  Text,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Input,
-  InputGroup,
-  InputRightElement,
-  InputLeftElement,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  useDisclosure,
-  useToast,
-} from '@chakra-ui/react';
+import { Box, Button, Text, useToast } from '@chakra-ui/react';
 import { Loading } from '../Loading';
 import { useFormik, yupToFormErrors, FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -37,6 +12,11 @@ import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { GeneralItemType, ItemType, UserType } from '../../types';
+import { SelectInput } from '../../atoms/SelectInput';
+import { NumberInput } from '../../atoms/NumberInput';
+import { MacInputsRenderer } from './modals/AdminPanelAddModal';
+import { StringInput } from '../../atoms/StringInput';
+import { ImagesInput } from '../../atoms/ImagesInput';
 
 const boxStyle = {
   display: 'flex',
@@ -95,6 +75,7 @@ export const AdminPanelEdit = () => {
   const currentItem = itemsObj.items.find(
     (x) => x.id === parseInt(currentId!)
   )!;
+
   const initialValues = { ...currentItem };
 
   const editItemSchema = Yup.object().shape({
@@ -123,232 +104,278 @@ export const AdminPanelEdit = () => {
   if (isLoading === true) {
     return <Loading />;
   }
-  return (
-    <div className='edit-item-panel'>
-      <Button
-        position='absolute'
-        top='20px'
-        left='2.5%'
-        type='submit'
-        colorScheme='blue'
-        size='sm'
-        onClick={() => {
-          navigate('/adminpanel');
-        }}
-      >
-        Go Back
-      </Button>
-      <h1 style={{ fontSize: '34px', marginBottom: '75px' }}>
-        Editing id: {currentId}
-      </h1>
-      <Formik
-        validationSchema={editItemSchema}
-        initialValues={initialValues}
-        onSubmit={(values) => {
-          axios({
-            url: 'https://geolab-project-backend.onrender.com/edit',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            data: values,
-          })
-            .then((res) => {
-              toast({
-                title: 'Item Replaced',
-                // description: "test",
-                status: 'success',
-                duration: 5000,
-                isClosable: true,
-                position: 'top',
-              });
-              console.log('fetch response ', res);
-            })
-            .catch((err) => {
-              console.log('fetch errors ', err);
-            });
+  const [category, setCategory] = useState('');
+  useEffect(() => {
+    // setCategory(currentItem.category);
 
-          setIsDisabled(true);
-          // alert(JSON.stringify(values, null, 2));
-        }}
-      >
-        {({ values, errors, handleChange, handleBlur, handleSubmit }) => {
-          // console.log('errors ', errors);
-          console.log('values ', values);
-          console.log('initial values ', initialValues);
-          return (
-            <form
-              onSubmit={handleSubmit}
-              style={{
-                width: '95%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <AdminPanelInput
-                label='Type'
-                errorMessage={errors.type}
-                helperText='Nice Job'
-                id='type'
-                inputValue={values.type}
-                handleChange={handleChange}
-                onBlur={handleBlur}
-                text
-              />
-              <AdminPanelInput
-                label='Price'
-                error={errors.price}
-                errorMessage={errors.price}
-                helperText='Nice Job'
-                min={0}
-                id='price'
-                inputValue={values.price}
-                handleChange={handleChange}
-                onBlur={handleBlur}
-                number
-              />
-              <AdminPanelInput
-                label='Sale Price'
-                error={errors.salePrice}
-                errorMessage={errors.salePrice}
-                helperText='Nice Job'
-                min={0}
-                id='salePrice'
-                inputValue={values.salePrice}
-                handleChange={handleChange}
-                onBlur={handleBlur}
-                number
-              />
-              <AdminPanelInput
-                label='Gel Price'
-                error={errors.gelPrice}
-                errorMessage={errors.gelPrice}
-                helperText='Nice Job'
-                min={0}
-                id='gelPrice'
-                inputValue={values.gelPrice}
-                handleChange={handleChange}
-                onBlur={handleBlur}
-                number
-              />
-              <AdminPanelInput
-                label='Sale Gel Price'
-                error={errors.saleGelPrice}
-                errorMessage={errors.saleGelPrice}
-                helperText='Nice Job'
-                min={0}
-                id='saleGelPrice'
-                inputValue={values.saleGelPrice}
-                handleChange={handleChange}
-                onBlur={handleBlur}
-                number
-              />
-              <FieldArray name='images'>
-                {({ insert, remove, push }) => (
-                  <div style={{ width: '100%' }}>
-                    {values.images.map((image, index) => {
-                      console.log(errors.images);
-                      if (errors.images !== undefined) {
-                        return (
-                          <AdminPanelInput
-                            itemKey={index}
-                            label={`Image ` + (index + 1)}
-                            error={errors.images[index]}
-                            errorMessage={errors.images[index]}
-                            helperText='Nice Job'
-                            min={0}
-                            name={`images[0]`}
-                            id={`images[${index}]`}
-                            inputValue={values.images[index]}
-                            handleChange={handleChange}
-                            onBlur={handleBlur}
-                            removeFunc={() => remove(index)}
-                            imagesValues={values.images}
-                            images
-                          />
-                        );
-                      } else {
-                        return (
-                          <AdminPanelInput
-                            itemKey={index}
-                            label={`Image ` + (index + 1)}
-                            // error={errors.images[index]}
-                            // errorMessage={errors.images[index]}
-                            helperText='Nice Job'
-                            min={0}
-                            name={`images[0]`}
-                            id={`images[${index}]`}
-                            inputValue={values.images[index]}
-                            handleChange={handleChange}
-                            onBlur={handleBlur}
-                            removeFunc={() => remove(index)}
-                            imagesValues={values.images}
-                            images
-                          />
-                        );
-                      }
-                    })}
-                    <Button mt={'2'} type='button' onClick={() => push('')}>
-                      Add Image
-                    </Button>
-                  </div>
+    console.log('CURRENT_ITEM: ', currentItem);
+  }, [currentItem]);
+  if (!!currentItem) {
+    return (
+      <div className='edit-item-panel'>
+        <Button
+          position='absolute'
+          top='20px'
+          left='2.5%'
+          type='submit'
+          colorScheme='blue'
+          size='sm'
+          onClick={() => {
+            navigate('/adminpanel');
+          }}
+        >
+          Go Back
+        </Button>
+        <h1 style={{ fontSize: '34px', marginBottom: '75px' }}>
+          Editing id: {currentId}
+        </h1>
+        <Formik
+          validationSchema={editItemSchema}
+          initialValues={initialValues}
+          onSubmit={(values) => {
+            axios({
+              url: 'https://geolab-project-backend.onrender.com/edit',
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              data: values,
+            })
+              .then((res) => {
+                toast({
+                  title: 'Item Replaced',
+                  // description: "test",
+                  status: 'success',
+                  duration: 5000,
+                  isClosable: true,
+                  position: 'top',
+                });
+                console.log('fetch response ', res);
+              })
+              .catch((err) => {
+                console.log('fetch errors ', err);
+              });
+
+            setIsDisabled(true);
+            // alert(JSON.stringify(values, null, 2));
+          }}
+        >
+          {({ values, errors, handleChange, handleBlur, handleSubmit }) => {
+            // console.log('errors ', errors);
+            console.log('values ', values);
+            console.log('initial values ', initialValues);
+            return (
+              <form
+                onSubmit={handleSubmit}
+                style={{
+                  width: '95%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <SelectInput
+                  label='Category'
+                  id='category'
+                  inputValue={category}
+                  optionsArr={['mac', 'iphone', 'airpods']}
+                  handleChange={(e: any) => {
+                    setCategory(e.target.value);
+                  }}
+                  onBlur={handleBlur}
+                />
+                <SelectInput
+                  label='Type'
+                  id='type'
+                  inputValue={values.type}
+                  optionsArr={
+                    category === 'mac'
+                      ? ['air_13_m1', 'air_15_m1', 'air_17_m1']
+                      : category === 'iphone'
+                      ? ['13', '13_pro', '13_pro_max']
+                      : ['other']
+                  }
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <SelectInput
+                  label='Color'
+                  id='color'
+                  inputValue={values.color}
+                  optionsArr={
+                    category === 'mac'
+                      ? ['silver', 'space_grey', 'gold']
+                      : category === 'iphone'
+                      ? ['red', 'blue', 'green']
+                      : ['other']
+                  }
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {category === 'mac' ? (
+                  <MacInputsRenderer
+                    values={values}
+                    handleBlur={handleBlur}
+                    handleChange={handleChange}
+                  />
+                ) : null}
+                <NumberInput
+                  label='ID'
+                  errorMessage={errors.id}
+                  helperText='Nice Job'
+                  min={0}
+                  id='id'
+                  inputValue={values.id}
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <NumberInput
+                  label='Price'
+                  errorMessage={errors.price}
+                  helperText='Nice Job'
+                  min={0}
+                  id='price'
+                  inputValue={values.price}
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <NumberInput
+                  label='Sale Price'
+                  errorMessage={errors.salePrice}
+                  helperText='Nice Job'
+                  min={0}
+                  id='salePrice'
+                  inputValue={values.salePrice}
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <NumberInput
+                  label='Gel Price'
+                  errorMessage={errors.gelPrice}
+                  helperText='Nice Job'
+                  min={0}
+                  id='gelPrice'
+                  inputValue={values.gelPrice}
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <NumberInput
+                  label='Sale Gel Price'
+                  errorMessage={errors.saleGelPrice}
+                  helperText='Nice Job'
+                  min={0}
+                  id='saleGelPrice'
+                  inputValue={values.saleGelPrice}
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <FieldArray name='images'>
+                  {({ insert, remove, push }) => (
+                    <Box w='100%'>
+                      {values.images.length > 0 &&
+                        values.images.map((image, index) => {
+                          console.log(errors.images);
+                          if (errors.images !== undefined) {
+                            return (
+                              <ImagesInput
+                                key={index}
+                                label={`Image ` + (index + 1)}
+                                error={errors.images[index]}
+                                errorMessage={errors.images[index]}
+                                helperText='Nice Job'
+                                min={0}
+                                name={`images[0]`}
+                                id={`images[${index}]`}
+                                inputValue={values.images[index]}
+                                handleChange={handleChange}
+                                onBlur={handleBlur}
+                                removeFunc={() => remove(index)}
+                                images
+                                imagesValues={values.images}
+                              />
+                            );
+                          } else {
+                            return (
+                              <ImagesInput
+                                label={`Image ` + (index + 1)}
+                                // error={errors.images[index]}
+                                // errorMessage={errors.images[index]}
+                                helperText='Nice Job'
+                                min={0}
+                                name={`images[0]`}
+                                id={`images[${index}]`}
+                                inputValue={values.images[index]}
+                                handleChange={handleChange}
+                                onBlur={handleBlur}
+                                removeFunc={() => remove(index)}
+                                imagesValues={values.images}
+                              />
+                            );
+                          }
+                        })}
+
+                      <Button mt={'2'} type='button' onClick={() => push('')}>
+                        Add Image
+                      </Button>
+                    </Box>
+                  )}
+                </FieldArray>
+                <NumberInput
+                  id='inStock'
+                  label='In Stock'
+                  errorMessage={errors.inStock}
+                  helperText='Nice Job'
+                  inputValue={values.inStock}
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                  min={1}
+                />
+                <StringInput
+                  label='Name'
+                  error={errors.name}
+                  errorMessage={errors.name}
+                  helperText='Nice Job'
+                  inputValue={values.name}
+                  handleChange={handleChange}
+                  onBlur={handleBlur}
+                  id='name'
+                />
+                {initialValues == values ? (
+                  <Button
+                    type='submit'
+                    colorScheme='green'
+                    mt={5}
+                    mr={3}
+                    size='lg'
+                    w='200px'
+                    h='65px'
+                    fontSize='2xl'
+                    disabled
+                  >
+                    Confirm Edit
+                  </Button>
+                ) : (
+                  <Button
+                    type='submit'
+                    colorScheme='green'
+                    mt={5}
+                    mr={3}
+                    size='lg'
+                    w='200px'
+                    h='65px'
+                    fontSize='2xl'
+                    disabled={isDisabled}
+                  >
+                    Confirm Edit
+                  </Button>
                 )}
-              </FieldArray>
-              <AdminPanelInput
-                label='In Stock'
-                error={errors.inStock}
-                errorMessage={errors.inStock}
-                helperText='Nice Job'
-                inputValue={values.inStock}
-                handleChange={handleChange}
-                onBlur={handleBlur}
-                number
-                id='inStock'
-              />
-              <AdminPanelInput
-                label='Name'
-                error={errors.name}
-                errorMessage={errors.name}
-                helperText='Nice Job'
-                inputValue={values.name}
-                handleChange={handleChange}
-                onBlur={handleBlur}
-                id='name'
-              />
-              {initialValues == values ? (
-                <Button
-                  type='submit'
-                  colorScheme='green'
-                  mt={5}
-                  mr={3}
-                  size='lg'
-                  w='200px'
-                  h='65px'
-                  fontSize='2xl'
-                  disabled
-                >
-                  Confirm Edit
-                </Button>
-              ) : (
-                <Button
-                  type='submit'
-                  colorScheme='green'
-                  mt={5}
-                  mr={3}
-                  size='lg'
-                  w='200px'
-                  h='65px'
-                  fontSize='2xl'
-                  disabled={isDisabled}
-                >
-                  Confirm Edit
-                </Button>
-              )}
-            </form>
-          );
-        }}
-      </Formik>
-    </div>
-  );
+              </form>
+            );
+          }}
+        </Formik>
+      </div>
+    );
+  } else {
+    return <Loading />;
+  }
 };

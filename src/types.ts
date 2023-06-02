@@ -11,6 +11,7 @@ export interface MacType {
   storage: number;
   size: number;
   color: string;
+  category: string;
 }
 export interface GeneralMacTypes {
   id: number;
@@ -24,9 +25,9 @@ export interface GeneralMacTypes {
 export interface ItemType {
   id: number;
   price: number;
-  salePrice?: number;
+  salePrice: number;
   gelPrice: number;
-  saleGelPrice?: number;
+  saleGelPrice: number;
   images: string[];
   inStock: number;
   name: string;

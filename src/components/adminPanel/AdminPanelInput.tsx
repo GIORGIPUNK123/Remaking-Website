@@ -19,10 +19,6 @@ import {
   InputLeftElement,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { Loading } from "../Loading";

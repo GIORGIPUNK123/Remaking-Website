@@ -1,18 +1,24 @@
-import { Box, Button, Input, Text } from '@chakra-ui/react';
-import axios from 'axios';
-import { useFormik, yupToFormErrors, FieldArray, Formik } from 'formik';
-import { AdminPanelInput } from '../../adminPanel/AdminPanelInput';
-import * as Yup from 'yup';
-import React, { useState } from 'react';
-import { useToast } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useCookies } from 'react-cookie';
-import { UserType } from '../../../types';
-import { useSelector } from 'react-redux';
+import { Box, Button, Input, Text } from "@chakra-ui/react";
+import axios from "axios";
+import { useFormik, yupToFormErrors, FieldArray, Formik } from "formik";
+import { AdminPanelInput } from "../../adminPanel/AdminPanelInput";
+import * as Yup from "yup";
+import React, { useState } from "react";
+import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { UserType } from "../../../types";
+import { useDispatch, useSelector } from "react-redux";
+import { axiosInstance } from "../../../instance";
+import {
+  getCurrentUser,
+  registerUser,
+} from "../../../store/slices/currentUserSlice";
+import { AppDispatch } from "../../../store/store";
 export const Register = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
-  console.log('Token ', cookies.accessToken);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
+  console.log("Token ", cookies.accessToken);
   const navigate = useNavigate();
   const currentUserObj = useSelector(
     (state: {
@@ -21,39 +27,39 @@ export const Register = () => {
   );
   useEffect(() => {
     if (Object.keys(currentUserObj.currentUser).length !== 0) {
-      navigate('../');
+      navigate("../");
     }
   }, []);
 
   const [emailExists, setEmailExists] = useState(false);
   const toast = useToast();
   const initialValues = {
-    name: '',
-    surname: '',
-    email: '',
-    password: '',
-    repeatPassword: '',
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    repeatPassword: "",
   };
   const [isLoading, setIsLoading] = useState(false);
   const registerSchema = Yup.object().shape({
     name: Yup.string()
       .required()
-      .min(3, 'Name has to contain more than 3 letters')
-      .max(15, 'Password has to contain less than 15 letters'),
+      .min(3, "Name has to contain more than 3 letters")
+      .max(15, "Password has to contain less than 15 letters"),
     surname: Yup.string()
       .required()
-      .min(6, 'Surname has to contain more than 3 letters')
-      .max(15, 'Password has to contain less than 15 letters'),
+      .min(6, "Surname has to contain more than 3 letters")
+      .max(15, "Password has to contain less than 15 letters"),
     email: Yup.string()
       .required()
       .email()
-      .min(2, 'Email has to contain more than 2 letters')
-      .test('test-name', 'Email already exists', (value) => {
-        fetch('https://geolab-project-backend.onrender.com/checkuser', {
-          method: 'POST',
+      .min(2, "Email has to contain more than 2 letters")
+      .test("test-name", "Email already exists", (value) => {
+        fetch("https://geolab-project-backend.onrender.com/checkuser", {
+          method: "POST",
           body: JSON.stringify({ email: value }),
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         })
           .then((res) => res.json())
@@ -63,177 +69,176 @@ export const Register = () => {
             } else {
               setEmailExists(true);
             }
-            console.log('fetch values: ', values);
+            console.log("fetch values: ", values);
           })
           .catch((err) => {
-            console.log('Error: ', JSON.stringify(err));
+            console.log("Error: ", JSON.stringify(err));
           });
         return emailExists;
       })
-      .max(50, 'Email has to contain less than 50 letters'),
+      .max(50, "Email has to contain less than 50 letters"),
 
     password: Yup.string()
       .required()
-      .min(6, 'Password has to contain more than 6 letters')
-      .max(15, 'Password has to contain less than 15 letters'),
+      .min(6, "Password has to contain more than 6 letters")
+      .max(15, "Password has to contain less than 15 letters"),
 
     repeatPassword: Yup.string()
       .required()
-      .oneOf([Yup.ref('password')], 'Passwords do not match'),
+      .oneOf([Yup.ref("password")], "Passwords do not match"),
   });
+  const dispatch = useDispatch<AppDispatch>();
   return (
     <>
       <div
-        className='wrapper'
-        style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+        className="wrapper"
+        style={{ width: "100%", display: "flex", justifyContent: "center" }}
       >
         <Box
-          className='main-login-div'
-          mt='105'
-          bgColor='blackAlpha.100'
-          h='800px'
-          w='50%'
-          display='flex'
-          alignItems='center'
-          flexDirection='column'
-          borderRadius='15'
+          className="main-login-div"
+          mt="105"
+          bgColor="blackAlpha.100"
+          h="800px"
+          w="50%"
+          display="flex"
+          alignItems="center"
+          flexDirection="column"
+          borderRadius="15"
         >
-          <Text fontSize='6xl'>Sign Up</Text>
+          <Text fontSize="6xl">Sign Up</Text>
           <Box
-            className='inputs'
-            mt='55'
-            h='200px'
-            display='flex'
-            flexDirection='column'
-            w='80%'
-            justifyContent='space-between'
+            className="inputs"
+            mt="55"
+            h="200px"
+            display="flex"
+            flexDirection="column"
+            w="80%"
+            justifyContent="space-between"
           >
             <Formik
               validationSchema={registerSchema}
               initialValues={initialValues}
-              onSubmit={(values) => {
-                axios({
-                  url: 'https://geolab-project-backend.onrender.com/register',
-                  method: 'POST',
-                  data: JSON.stringify({
+              onSubmit={(values: {
+                name: string;
+                surname: string;
+                email: string;
+                password: string;
+                repeatPassword: string;
+              }) => {
+                dispatch(
+                  registerUser({
+                    name: values.name,
+                    surname: values.surname,
                     email: values.email,
                     password: values.password,
-                  }),
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                })
+                  })
+                )
                   .then((res) => {
-                    console.log('fetch res: ', res);
+                    console.log("res.payload dispatch then: ", res.payload);
+                    dispatch(getCurrentUser(res.payload.accessToken));
+                    navigate("../");
                   })
                   .catch((err) => {
-                    console.log('Error: ', JSON.stringify(err));
                     toast({
-                      title: 'Error.',
+                      title: "Error.",
                       description: err.message,
-                      status: 'error',
+                      status: "error",
                       duration: 5000,
                       isClosable: true,
-                      position: 'top',
+                      position: "top",
                     });
                   });
-                useEffect(() => {
-                  const timer = setTimeout(() => {
-                    setIsLoading(false);
-                  }, 1500);
-                  return () => clearTimeout(timer);
-                }, []);
 
                 // alert(JSON.stringify(values, null, 2));
               }}
             >
               {({ values, errors, handleChange, handleBlur, handleSubmit }) => {
-                console.log('errors ', errors);
-                console.log('values ', values);
+                console.log("errors ", errors);
+                console.log("values ", values);
                 return (
                   <form
                     onSubmit={handleSubmit}
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
                     }}
                   >
                     <Box
-                      w='100%'
-                      h='500px'
-                      display='flex'
-                      flexDir='column'
-                      justifyContent='space-between'
+                      w="100%"
+                      h="500px"
+                      display="flex"
+                      flexDir="column"
+                      justifyContent="space-between"
                     >
                       <AdminPanelInput
-                        label='name'
+                        label="name"
                         error={errors.name}
                         errorMessage={errors.name}
-                        helperText='Nice Job'
+                        helperText="Nice Job"
                         min={0}
-                        id='name'
+                        id="name"
                         inputValue={values.name}
                         handleChange={handleChange}
                         onBlur={handleBlur}
                       />
                       <AdminPanelInput
-                        label='surname'
+                        label="surname"
                         error={errors.surname}
                         errorMessage={errors.surname}
-                        helperText='Nice Job'
+                        helperText="Nice Job"
                         min={0}
-                        id='surname'
+                        id="surname"
                         inputValue={values.surname}
                         handleChange={handleChange}
                         onBlur={handleBlur}
                       />
                       <AdminPanelInput
-                        label='Email'
+                        label="Email"
                         error={errors.email}
                         errorMessage={errors.email}
-                        helperText='Nice Job'
+                        helperText="Nice Job"
                         min={0}
-                        id='email'
+                        id="email"
                         inputValue={values.email}
                         handleChange={handleChange}
                         onBlur={handleBlur}
                         text
                       />
                       <AdminPanelInput
-                        label='Password'
+                        label="Password"
                         error={errors.password}
                         errorMessage={errors.password}
-                        helperText='Nice Job'
+                        helperText="Nice Job"
                         min={0}
-                        id='password'
+                        id="password"
                         inputValue={values.password}
                         handleChange={handleChange}
                         onBlur={handleBlur}
                         password
                       />
                       <AdminPanelInput
-                        label='Repeat Password'
+                        label="Repeat Password"
                         error={errors.repeatPassword}
                         errorMessage={errors.repeatPassword}
-                        helperText='Nice Job'
+                        helperText="Nice Job"
                         min={0}
-                        id='repeatPassword'
+                        id="repeatPassword"
                         inputValue={values.repeatPassword}
                         handleChange={handleChange}
                         onBlur={handleBlur}
-                        autocomplete='off'
+                        autocomplete="off"
                         password
                       />
                     </Box>
                     <Button
                       isLoading={isLoading}
-                      type='submit'
-                      colorScheme='blue'
-                      mt='55'
-                      w='70%'
-                      h='60px'
-                      fontSize='2xl'
+                      type="submit"
+                      colorScheme="blue"
+                      mt="55"
+                      w="70%"
+                      h="60px"
+                      fontSize="2xl"
                       disabled={Object.keys(errors).length !== 0}
                     >
                       Sign Up

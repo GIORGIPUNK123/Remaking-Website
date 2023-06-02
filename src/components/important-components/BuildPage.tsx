@@ -81,7 +81,13 @@ export const BuildPage = () => {
           <Text className='item-page-name' fontSize='34px' mt='75px' mb='45px'>
             {currentGeneralProduct?.name}
           </Text>
-          <SwiperSlideForImages images={currentGeneralProduct?.images} />
+          <SwiperSlideForImages
+            images={
+              realProduct?.images
+                ? realProduct?.images
+                : currentGeneralProduct?.images
+            }
+          />
           <Box
             w='80%'
             bgColor='whiteAlpha.100'

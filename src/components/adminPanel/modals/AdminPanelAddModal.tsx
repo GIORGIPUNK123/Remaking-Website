@@ -19,14 +19,51 @@ import * as Yup from 'yup';
 import { AdminPanelInput } from '../AdminPanelInput';
 import { useSelector } from 'react-redux';
 import { ItemType } from '../../../types';
+import { NumberInput } from '../../../atoms/NumberInput';
+import { StringInput } from '../../../atoms/StringInput';
+import { SelectInput } from '../../../atoms/SelectInput';
+import { ImagesInput } from '../../../atoms/ImagesInput';
+
+export const MacInputsRenderer = (props: {
+  values: any;
+  handleChange: any;
+  handleBlur: any;
+}) => {
+  const { values, handleBlur, handleChange } = props;
+  return (
+    <>
+      <SelectInput
+        label='Ssd'
+        id='ssd'
+        inputValue={values.ssd}
+        optionsArr={[256, 512]}
+        handleChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <SelectInput
+        label='Ram'
+        id='ram'
+        inputValue={values.ram}
+        optionsArr={[8, 16]}
+        handleChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <SelectInput
+        label='Screen Size'
+        id='screenSize'
+        inputValue={values.screenSize}
+        optionsArr={[13, 15]}
+        handleChange={handleChange}
+        onBlur={handleBlur}
+      />
+    </>
+  );
+};
 export const AdminPanelAddModal = (props: {
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  // const [addRow, setAddRow] = useState([0, '']);
-  // const [booleans, setBooleans] = useState([false]);
-  // console.log('addRow ', addRow);
-  // console.log('booleans ', booleans);
+  const [category, setCategory] = useState('mac');
   const itemsObj = useSelector(
     (state: {
       items: { items: ItemType[]; error: boolean; loading: boolean };
@@ -35,7 +72,7 @@ export const AdminPanelAddModal = (props: {
   console.log('items ', itemsObj.items);
   const initialValues = {
     id: 0,
-    type: '',
+    type: 'air_13_m1',
     price: 0,
     salePrice: 0,
     gelPrice: 0,
@@ -43,6 +80,10 @@ export const AdminPanelAddModal = (props: {
     images: [''],
     inStock: 0,
     name: '',
+    ssd: 256,
+    ram: 8,
+    color: 'silver',
+    screenSize: 13,
   };
 
   const addItemSchema = Yup.object().shape({
@@ -56,10 +97,6 @@ export const AdminPanelAddModal = (props: {
         }),
         'ID has been already used'
       ),
-
-    type: Yup.string()
-      .required('Type is requiered')
-      .oneOf(['mac', 'iphone', 'airpods']),
     price: Yup.number()
       .positive('Price has to be positive')
       .required('Price is required'),
@@ -73,7 +110,7 @@ export const AdminPanelAddModal = (props: {
           .required('Image is required')
           .url('Image has to be a valid link')
       ),
-    inStock: Yup.number().moreThan(-1),
+    inStock: Yup.number().moreThan(0),
     name: Yup.string()
       .required()
       .min(2, 'Name has to contain more than 2 letters')
@@ -88,16 +125,20 @@ export const AdminPanelAddModal = (props: {
           validationSchema={addItemSchema}
           initialValues={initialValues}
           onSubmit={(values) => {
-            fetch('https://geolab-project-backend.onrender.com/add', {
-              method: 'POST',
-              body: JSON.stringify(values),
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            })
-              .then((values) => console.log(values))
+            fetch(
+              `https://geolab-project-backend.onrender.com/add/${category}`,
+              {
+                method: 'POST',
+                body: JSON.stringify(values),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            )
+              .then((values) => {
+                props.onClose;
+              })
               .catch((err) => console.log('fetch errors ', err));
-            alert(JSON.stringify(values, null, 2));
           }}
         >
           {({ values, errors, handleChange, handleBlur, handleSubmit }) => {
@@ -110,9 +151,53 @@ export const AdminPanelAddModal = (props: {
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                  <AdminPanelInput
+                  <SelectInput
+                    label='Category'
+                    id='category'
+                    inputValue={category}
+                    optionsArr={['mac', 'iphone', 'airpods']}
+                    handleChange={(e: any) => {
+                      setCategory(e.target.value);
+                    }}
+                    onBlur={handleBlur}
+                  />
+                  <SelectInput
+                    label='Type'
+                    id='type'
+                    inputValue={values.type}
+                    optionsArr={
+                      category === 'mac'
+                        ? ['air_13_m1', 'air_15_m1', 'air_17_m1']
+                        : category === 'iphone'
+                        ? ['13', '13_pro', '13_pro_max']
+                        : ['other']
+                    }
+                    handleChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <SelectInput
+                    label='Color'
+                    id='color'
+                    inputValue={values.color}
+                    optionsArr={
+                      category === 'mac'
+                        ? ['silver', 'space_grey', 'gold']
+                        : category === 'iphone'
+                        ? ['red', 'blue', 'green']
+                        : ['other']
+                    }
+                    handleChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {category === 'mac' ? (
+                    <MacInputsRenderer
+                      values={values}
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                    />
+                  ) : null}
+                  <NumberInput
                     label='ID'
-                    error={errors.id}
                     errorMessage={errors.id}
                     helperText='Nice Job'
                     min={0}
@@ -120,21 +205,9 @@ export const AdminPanelAddModal = (props: {
                     inputValue={values.id}
                     handleChange={handleChange}
                     onBlur={handleBlur}
-                    number
                   />
-                  <AdminPanelInput
-                    label='Type'
-                    errorMessage={errors.type}
-                    helperText='Nice Job'
-                    id='type'
-                    inputValue={values.type}
-                    handleChange={handleChange}
-                    onBlur={handleBlur}
-                    text
-                  />
-                  <AdminPanelInput
+                  <NumberInput
                     label='Price'
-                    error={errors.price}
                     errorMessage={errors.price}
                     helperText='Nice Job'
                     min={0}
@@ -142,11 +215,9 @@ export const AdminPanelAddModal = (props: {
                     inputValue={values.price}
                     handleChange={handleChange}
                     onBlur={handleBlur}
-                    number
                   />
-                  <AdminPanelInput
+                  <NumberInput
                     label='Sale Price'
-                    error={errors.salePrice}
                     errorMessage={errors.salePrice}
                     helperText='Nice Job'
                     min={0}
@@ -154,12 +225,9 @@ export const AdminPanelAddModal = (props: {
                     inputValue={values.salePrice}
                     handleChange={handleChange}
                     onBlur={handleBlur}
-                    number
-                    items={itemsObj.items}
                   />
-                  <AdminPanelInput
+                  <NumberInput
                     label='Gel Price'
-                    error={errors.gelPrice}
                     errorMessage={errors.gelPrice}
                     helperText='Nice Job'
                     min={0}
@@ -167,12 +235,9 @@ export const AdminPanelAddModal = (props: {
                     inputValue={values.gelPrice}
                     handleChange={handleChange}
                     onBlur={handleBlur}
-                    number
-                    items={itemsObj.items}
                   />
-                  <AdminPanelInput
+                  <NumberInput
                     label='Sale Gel Price'
-                    error={errors.saleGelPrice}
                     errorMessage={errors.saleGelPrice}
                     helperText='Nice Job'
                     min={0}
@@ -180,8 +245,6 @@ export const AdminPanelAddModal = (props: {
                     inputValue={values.saleGelPrice}
                     handleChange={handleChange}
                     onBlur={handleBlur}
-                    number
-                    items={itemsObj.items}
                   />
                   <FieldArray name='images'>
                     {({ insert, remove, push }) => (
@@ -191,8 +254,8 @@ export const AdminPanelAddModal = (props: {
                             console.log(errors.images);
                             if (errors.images !== undefined) {
                               return (
-                                <AdminPanelInput
-                                  itemKey={index}
+                                <ImagesInput
+                                  key={index}
                                   label={`Image ` + (index + 1)}
                                   error={errors.images[index]}
                                   errorMessage={errors.images[index]}
@@ -210,8 +273,7 @@ export const AdminPanelAddModal = (props: {
                               );
                             } else {
                               return (
-                                <AdminPanelInput
-                                  itemKey={index}
+                                <ImagesInput
                                   label={`Image ` + (index + 1)}
                                   // error={errors.images[index]}
                                   // errorMessage={errors.images[index]}
@@ -224,7 +286,6 @@ export const AdminPanelAddModal = (props: {
                                   onBlur={handleBlur}
                                   removeFunc={() => remove(index)}
                                   imagesValues={values.images}
-                                  images
                                 />
                               );
                             }
@@ -236,18 +297,17 @@ export const AdminPanelAddModal = (props: {
                       </div>
                     )}
                   </FieldArray>
-                  <AdminPanelInput
+                  <NumberInput
+                    id='inStock'
                     label='In Stock'
-                    error={errors.inStock}
                     errorMessage={errors.inStock}
                     helperText='Nice Job'
                     inputValue={values.inStock}
                     handleChange={handleChange}
                     onBlur={handleBlur}
-                    number
-                    id='inStock'
+                    min={1}
                   />
-                  <AdminPanelInput
+                  <StringInput
                     label='Name'
                     error={errors.name}
                     errorMessage={errors.name}
