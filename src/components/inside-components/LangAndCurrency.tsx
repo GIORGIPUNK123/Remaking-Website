@@ -1,6 +1,5 @@
 import React from 'react';
 import { Select, useSafeLayoutEffect } from '@chakra-ui/react';
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeLang } from '../../store/slices/languageSlice';
 import { changeCurrency } from '../../store/slices/currencySlice';

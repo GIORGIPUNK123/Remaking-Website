@@ -10,12 +10,12 @@ export const SelectInput = (props: {
   optionsArr: (string | number)[];
   inputValue: string | number;
   handleChange: any;
-  onBlur: any;
-  label: string;
-  id: string;
+  onBlur?: any;
+  label?: string;
+  id?: string;
 }) => (
   <FormControl>
-    <FormLabel>{props.label}</FormLabel>
+    {props.label ? <FormLabel>{props.label}</FormLabel> : null}
     <Select
       id={props.id}
       onChange={props.handleChange}
