@@ -90,15 +90,18 @@ export const AdminPanelDeleteModal = (props: any) => {
                     itemsObj.items.find(
                       (item) => item.id === parseInt(deleteId)
                     )?.category
+                  }/${
+                    itemsObj.items.find(
+                      (item) => item.id === parseInt(deleteId)
+                    )?.id
                   }`,
                   {
-                    method: 'POST',
-                    body: deleteId,
+                    method: 'DELETE',
                   }
                 )
                   .then((response) => {
+                    props.onClose();
                     console.log(response);
-                    console.log('I am dumb duck');
                     return response.text();
                   })
                   .then((data) => {

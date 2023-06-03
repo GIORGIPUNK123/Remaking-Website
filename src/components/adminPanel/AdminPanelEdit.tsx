@@ -136,7 +136,7 @@ export const AdminPanelEdit = (props: any) => {
                   isClosable: true,
                   position: 'top',
                 });
-                navigate('../');
+                navigate('/adminpanel');
                 console.log('fetch response ', res);
               })
               .catch((err) => {
@@ -198,7 +198,7 @@ export const AdminPanelEdit = (props: any) => {
                                   : key === 'ssd_amount'
                                   ? [256, 512]
                                   : key === 'screen_size_size'
-                                  ? ['small', 'medium', 'large']
+                                  ? [13, 15]
                                   : ['silver', 'gold', 'space-grey']
                               }
                               handleChange={handleChange}

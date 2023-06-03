@@ -35,50 +35,52 @@ export const AdminPanelTable = (props: any) => {
             ))}
         </Thead>
         <Tbody>
-          {props.itemsArr.map((item) => (
-            <Tr key={item.id}>
-              {Object.values(item).map((value: any, index) => {
-                if (Array.isArray(value)) {
-                  return (
-                    <Td
-                      key={index}
-                      display='flex'
-                      justifyContent='space-evenly'
-                      w='250px'
-                    >
-                      {item.images.map((image, index) => (
-                        <Button
-                          variant='solid'
-                          key={index}
-                          onClick={() => {
-                            props.setActiveImage(image);
-                            props.onOpen();
-                          }}
-                        >
-                          {index}
-                        </Button>
-                      ))}
-                    </Td>
-                  );
-                } else {
-                  return (
-                    <Td key={index} textAlign='center'>
-                      {value}
-                    </Td>
-                  );
-                }
-              })}
-              <Button
-                onClick={() => {
-                  navigate('./edit/' + item.id);
-                }}
-                colorScheme={'blue'}
-                style={{ marginLeft: '25px' }}
-              >
-                Edit
-              </Button>
-            </Tr>
-          ))}
+          {props.itemsArr
+            ?.sort((a, b) => (a.id > b.id ? 1 : -1))
+            .map((item) => (
+              <Tr key={item.id}>
+                {Object.values(item).map((value: any, index) => {
+                  if (Array.isArray(value)) {
+                    return (
+                      <Td
+                        key={index}
+                        display='flex'
+                        justifyContent='space-evenly'
+                        w='250px'
+                      >
+                        {item.images.map((image, index) => (
+                          <Button
+                            variant='solid'
+                            key={index}
+                            onClick={() => {
+                              props.setActiveImage(image);
+                              props.onOpen();
+                            }}
+                          >
+                            {index}
+                          </Button>
+                        ))}
+                      </Td>
+                    );
+                  } else {
+                    return (
+                      <Td key={index} textAlign='center'>
+                        {value}
+                      </Td>
+                    );
+                  }
+                })}
+                <Button
+                  onClick={() => {
+                    navigate('./edit/' + item.id);
+                  }}
+                  colorScheme={'blue'}
+                  style={{ marginLeft: '25px' }}
+                >
+                  Edit
+                </Button>
+              </Tr>
+            ))}
         </Tbody>
       </Table>
     </TableContainer>

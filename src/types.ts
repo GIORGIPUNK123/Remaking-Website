@@ -9,7 +9,6 @@ export interface MacType {
   name: string;
   ram: number;
   storage: number;
-  size: number;
   color: string;
   category: string;
 }
@@ -33,7 +32,6 @@ export interface ItemType {
   name: string;
   ram?: number;
   storage?: number;
-  size?: number;
   color: string;
   type: string;
   category: string;

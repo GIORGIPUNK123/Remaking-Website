@@ -136,7 +136,7 @@ export const AdminPanelAddModal = (props: {
               }
             )
               .then((values) => {
-                props.onClose;
+                props.onClose();
               })
               .catch((err) => console.log('fetch errors ', err));
           }}
