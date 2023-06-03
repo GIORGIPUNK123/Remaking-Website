@@ -96,14 +96,6 @@ export const AdminPanelEdit = (props: any) => {
   if (isLoading === true) {
     return <Loading />;
   }
-  const [category, setCategory] = useState('');
-  const [type, setType] = useState('');
-  useEffect(() => {
-    !!currentItem ?? setCategory(currentItem.category);
-    // !!currentItem ? (initialValues.type = currentItem.type) : null;
-
-    console.log('CURRENT_ITEM: ', currentItem);
-  }, [currentItem]);
   if (!!currentItem) {
     return (
       <div className='edit-item-panel'>
@@ -128,7 +120,7 @@ export const AdminPanelEdit = (props: any) => {
           initialValues={initialValues}
           onSubmit={(values) => {
             axios({
-              url: `https://geolab-project-backend.onrender.com/edit/${category}`,
+              url: `https://geolab-project-backend.onrender.com/edit/${values.category}`,
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -144,12 +136,13 @@ export const AdminPanelEdit = (props: any) => {
                   isClosable: true,
                   position: 'top',
                 });
+                navigate('../');
                 console.log('fetch response ', res);
               })
               .catch((err) => {
                 toast({
-                  title: err?.message,
-                  description: `Error code: ${err?.status}`,
+                  title: err?.response.data.message,
+                  description: `Error code: ${err?.response.status}`,
                   status: 'error',
                   duration: 5000,
                   isClosable: true,
@@ -329,7 +322,7 @@ export const AdminPanelEdit = (props: any) => {
                   colorScheme='green'
                   size='lg'
                 >
-                  Edit
+                  Submit
                 </Button>
               </form>
             );
