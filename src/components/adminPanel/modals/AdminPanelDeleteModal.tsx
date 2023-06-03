@@ -34,7 +34,10 @@ export const AdminPanelDeleteModal = (props: any) => {
   }, [itemsObj]);
 
   const [deleteId, setDeleteId] = useState('');
-
+  console.log(
+    'deleteCat: ',
+    itemsObj.items.find((item) => item.id === parseInt(deleteId))?.category
+  );
   const deleteAlertDisplay = deleteId === '' ? 'flex' : 'none';
   console.log(deleteId);
   return (
@@ -44,6 +47,7 @@ export const AdminPanelDeleteModal = (props: any) => {
         props.onClose();
         setDeleteId('');
       }}
+      // @ts-ignore
       className='admin-panel-modal'
     >
       <ModalOverlay />
@@ -81,10 +85,17 @@ export const AdminPanelDeleteModal = (props: any) => {
             mr={3}
             onClick={() => {
               if (deleteId != '') {
-                fetch('https://geolab-project-backend.onrender.com/delete', {
-                  method: 'POST',
-                  body: deleteId,
-                })
+                fetch(
+                  `https://geolab-project-backend.onrender.com/delete/${
+                    itemsObj.items.find(
+                      (item) => item.id === parseInt(deleteId)
+                    )?.category
+                  }`,
+                  {
+                    method: 'POST',
+                    body: deleteId,
+                  }
+                )
                   .then((response) => {
                     console.log(response);
                     console.log('I am dumb duck');

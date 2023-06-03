@@ -134,7 +134,11 @@ export const AdminPanel = (props: any) => {
           onOpen={onOpenImage}
           itemsArr={itemsObj.items.filter((el) => el.category === activeCat)}
         />
-        <AdminPanelDeleteModal onClose={onCloseDelete} isOpen={isOpenDelete} />
+        <AdminPanelDeleteModal
+          onClose={onCloseDelete}
+          isOpen={isOpenDelete}
+          activeCat={activeCat}
+        />
         <AdminPanelImageModal
           onClose={onCloseImage}
           isOpen={isOpenImage}
