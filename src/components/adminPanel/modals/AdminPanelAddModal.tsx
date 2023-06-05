@@ -23,6 +23,7 @@ import { NumberInput } from '../../../atoms/NumberInput';
 import { StringInput } from '../../../atoms/StringInput';
 import { SelectInput } from '../../../atoms/SelectInput';
 import { ImagesInput } from '../../../atoms/ImagesInput';
+import { addItemSchema } from '../../../schemas/AddItemSchema';
 
 export const MacInputsRenderer = (props: {
   values: any;
@@ -86,43 +87,12 @@ export const AdminPanelAddModal = (props: {
     screenSize: 13,
   };
 
-  const addItemSchema = Yup.object().shape({
-    id: Yup.number()
-      .required('ID is requiered')
-      .positive('ID has to be positive')
-      .integer('ID has to be integer')
-      .notOneOf(
-        itemsObj.items.map((item) => {
-          return item.id;
-        }),
-        'ID has been already used'
-      ),
-    price: Yup.number()
-      .positive('Price has to be positive')
-      .required('Price is required'),
-    salePrice: Yup.number().moreThan(-1),
-    gelPrice: Yup.number().positive('Gel price has to be positive'),
-    images: Yup.array()
-      .min(1, 'At least 1 image is required')
-      .max(7)
-      .of(
-        Yup.string()
-          .required('Image is required')
-          .url('Image has to be a valid link')
-      ),
-    inStock: Yup.number().moreThan(0),
-    name: Yup.string()
-      .required()
-      .min(2, 'Name has to contain more than 2 letters')
-      .max(50, 'Name has to contain less than 50 letters'),
-  });
-
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose}>
       <ModalOverlay />
       <ModalContent w='80%' maxW='auto'>
         <Formik
-          validationSchema={addItemSchema}
+          validationSchema={addItemSchema(itemsObj.items)}
           initialValues={initialValues}
           onSubmit={(values) => {
             fetch(

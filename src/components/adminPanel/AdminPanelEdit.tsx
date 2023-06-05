@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Text, useToast } from '@chakra-ui/react';
 import { Loading } from '../Loading';
-import { useFormik, yupToFormErrors, FieldArray, Formik } from 'formik';
-import * as Yup from 'yup';
+import {
+  useFormik,
+  yupToFormErrors,
+  FieldArray,
+  Formik,
+  validateYupSchema,
+} from 'formik';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/store';
@@ -12,6 +17,7 @@ import { SelectInput } from '../../atoms/SelectInput';
 import { NumberInput } from '../../atoms/NumberInput';
 import { StringInput } from '../../atoms/StringInput';
 import { ImagesInput } from '../../atoms/ImagesInput';
+import { editItemSchema } from '../../schemas/EditItemSchema';
 
 const boxStyle = {
   display: 'flex',
@@ -70,29 +76,7 @@ export const AdminPanelEdit = (props: any) => {
   const currentItem = itemsObj.items.find(
     (x) => x.id === parseInt(currentId!)
   )!;
-
   const initialValues = { ...currentItem };
-
-  const editItemSchema = Yup.object().shape({
-    price: Yup.number()
-      .positive('Price has to be positive')
-      .required('Price is required'),
-    salePrice: Yup.number().moreThan(-1),
-    gelPrice: Yup.number().positive('Gel price has to be positive'),
-    images: Yup.array()
-      .min(1, 'At least 1 image is required')
-      .max(7)
-      .of(
-        Yup.string()
-          .required('Image is required')
-          .url('Image has to be a valid link')
-      ),
-    inStock: Yup.number().moreThan(-1),
-    name: Yup.string()
-      .required()
-      .min(2, 'Name has to contain more than 2 letters')
-      .max(50, 'Name has to contain less than 50 letters'),
-  });
   if (isLoading === true) {
     return <Loading />;
   }
@@ -116,9 +100,24 @@ export const AdminPanelEdit = (props: any) => {
           Editing id: {currentId}
         </h1>
         <Formik
-          validationSchema={editItemSchema}
+          validate={(values) => {
+            try {
+              validateYupSchema(
+                values,
+                editItemSchema(values, generalItemsObj.generalItems),
+                true,
+                values
+              );
+            } catch (err) {
+              return yupToFormErrors(err); //for rendering validation errors
+            }
+
+            return {};
+          }}
+          // validationSchema={(values) => createEditItemSchema(values)} // Pass the createEditItemSchema function
           initialValues={initialValues}
           onSubmit={(values) => {
+            // Values are valid, proceed with submission
             axios({
               url: `https://geolab-project-backend.onrender.com/edit/${values.category}`,
               method: 'POST',
