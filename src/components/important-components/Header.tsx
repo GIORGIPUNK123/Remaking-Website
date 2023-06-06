@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import cartImage from '../../images/shopping-cart.svg';
 import { CartItemType, UserType } from '../../types';
 import { Loading } from '../Loading';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 export const Header: React.FC<{
   getInputText?: (text: string) => void;
   login?: string;
@@ -85,7 +85,7 @@ export const Header: React.FC<{
             h='250px'
           >
             <Link className='header-li' to='/'>
-              {/* {t('HOME')} */}
+              {/* {t('navbar.home')} */}
               {languageObj.lang === 'en' ? 'HOME' : 'სახლი'}
             </Link>
             <Link className='header-li' to='/shop'>
@@ -144,8 +144,8 @@ export const Header: React.FC<{
         className='navbar-links'
       >
         <Link className='header-li' to='/'>
-          {t('HOME')}
-          {/* {languageObj.lang === 'en' ? 'HOME' : 'სახლი'} */}
+          {/* {t('navbar.home')} */}
+          {languageObj.lang === 'en' ? 'HOME' : 'სახლი'}
         </Link>
         <Link className='header-li' to='/shop'>
           {languageObj.lang === 'en' ? 'SHOP' : 'მაღაზია'}

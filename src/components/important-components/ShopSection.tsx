@@ -8,6 +8,7 @@ import { CheckBoxes } from '../inside-components/CheckBoxes';
 import { PriceRangeSlider } from '../inside-components/PriceRangeSlider';
 import { useSelector } from 'react-redux';
 import { filterBoxes } from '../../functions/filterBoxes';
+import { useNavigate } from 'react-router-dom';
 const DisplayGeneralShopBoxes = (props: {
   items: any[];
   sliceValue: number;
@@ -75,6 +76,7 @@ export const ShopSection = () => {
     checkBoxesArr
   );
   const [sliceValue, setSliceValue] = useState(6);
+  const navigate = useNavigate();
   if (
     !itemsObj.loading
     // filteredItems !== undefined
@@ -161,6 +163,24 @@ export const ShopSection = () => {
             />
           </Box>
         </Box>
+        <Button
+          colorScheme='blue'
+          variant='solid'
+          size='lg'
+          bg='blue.400'
+          color='white'
+          style={{
+            position: 'absolute',
+            top: '70px',
+            right: '10%',
+          }}
+          isLoading={itemsObj.loading}
+          onClick={() => {
+            navigate('/adminpanel');
+          }}
+        >
+          Admin Panel
+        </Button>
       </>
     );
   } else return <Loading />;
