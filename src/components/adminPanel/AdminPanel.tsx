@@ -18,12 +18,11 @@ import { GeneralItemType, ItemType, UserType } from '../../types';
 import { getItems } from '../../store/slices/itemsSlice';
 import { getGeneralItems } from '../../store/slices/generalItemsSlice';
 import { AppDispatch } from '../../store/store';
+
 export const AdminPanel = (props: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  // const { colorMode, toggleColorMode } = useColorMode();
-  // console.log(colorMode);
   const {
     isOpen: isOpenDelete,
     onOpen: onOpenDelete,
@@ -39,12 +38,6 @@ export const AdminPanel = (props: any) => {
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
-  const currentUserObj = useSelector(
-    (state: {
-      currentUser: { currentUser: UserType; error: boolean; loading: boolean };
-    }) => state.currentUser
-  );
-
   const languageObj = useSelector(
     (state: { language: { lang: 'en' | 'ge' } }) => state.language
   );
@@ -57,13 +50,6 @@ export const AdminPanel = (props: any) => {
   if (isLoading === true) {
     return <Loading />;
   }
-  useEffect(() => {
-    if (Object.keys(currentUserObj.currentUser).length === 0) {
-      navigate('../login');
-    } else if (currentUserObj.currentUser.rank !== 'admin') {
-      navigate('/');
-    }
-  });
   const [activeImage, setActiveImage] = useState();
   const [activeCat, setActiveCat] = useState('mac');
   return (
@@ -123,12 +109,6 @@ export const AdminPanel = (props: any) => {
         >
           Refresh
         </Button>
-        {/* <Button
-          onClick={toggleColorMode}
-          style={{ position: 'absolute', top: '70px', left: '10%' }}
-        >
-          Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
-        </Button> */}
         <AdminPanelTable
           setActiveImage={setActiveImage}
           onOpen={onOpenImage}

@@ -1,33 +1,33 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { UserType } from "../../types";
-import { axiosInstance } from "../../instance";
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { UserType } from '../../types';
+import { axiosInstance } from '../../instance';
 
 export const getCurrentUser = createAsyncThunk(
-  "getCurrentUser/get",
+  'getCurrentUser/get',
   async (accessToken: string) => {
-    console.log("accessToken from getCurrUser: ", accessToken);
+    console.log('accessToken from getCurrUser: ', accessToken);
     return axiosInstance
-      .get("/userinfo", {
+      .get('/userinfo', {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((res) => {
-        console.log("setting res.data");
+        console.log('setting res.data');
         return res.data;
       })
       .catch((err) => {
         if (err.response.status === 401) {
         }
-        console.error("Error from getCurrentUser: ", err.message);
+        console.error('Error from getCurrentUser: ', err.message);
         throw new Error(`Error from getCurrentUser: ${err.message}`);
       });
   }
 );
 
 export const registerUser = createAsyncThunk(
-  "registerUser/post",
+  'registerUser/post',
   async (values: {
     name: string;
     surname: string;
@@ -35,27 +35,27 @@ export const registerUser = createAsyncThunk(
     password: string;
   }) => {
     return axiosInstance
-      .post("/register", {
-        method: "POST",
+      .post('/register', {
+        method: 'POST',
         name: values.name,
         surname: values.surname,
         email: values.email,
         password: values.password,
       })
       .then((res) => {
-        console.log("Register Response: ", res);
+        console.log('Register Response: ', res);
         return res.data;
       })
       .catch((err) => {
-        console.log("Error From Register: ", JSON.stringify(err));
+        console.log('Error From Register: ', JSON.stringify(err));
       });
   }
 );
 
 const currentUserSlice = createSlice({
-  name: "currentUser",
+  name: 'currentUser',
   initialState: {
-    currentUser: {} as UserType,
+    currentUser: null as null | UserType,
     loading: false,
     error: false,
   },

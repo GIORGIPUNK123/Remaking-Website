@@ -25,7 +25,7 @@ export const AdminPanelDeleteModal = (props: any) => {
   const [minItem, setMinItem] = useState(1);
 
   useEffect(() => {
-    if (!itemsObj.loading) {
+    if (itemsObj.items.length !== 0) {
       setMinItem(
         itemsObj.items.reduce((prev, curr) => (prev.id < curr.id ? prev : curr))
           .id
