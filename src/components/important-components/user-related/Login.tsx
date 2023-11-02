@@ -7,67 +7,72 @@ import React, { useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useCookies } from 'react-cookie';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { UserType } from '../../../types';
-import { getTokenByLogin } from '../../../store/slices/currentTokenSlice';
-import { AppDispatch } from '../../../store/store';
-import { getCurrentUser } from '../../../store/slices/currentUserSlice';
-import { authentication } from '../../../firebase';
+import { authentication } from '../../../firebase-config';
 import {
   FacebookAuthProvider,
   signInWithPopup,
   GithubAuthProvider,
+  signInWithEmailAndPassword,
 } from 'firebase/auth';
-// import { loginSchema } from '../../../schemas/LoginSchema';
 import { StringInput } from '../../../atoms/StringInput';
 import { PasswordInput } from '../../../atoms/PasswordInput';
 
+const returnToastError = (message: string, toast: any) => {
+  return toast({
+    title: 'Error',
+    description: message,
+    status: 'error',
+    duration: 5000,
+    isClosable: true,
+    position: 'top',
+  });
+};
+
 export const Login = () => {
-  const signInWithFacebook = () => {
+  const toast = useToast();
+  const signInWithFacebook = async () => {
     const provider = new FacebookAuthProvider();
-    signInWithPopup(authentication, provider)
-      .then((res) => {
-        console.log('auth response: ', res);
-      })
-      .catch((err) => console.log('auth error: ', err));
+    try {
+      await signInWithPopup(authentication, provider);
+      navigate('/');
+    } catch (err) {
+      throw new Error(err.message);
+    }
   };
-  const signInWithGithub = () => {
+  const signInWithGithub = async () => {
     const provider = new GithubAuthProvider();
-    signInWithPopup(authentication, provider)
-      .then((res) => {
-        console.log('auth response: ', res);
-      })
-      .catch((err) => console.log('auth error: ', err));
+    try {
+      await signInWithPopup(authentication, provider);
+      navigate('/');
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+  const basicSignIn = async (email: string, password: string) => {
+    try {
+      await signInWithEmailAndPassword(authentication, email, password);
+      navigate('/');
+    } catch (err) {
+      throw new Error(err.message);
+    }
   };
 
+  const [tempUser, setTempUser] = useState<any>();
+  console.log('tempUser: ', tempUser);
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const toast = useToast();
   const initialValues = {
     email: '',
     password: '',
   };
   const [isLoading, setIsLoading] = useState(false);
 
-  const [cookies, setCookie] = useCookies(['accessToken']);
-  const currentUserObj = useSelector(
-    (state: {
-      currentUser: { currentUser: UserType; error: boolean; loading: boolean };
-    }) => state.currentUser
-  );
-  const loggedIn = !!currentUserObj.currentUser;
-  // console.log('CurrentUserObj: ', currentUserObj);
   useEffect(() => {
-    loggedIn && navigate('../');
+    authentication.onAuthStateChanged((user) => {
+      if (user) {
+        navigate('../');
+      }
+    });
   }, []);
-  const currentTokenObj = useSelector(
-    (state: {
-      currentToken: { token: string; error: boolean; loading: boolean };
-    }) => state.currentToken
-  );
-  // console.log('currentTokenObj: ', currentTokenObj);
   return (
     <>
       <div
@@ -79,7 +84,7 @@ export const Login = () => {
           mt='105'
           bgColor='blackAlpha.100'
           h='600px'
-          w='50%'
+          w='800px'
           display='flex'
           alignItems='center'
           flexDirection='column'
@@ -96,37 +101,20 @@ export const Login = () => {
             justifyContent='space-between'
           >
             <Formik
-              // validationSchema={loginSchema}
+              // Add validationSchema if needed
               initialValues={initialValues}
               onSubmit={async ({ email, password }) => {
                 try {
-                  // setIsLoading(true);
-                  // setIsLoading(false);
-                } catch (err: any) {
-                  let errorMessage = 'An error occurred during login.';
-                  if (err.response) {
-                    if (err.response.status === 401) {
-                      errorMessage = 'Email or Password is incorrect';
-                    } else {
-                      errorMessage = `Error ${err.response.status}`;
-                    }
-                  }
-                  console.log('Error:', err);
-                  toast({
-                    title: 'Error',
-                    description: errorMessage,
-                    status: 'error',
-                    duration: 5000,
-                    isClosable: true,
-                    position: 'top',
-                  });
+                  setIsLoading(true);
+                  await basicSignIn(email, password);
                   setIsLoading(false);
+                } catch (err: any) {
+                  setIsLoading(false);
+                  returnToastError(err.message, toast);
                 }
               }}
             >
               {({ values, handleChange, handleBlur, handleSubmit }) => {
-                // console.log('errors ', errors);
-                // console.log('values ', values);
                 return (
                   <form
                     onSubmit={handleSubmit}
@@ -168,7 +156,6 @@ export const Login = () => {
                       w='70%'
                       h='60px'
                       fontSize='2xl'
-                      onClick={() => {}}
                     >
                       Log In
                     </Button>
@@ -178,47 +165,67 @@ export const Login = () => {
             </Formik>
             <Box mt='5' w='full' display='flex' justifyContent='space-between'>
               <Button
-                isLoading={isLoading}
-                // w={'full'}
+                // isLoading={isLoading}
+                marginX='4'
+                w={'full'}
                 colorScheme='blue'
                 leftIcon={<FaFacebook />}
                 fontSize='2xl'
                 h='60px'
-                onClick={signInWithFacebook}
+                onClick={async () => {
+                  try {
+                    await signInWithFacebook();
+                  } catch (err) {
+                    returnToastError(err.message, toast);
+                  }
+                }}
               >
                 <Center>
                   <Text>Facebook</Text>
                 </Center>
               </Button>
               <Button
-                isLoading={isLoading}
-                // w={'full'}
+                // isLoading={isLoading}
+                w={'full'}
+                marginX='4'
                 colorScheme='blue'
                 leftIcon={<BsGithub />}
                 fontSize='2xl'
                 h='60px'
-                onClick={signInWithGithub}
+                onClick={async () => {
+                  try {
+                    await signInWithGithub();
+                  } catch (err) {
+                    returnToastError(err.message, toast);
+                  }
+                }}
               >
                 <Center>
                   <Text>Github</Text>
                 </Center>
               </Button>
               <Button
-                isLoading={isLoading}
-                // w={'full'}
+                // isLoading={isLoading}
+                w={'full'}
                 colorScheme='blue'
-                leftIcon={<FaFacebook />}
+                marginX='4'
+                leftIcon={<FcGoogle />}
                 fontSize='2xl'
                 h='60px'
-                onClick={signInWithFacebook}
+                onClick={async () => {
+                  try {
+                    await signInWithFacebook();
+                  } catch (err) {
+                    returnToastError(err.message, toast);
+                  }
+                }}
               >
-                <Center>
-                  <Text>Facebook</Text>
-                </Center>
+                <Center>Google</Center>
               </Button>
             </Box>
           </Box>
         </Box>
+        <Text></Text>
       </div>
     </>
   );
