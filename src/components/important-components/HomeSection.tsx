@@ -10,6 +10,8 @@ import { GeneralItemType, ItemType, UserType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterBoxes } from '../../functions/filterBoxes';
 import { useNavigate } from 'react-router-dom';
+import { authentication } from '../../firebase-config';
+import { User } from 'firebase/auth';
 export const HomeSection = () => {
   const languageObj = useSelector(
     (state: { language: { lang: 'en' | 'ge' } }) => state.language
@@ -33,13 +35,20 @@ export const HomeSection = () => {
   const getInputText = (text: string) => {
     setInputText(text);
   };
-  const currentUserObj = useSelector(
-    (state: {
-      currentUser: { currentUser: UserType; error: boolean; loading: boolean };
-    }) => state.currentUser
-  );
+
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  authentication.onAuthStateChanged((user) => {
+    if (user) {
+      setCurrentUser(user);
+      // User is signed in.
+    } else {
+      setCurrentUser(null);
+    }
+  });
+  // const currentUser = authentication.currentUser;
   const navigate = useNavigate();
   const filteredItems = filterBoxes(generalItemsObj.generalItems, inputText);
+  console.log('currentUser: ', currentUser);
   return (
     <>
       <Header
@@ -51,6 +60,15 @@ export const HomeSection = () => {
       />
       <section>
         <Box bg={'whiteAlpha.800'} h='125px' />
+        <Heading
+          className='best-seller-heading'
+          fontSize={{ base: '24px', xl: '36px' }}
+          mt='80px'
+          mb='80px'
+          textAlign='center'
+        >
+          {currentUser?.displayName}
+        </Heading>
         <Heading
           className='best-seller-heading'
           fontSize={{ base: '24px', xl: '36px' }}
@@ -72,8 +90,8 @@ export const HomeSection = () => {
             </div>
           </Box>
         </div>
-        {!!currentUserObj.currentUser &&
-          currentUserObj.currentUser.rank === 'admin' && (
+        {/* {!!currentUser &&
+          currentUser.rank === 'admin' && (
             <Button
               colorScheme='blue'
               variant='solid'
@@ -92,7 +110,7 @@ export const HomeSection = () => {
             >
               Admin Panel
             </Button>
-          )}
+          )} */}
       </section>
     </>
   );

@@ -11,6 +11,7 @@ import cartImage from '../../images/shopping-cart.svg';
 import { CartItemType, UserType } from '../../types';
 import { Loading } from '../Loading';
 import { Trans, useTranslation } from 'react-i18next';
+import { authentication } from '../../firebase-config';
 export const Header: React.FC<{
   getInputText?: (text: string) => void;
   login?: string;
@@ -97,6 +98,7 @@ export const Header: React.FC<{
               {languageObj.lang === 'en' ? 'ABOUT US' : 'ჩვენს შესახებ'}
             </Link>
           </Box>
+
           <Box display='flex' alignItems='center' flexDir='column'>
             {!loggedIn ? (
               <>
