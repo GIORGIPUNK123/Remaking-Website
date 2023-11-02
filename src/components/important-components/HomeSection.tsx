@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Box, Button, Heading, Text } from '@chakra-ui/react';
-import { GeneralItemType, ItemType } from '../../types';
+import { GeneralItemType, ItemType, UserType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterBoxes } from '../../functions/filterBoxes';
 import { useNavigate } from 'react-router-dom';
@@ -33,6 +33,11 @@ export const HomeSection = () => {
   const getInputText = (text: string) => {
     setInputText(text);
   };
+  const currentUserObj = useSelector(
+    (state: {
+      currentUser: { currentUser: UserType; error: boolean; loading: boolean };
+    }) => state.currentUser
+  );
   const navigate = useNavigate();
   const filteredItems = filterBoxes(generalItemsObj.generalItems, inputText);
   return (
@@ -67,24 +72,27 @@ export const HomeSection = () => {
             </div>
           </Box>
         </div>
-        <Button
-          colorScheme='blue'
-          variant='solid'
-          size='lg'
-          bg='blue.400'
-          color='white'
-          style={{
-            position: 'absolute',
-            top: '70px',
-            right: '10%',
-          }}
-          isLoading={itemsObj.loading}
-          onClick={() => {
-            navigate('/adminpanel');
-          }}
-        >
-          Admin Panel
-        </Button>
+        {!!currentUserObj.currentUser &&
+          currentUserObj.currentUser.rank === 'admin' && (
+            <Button
+              colorScheme='blue'
+              variant='solid'
+              size='lg'
+              bg='blue.400'
+              color='white'
+              style={{
+                position: 'absolute',
+                top: '70px',
+                right: '10%',
+              }}
+              isLoading={itemsObj.loading}
+              onClick={() => {
+                navigate('/adminpanel');
+              }}
+            >
+              Admin Panel
+            </Button>
+          )}
       </section>
     </>
   );

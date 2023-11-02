@@ -43,7 +43,8 @@ export const Header: React.FC<{
       };
     }) => state.cartItems
   );
-  const { name, surname, id } = currentUserObj.currentUser;
+  const loggedIn = !!currentUserObj.currentUser;
+  const currUser = currentUserObj.currentUser;
   if (burgerBarOpen) {
     return (
       <>
@@ -97,7 +98,7 @@ export const Header: React.FC<{
             </Link>
           </Box>
           <Box display='flex' alignItems='center' flexDir='column'>
-            {!currentUserObj.currentUser ? (
+            {!loggedIn ? (
               <>
                 <Link to={props.login!} style={{ fontSize: '24px' }}>
                   Sign In
@@ -118,7 +119,7 @@ export const Header: React.FC<{
                   cursor='pointer'
                 >
                   <Text fontSize='24px' ml='55px' pb='5px'>
-                    {name}
+                    {currUser.name}
                   </Text>
                   <Image h='30px' ml='4' src={profile} alt='profile' />
                 </Box>
@@ -196,7 +197,7 @@ export const Header: React.FC<{
             {cartItemsObj.cartItems.length}
           </Text>
         </Button>
-        {currentUserObj.currentUser ? (
+        {loggedIn ? (
           <>
             <Button
               variant='ghost'
@@ -208,7 +209,7 @@ export const Header: React.FC<{
               ml='25px'
             >
               <Text fontSize='18px' pb='5px'>
-                {name}
+                {currUser.name}
               </Text>
               <Image
                 borderRadius='full'
